@@ -17,6 +17,8 @@ const StyledButton = styled.button`
   }
 `
 
+  
+
 class UserHome extends Component{
     state = {
         name: ''
@@ -24,12 +26,11 @@ class UserHome extends Component{
     componentDidMount = () =>{
         //TODO = Handle request to server to get name
         console.log(this.props.location.state.idToken);
-        axios.post("http://localhost:3001/getUser",null,{
+        axios.post("http://localhost:3001/getUser",{},{
             headers: {
                 Authorization: 'Bearer ' + this.props.location.state.idToken
             }
-        })
-            .then(response=>{
+        }).then(response=>{
                 this.setState({posts: response.data});
                 console.log(response);
             })
@@ -43,6 +44,12 @@ class UserHome extends Component{
         firebase.auth().signOut();
         this.props.history.push('/');
     }
+    createRoomHandler = () =>{
+        this.props.history.push('/lobby');
+    }
+    joinRoomHandler = () =>{
+        this.props.history.push('/join');
+    }
     
     render(){
         return(
@@ -52,8 +59,8 @@ class UserHome extends Component{
                     <StyledButton onClick={this.signoutHander}>SignOut</StyledButton>
                 </header>
                 <h1>Hello Buddy : {this.state.name}</h1>
-                <StyledButton onClick={()=>{this.props.history.push('/lobby')}}>Create Room</StyledButton>
-                <StyledButton>Join Room</StyledButton>
+                <StyledButton onClick={this.createRoomHandler}>Create Room</StyledButton>
+                <StyledButton onClick={this.joinRoomHandler}>Join Room</StyledButton>
             </div>
         );
     }
