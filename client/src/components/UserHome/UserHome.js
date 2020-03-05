@@ -23,8 +23,12 @@ class UserHome extends Component{
     }
     componentDidMount = () =>{
         //TODO = Handle request to server to get name
-
-        axios.post("http://localhost:3001/getUser",this.props.location.state.idToken)
+        console.log(this.props.location.state.idToken);
+        axios.post("http://localhost:3001/getUser",null,{
+            headers: {
+                Authorization: 'Bearer ' + this.props.location.state.idToken
+            }
+        })
             .then(response=>{
                 this.setState({posts: response.data});
                 console.log(response);
