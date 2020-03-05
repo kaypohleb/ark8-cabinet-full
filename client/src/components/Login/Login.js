@@ -1,15 +1,17 @@
 import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
 import React,{ Component } from "react";
-
+import {withRouter} from 'react-router-dom';
 firebase.initializeApp({
     apiKey:"AIzaSyDAqWHBVCQhSMXGopU-U_IAKwjO7lt-LFs",
     authDomain:"ark8-cabinet.firebaseapp.com",
   })
 
+
 class Login extends Component{
     state = {
-        isSignedIn: false
+        isSignedIn: false,
+        name:'John Doe'
       }
       uiConfig = {
         signInFlow:"popup",
@@ -24,7 +26,7 @@ class Login extends Component{
         }
       }
     
-      componentDidMount = ()=>{
+      componentDidMount = () => {
         
         firebase.auth().onAuthStateChanged(user=>{
           this.setState({isSignedIn:!!user})
@@ -32,6 +34,13 @@ class Login extends Component{
             console.log("user",user);
             console.log("IDtoken",user.getIdToken());
             console.log("PhotoURL",user.photoURL);
+           
+            const username = user.displayName;
+            
+            this.props.history.push({
+              pathname:"/profile",
+              state:{name:username},
+            });
             
           }
         })
@@ -54,10 +63,11 @@ class Login extends Component{
                 firebaseAuth = {firebase.auth()}
                 />
             </span>
-            )}   
+            )}
+              
         </div>
         )
     }
 }
 
-export default Login;
+export default withRouter(Login);
