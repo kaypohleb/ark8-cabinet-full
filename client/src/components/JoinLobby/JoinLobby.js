@@ -6,10 +6,11 @@ class JoinLobby extends Component{
     state={
         roomInput : 'unfilled',
         userID:this.props.location.state.userID,
-        idToken: this.props.location.state.idToken
+        idToken: this.props.location.state.idToken,
+        roomId:'',
     }
     inputTextHandler = (event)=>{
-        if(event.target.value.length == 6){
+        if(event.target.value.length === 6){
             this.setState({
                 roomInput : 'filled',
                 roomId:event.target.value
@@ -22,10 +23,11 @@ class JoinLobby extends Component{
         }
     }
     checkRoomHandler = ()=>{
+        console.log(this.state.roomId);
         this.props.history.push({
             pathname:"/lobby",
             state:{
-                userID: this.state.id,
+                userID: this.state.userID,
                 idToken: this.state.idToken,
                 roomId: this.state.roomId,
                 join:true

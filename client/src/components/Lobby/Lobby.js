@@ -17,7 +17,9 @@ class Lobby extends Component{
     
     componentDidMount = () => {
         console.log(this.props.location.state.idToken);
+        
         if(!this.state.join){
+            console.log("creating..")
             axios.post("http://localhost:3001/createRoom",{},{
             headers: {
                 Authorization: 'Bearer ' + this.props.location.state.idToken
@@ -46,7 +48,22 @@ class Lobby extends Component{
    
             })
         
+    }else{
+        console.log("joining...");
+        const roomId = this.props.location.state.roomId;
+        console.log(roomId);
+        const socket = socketIOClient("http://localhost:3001");
+        socket.emit('join', {userId: this.state.userID, roomId: roomId});
+        socket.on('roomStateUpdate', (room) =>{
+            this.setState({
+                players: room.players,
+                userID: this.props.location.state.userID,
+                roomId: roomId,
+                getInfo: true,
+             });
+        })
     }
+}
     render(){
         let players = null;
         if(this.state.getInfo){
