@@ -14,7 +14,6 @@ class Lobby extends Component{
 
     
     
-    
     componentDidMount = () => {
         console.log(this.props.location.state.idToken);
         axios.post("http://localhost:3001/createRoom",{},{
