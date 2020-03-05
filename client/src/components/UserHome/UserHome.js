@@ -53,13 +53,22 @@ class UserHome extends Component{
             pathname:"/lobby",
             state:{
                 userID: this.state.id,
-                idToken: this.state.idToken
+                idToken: this.state.idToken,
+                join:false
             }
             
         });
     }
     joinRoomHandler = () =>{
-        this.props.history.push('/join');
+        this.props.history.push({
+            pathname:"/join",
+            state:{
+                userID: this.state.id,
+                idToken: this.state.idToken
+               
+            }
+            
+        });
     }
     
     render(){
