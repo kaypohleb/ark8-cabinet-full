@@ -1,35 +1,51 @@
 const generate = require('nanoid/generate');
+const firebase = require('../db/firebase');
+const db = firebase.firestore();
+
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const rooms = [];
 
-const createRoom = ({userId, gameId}) => {
+const createRoom = async ({userId, gameId}) => {
+    const userDoc = await db.collection('users').doc(userId).get();
+    
+    if (!userDoc.exists){
+        return null;
+    }
+
     const roomId = generate(alphabet, 6);
+    const user = userDoc.data();
 
     const room = {
         roomId,
-        createdBy: userId,
+        createdBy: user,
         gameId,
-        players : [userId]
+        players : [user]
     }
 
     rooms.push(room);
 
-    console.log("rooms:", rooms);
+    console.log("rooms:", room);
     return room;
 };
 
-const joinRoom = ({userId, roomId}) => {
+const joinRoom = async ({userId, roomId}) => {
     const roomIndex = rooms.findIndex(r => r.roomId == roomId);
-
     if (roomIndex == -1) {
         return null;
     }
+
+    const userDoc = await db.collection('users').doc(userId).get();
+    if (!userDoc.exists){
+        return null;
+    }
+
+    const user = userDoc.data();
 
     let room = rooms[roomIndex];
     
     rooms[roomIndex] = {
         ...room,
-        players : [...room.players.filter(player => player != userId), userId]
+        players : [...room.players.filter(player => player.id != userId), user]
     };
 
     room = rooms[roomIndex];
@@ -38,7 +54,7 @@ const joinRoom = ({userId, roomId}) => {
     return room
 }
 
-const leaveRoom = ({userId, roomId}) => {
+const leaveRoom = async ({userId, roomId}) => {
     const roomIndex = rooms.findIndex(r => r.roomId == roomId);
 
     if (roomIndex == -1) {
@@ -49,7 +65,7 @@ const leaveRoom = ({userId, roomId}) => {
     
     rooms[roomIndex] = {
         ...room,
-        players : room.players.filter((id) => id != userId)
+        players : room.players.filter(player => player.id != userId)
     };
 
     room = rooms[roomIndex];
