@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "express-unless": "^0.5.0",
     "firebase-admin": "^8.9.2",
+    "nanoid": "^2.1.11",
     "socket.io": "^2.3.0"
   }
 }
