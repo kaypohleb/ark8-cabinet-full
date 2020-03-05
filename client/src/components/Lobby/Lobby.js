@@ -6,6 +6,7 @@ import socketIOClient from "socket.io-client";
 
 class Lobby extends Component{
     state={
+        join: this.props.location.state.join,
         userID:this.props.location.state.userID,
         checkCreated: false,
         getInfo:false,
@@ -16,7 +17,8 @@ class Lobby extends Component{
     
     componentDidMount = () => {
         console.log(this.props.location.state.idToken);
-        axios.post("http://localhost:3001/createRoom",{},{
+        if(!this.state.join){
+            axios.post("http://localhost:3001/createRoom",{},{
             headers: {
                 Authorization: 'Bearer ' + this.props.location.state.idToken
             }
@@ -41,8 +43,8 @@ class Lobby extends Component{
                 socket.on('roomStateUpdate', (room) =>{
                     this.setState({players: room.players});
                 })
-            })
    
+            })
         
     }
     render(){
