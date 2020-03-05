@@ -7,11 +7,16 @@ const port = process.env.PORT || 3001;
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
+app.use(cors({
+    origin:['http://localhost:3000',],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 // Middleware
 const authMiddleware = require('./middleware/auth');
 app.use(authMiddleware);
 app.use(express.json());
-app.use(cors());
+
 
 // Route handlers
 app.use(require('./api/user'));

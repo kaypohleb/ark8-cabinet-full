@@ -4,6 +4,7 @@ const signedInUsers = [];
 const auth = firebase.auth();
 
 const checkAuth = (req, res, next) => {
+    console.log(req.headers);
     const idToken = req.headers.authorization.split(' ')[1];
     let user = signedInUsers.find(user => user.idToken == idToken);
 
