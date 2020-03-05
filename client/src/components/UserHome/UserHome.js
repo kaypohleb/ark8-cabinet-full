@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import {withRouter} from 'react-router-dom';
+import axios from 'axios';
+
 const StyledButton = styled.button`
   background-color: red;
   color:white;
@@ -21,6 +23,12 @@ class UserHome extends Component{
     }
     componentDidMount = () =>{
         //TODO = Handle request to server to get name
+
+        axios.post("http://localhost:3001/getUser",this.props.location.state.idToken)
+            .then(response=>{
+                this.setState({posts: response.data});
+                console.log(response);
+            })
         this.setState({
             name : this.props.location.state.name
         });

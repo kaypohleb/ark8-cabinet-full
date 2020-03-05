@@ -32,16 +32,21 @@ class Login extends Component{
           this.setState({isSignedIn:!!user})
           if(this.state.isSignedIn){
             console.log("user",user);
-            console.log("IDtoken",user.getIdToken());
             console.log("PhotoURL",user.photoURL);
-           
             const username = user.displayName;
-            
-            this.props.history.push({
-              pathname:"/profile",
-              state:{name:username},
+           
+            let token = '';
+            user.getIdToken().then((idToken) => {
+              token = idToken;
+              console.log("IDtoken",token);
+              this.props.history.push({
+                pathname:"/profile",
+                state:{name:username,
+                        idToken: token},
+              
+              });
             });
-            
+
           }
         })
 
