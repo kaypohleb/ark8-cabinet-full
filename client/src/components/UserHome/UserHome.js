@@ -21,7 +21,9 @@ const StyledButton = styled.button`
 
 class UserHome extends Component{
     state = {
-        name: ''
+        name: '',
+        id:'',
+        idToken:''
     }
     componentDidMount = () =>{
         //TODO = Handle request to server to get name
@@ -31,12 +33,14 @@ class UserHome extends Component{
                 Authorization: 'Bearer ' + this.props.location.state.idToken
             }
         }).then(response=>{
-                this.setState({posts: response.data});
+                this.setState({
+                    name: response.data.name,
+                    id: response.data.id,
+                    idToken: this.props.location.state.idToken
+                });
                 console.log(response);
             })
-        this.setState({
-            name : this.props.location.state.name
-        });
+        
         console.log(this.props.location);
     }
     signoutHander = () =>{
@@ -45,7 +49,14 @@ class UserHome extends Component{
         this.props.history.push('/');
     }
     createRoomHandler = () =>{
-        this.props.history.push('/lobby');
+        this.props.history.push({
+            pathname:"/lobby",
+            state:{
+                userID: this.state.id,
+                idToken: this.state.idToken
+            }
+            
+        });
     }
     joinRoomHandler = () =>{
         this.props.history.push('/join');
@@ -59,6 +70,7 @@ class UserHome extends Component{
                     <StyledButton onClick={this.signoutHander}>SignOut</StyledButton>
                 </header>
                 <h1>Hello Buddy : {this.state.name}</h1>
+                <p>User ID: {this.state.id}</p>
                 <StyledButton onClick={this.createRoomHandler}>Create Room</StyledButton>
                 <StyledButton onClick={this.joinRoomHandler}>Join Room</StyledButton>
             </div>
