@@ -1,0 +1,28 @@
+{
+  "name": "ark8-server",
+  "version": "0.0.1",
+  "description": "ark8-server",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lowenhere/ark8-server.git"
+  },
+  "author": "ark8",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lowenhere/ark8-server/issues"
+  },
+  "homepage": "https://github.com/lowenhere/ark8-server#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-unless": "^0.5.0",
+    "firebase-admin": "^8.9.2",
+    "socket.io": "^2.3.0"
+  }
+}
