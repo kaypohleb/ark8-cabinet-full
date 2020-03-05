@@ -3,11 +3,11 @@ const { createRoom, joinRoom, leaveRoom } = require('../games/roomManager');
 
 const router = express.Router();
 
-router.post('/createRoom', (req, res) => {
+router.post('/createRoom', async (req, res) => {
     const userId = req.userId;
     const gameId = "rockpaperscissors"; // TODO : change this
 
-    const room = createRoom({userId, gameId});
+    const room = await createRoom({userId, gameId});
 
     if (!room) {
         return res.json({
@@ -18,11 +18,11 @@ router.post('/createRoom', (req, res) => {
     return res.json(room);
 });
 
-router.post('/joinRoom', (req, res) => {
+router.post('/joinRoom', async (req, res) => {
     const userId = req.userId;
     const roomId = req.body.roomId;
 
-    const room = joinRoom({userId, roomId});
+    const room = await joinRoom({userId, roomId});
 
     if (!room) {
         return res.json({
@@ -33,11 +33,11 @@ router.post('/joinRoom', (req, res) => {
     return res.json(room);
 });
 
-router.post('/leaveRoom', (req,res) => {
+router.post('/leaveRoom', async (req,res) => {
     const userId = req.userId;
     const roomId = req.body.roomId;
 
-    const room = leaveRoom({userId, roomId});
+    const room = await leaveRoom({userId, roomId});
 
     if (!room) {
         return res.json({
