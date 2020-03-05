@@ -1,6 +1,7 @@
 const generate = require('nanoid/generate');
 const firebase = require('../db/firebase');
 const db = firebase.firestore();
+const io = require('../socketio/socketio');
 
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const rooms = [];
@@ -23,8 +24,10 @@ const createRoom = async ({userId, gameId}) => {
     }
 
     rooms.push(room);
-
     console.log("rooms:", room);
+
+    io.to(roomId).emit('roomStateUpdate',room);
+
     return room;
 };
 
@@ -49,8 +52,10 @@ const joinRoom = async ({userId, roomId}) => {
     };
 
     room = rooms[roomIndex];
-    
     console.log("rooms:", rooms);
+
+    io.to(roomId).emit('roomStateUpdate',room);
+
     return room
 }
 
@@ -69,8 +74,10 @@ const leaveRoom = async ({userId, roomId}) => {
     };
 
     room = rooms[roomIndex];
-
     console.log("rooms:", rooms);
+
+    io.to(roomId).emit('roomStateUpdate',room);
+
     return room
 }
 
