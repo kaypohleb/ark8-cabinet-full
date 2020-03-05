@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import axios from 'axios';
 import {withRouter} from  'react-router-dom';
 import Player from '../Player/Player';
-//attach to socket.io room here
+import socketIOClient from "socket.io-client";
 
 class Lobby extends Component{
     state={
@@ -35,7 +35,14 @@ class Lobby extends Component{
                 });
                 console.log(response);
                 console.log(this.state.players);
-            })     
+
+                const socket = socketIOClient("http://localhost:3001");
+                socket.emit('join', {userId: this.state.userID, roomId: this.state.roomId});
+                socket.on('roomStateUpdate', (room) =>{
+                    this.setState({players: room.players});
+                })
+            })
+   
         
     }
     render(){
