@@ -1,0 +1,16 @@
+.Login{
+  font-family: 'Raleway', sans-serif;
+  background-color: #0213b4;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card{
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 0.8rem;
+}

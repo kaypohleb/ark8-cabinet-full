@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import {withRouter} from  'react-router-dom';
+import './JoinLobby.css'
 
 //attach to socket.io room here
 class JoinLobby extends Component{
@@ -37,13 +38,15 @@ class JoinLobby extends Component{
     }
     render(){
         return (
-            <div className="Lobby">
+            <div className="JoinLobby">
                 <header>
                     <button onClick={()=>{this.props.history.goBack()}}>Back</button>
-                </header>                
+                </header>  
+                <div className ="card">       
                 <input type="text" onChange={this.inputTextHandler}></input>
                 <h1>{this.state.roomInput}</h1>
                 <button onClick={this.checkRoomHandler}>check</button>
+            </div>
             </div>
         );
     }
