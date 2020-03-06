@@ -10,7 +10,7 @@ const socket = socketIOClient("http://localhost:3001");
 class Lobby extends Component{
     state={
         join: this.props.location.state.join,
-        userID:this.props.location.stagit .userID,
+        userID:this.props.location.state.userID,
         checkCreated: false,
         getInfo:false,
         players:[]
