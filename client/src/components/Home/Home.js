@@ -2,17 +2,20 @@ import React, {Component} from 'react';
 import UncontrolledLottie from '../../components/Lotties/UncontrolledLottie';
 import styled from 'styled-components';
 import {withRouter} from 'react-router-dom';
-
+import './Home.css';
 const StyledButton = styled.button`
-  background-color: red;
-  color:white;
-  font: inherit;
-  border: 1px solid blue;
-  padding: 8px;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 0.5rem 0;
+  margin: 0.5rem 1rem;
+  width: 11rem;
+  background: transparent;
+  color: black;
+  border: 2px solid salmon;
   cursor: pointer;
   &:hover {
     background-color: salmon;
-    color: black;
+    color: white;
   }
 `
 
@@ -27,9 +30,13 @@ class Home extends Component{
         
         return(
             <div className = "Home">
-                <UncontrolledLottie/>
-                <p>Some body of text</p>
-                <StyledButton onClick = {this.getStartedHandler}>Get Started</StyledButton>
+                
+                <div className ="card">
+                    <UncontrolledLottie/>
+                    <h1>Ark8 Cabinet</h1>
+                    <p>Work in Progress</p>
+                    <StyledButton onClick = {this.getStartedHandler}>Get Started</StyledButton>
+                </div>
             </div>
         );
     }

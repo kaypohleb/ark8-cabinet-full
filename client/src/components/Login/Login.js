@@ -2,6 +2,8 @@ import firebase from "firebase";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth"
 import React,{ Component } from "react";
 import {withRouter} from 'react-router-dom';
+import './Login.css';
+
 firebase.initializeApp({
     apiKey:"AIzaSyDAqWHBVCQhSMXGopU-U_IAKwjO7lt-LFs",
     authDomain:"ark8-cabinet.firebaseapp.com",
@@ -54,22 +56,12 @@ class Login extends Component{
     render(){
         return (
         <div className ="Login">
-            {this.state.isSignedIn ? 
-            <span>
-            <div>Signed In!</div>
-            <button onClick={()=>firebase.auth().signOut()}>Sign Out!</button>
-            <h1>Welcome {firebase.auth().currentUser.displayName}</h1>
-            <img src={firebase.auth().currentUser.photoURL} alt="profile"/>
-            </span>
-            :(
-            <span>
-                <StyledFirebaseAuth
-                uiConfig={this.uiConfig}
-                firebaseAuth = {firebase.auth()}
-                />
-            </span>
-            )}
-              
+          <div className ="card">
+          <StyledFirebaseAuth
+          uiConfig={this.uiConfig}
+          firebaseAuth = {firebase.auth()}
+          />
+        </div>
         </div>
         )
     }

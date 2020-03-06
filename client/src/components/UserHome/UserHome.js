@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import firebase from 'firebase';
 import {withRouter} from 'react-router-dom';
 import axios from 'axios';
+import './UserHome.css';
 
 const StyledButton = styled.button`
   background-color: red;
   color:white;
   font: inherit;
-  border: 1px solid blue;
+  border-radius:8px;
   padding: 8px;
   cursor: pointer;
   &:hover {
@@ -78,10 +79,12 @@ class UserHome extends Component{
                 <header>
                     <StyledButton onClick={this.signoutHander}>SignOut</StyledButton>
                 </header>
+                <div className="card">
                 <h1>Hello Buddy : {this.state.name}</h1>
                 <p>User ID: {this.state.id}</p>
                 <StyledButton onClick={this.createRoomHandler}>Create Room</StyledButton>
                 <StyledButton onClick={this.joinRoomHandler}>Join Room</StyledButton>
+                </div>
             </div>
         );
     }

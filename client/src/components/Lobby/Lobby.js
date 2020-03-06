@@ -3,13 +3,14 @@ import axios from 'axios';
 import {withRouter} from  'react-router-dom';
 import Player from '../Player/Player';
 import socketIOClient from "socket.io-client";
+import './Lobby.css';
 
 const socket = socketIOClient("http://localhost:3001");
 
 class Lobby extends Component{
     state={
         join: this.props.location.state.join,
-        userID:this.props.location.state.userID,
+        userID:this.props.location.stagit .userID,
         checkCreated: false,
         getInfo:false,
         players:[]
@@ -82,10 +83,12 @@ class Lobby extends Component{
             })}</div>) 
         }
         return (
+            
             <div className="Lobby">
                 <header>
                     <button onClick={()=>{this.props.history.goBack()}}>Back</button>
-                </header>                
+                </header>
+                <div className="card">           
                 <h1>Waiting Room</h1>
                 <p>Room ID: {this.state.roomId}</p>  
                 <p>Game ID: {this.state.gameId}</p> 
@@ -93,6 +96,7 @@ class Lobby extends Component{
                 : <p>You are not the creator</p>} 
                 {players}
             </div>
+            </div>    
         );
     }
 
