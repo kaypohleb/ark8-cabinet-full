@@ -20,8 +20,11 @@ io.on('connection', (socket) => {
 
 
 
-    socket.on('disconnect', () =>{
-        leaveRoom({socketUserId, socketRoomId});
+    socket.on('disconnect',async () =>{
+        console.log("temps",socketUserId, socketRoomId);
+        const room = await leaveRoom({userId: socketUserId, roomId: socketRoomId});
+        console.log("temps leftroom", room);
+        io.to(socketRoomId).emit('roomStateUpdate', room);
     })
 });
 

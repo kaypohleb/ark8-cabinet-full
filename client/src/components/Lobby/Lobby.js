@@ -4,6 +4,8 @@ import {withRouter} from  'react-router-dom';
 import Player from '../Player/Player';
 import socketIOClient from "socket.io-client";
 
+const socket = socketIOClient("http://localhost:3001");
+
 class Lobby extends Component{
     state={
         join: this.props.location.state.join,
@@ -11,6 +13,8 @@ class Lobby extends Component{
         checkCreated: false,
         getInfo:false,
         players:[]
+
+
     }
 
     
@@ -40,7 +44,7 @@ class Lobby extends Component{
                 console.log(response);
                 console.log(this.state.players);
 
-                const socket = socketIOClient("http://localhost:3001");
+                socket.open();
                 socket.emit('join', {userId: this.state.userID, roomId: this.state.roomId});
                 socket.on('roomStateUpdate', (room) =>{
                     this.setState({players: room.players});
@@ -52,7 +56,7 @@ class Lobby extends Component{
         console.log("joining...");
         const roomId = this.props.location.state.roomId;
         console.log(roomId);
-        const socket = socketIOClient("http://localhost:3001");
+        socket.open();
         socket.emit('join', {userId: this.state.userID, roomId: roomId});
         socket.on('roomStateUpdate', (room) =>{
             this.setState({
@@ -62,8 +66,14 @@ class Lobby extends Component{
                 getInfo: true,
              });
         })
+        }
     }
-}
+
+    componentWillUnmount(){
+        console.log("componentWillUnmount");
+        socket.close();
+    }
+
     render(){
         let players = null;
         if(this.state.getInfo){
