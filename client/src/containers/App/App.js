@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
-import Home  from '../../components/Home/Home';
-import UserHome from '../../components/UserHome/UserHome';
-import Login from '../../components/Login/Login';
-import Lobby from '../../components/Lobby/Lobby';
-import JoinLobby from '../../components/JoinLobby/JoinLobby';
+import Home  from '../Home/Home';
+import UserHome from '../UserHome/UserHome';
+import Login from '../Login/Login';
+import Lobby from '../Lobby/Lobby';
+import JoinLobby from '../JoinLobby/JoinLobby';
 import {
   BrowserRouter as Router,
   Switch,

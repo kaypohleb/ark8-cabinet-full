@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import axios from 'axios';
 import {withRouter} from  'react-router-dom';
-import Player from '../Player/Player';
+import Player from '../../components/Player/Player';
 import socketIOClient from "socket.io-client";
 import './Lobby.css';
 
