@@ -37,27 +37,7 @@ class Login extends Component{
     
       componentDidMount = () => {
         
-        firebase.auth().onAuthStateChanged(user=>{
-          this.setState({isSignedIn:!!user})
-          if(this.state.isSignedIn){
-            console.log("user",user);
-            console.log("PhotoURL",user.photoURL);
-            const username = user.displayName;
-           
-            let token = '';
-            user.getIdToken().then((idToken) => {
-              token = idToken;
-              console.log("IDtoken",token);
-              this.props.history.push({
-                pathname:"/profile",
-                state:{name:username,
-                        idToken: token},
-              
-              });
-            });
-
-          }
-        })
+        firebase.auth().getRedirectResult().then(user=>console.log(user));
 
       }
     render(){
