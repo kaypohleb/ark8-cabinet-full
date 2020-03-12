@@ -3,13 +3,12 @@ import firebase from "firebase";
 import UncontrolledLottie from '../../components/Lotties/UncontrolledLottie';
 import styled from 'styled-components';
 import {withRouter} from 'react-router-dom';
-import './Home.css';
+import styles from './Home.module.css';
 import {motion} from 'framer-motion';
 import {connect} from 'react-redux';
 import Login from '../../components/Login/Login';
 import Modal from '../../components/UI/Modal/Modal';
-import { userStateChanged } from '../../store/actions';
-import { idTokenChanged } from '../../store/actions';
+import { userStateChanged,idTokenChanged } from '../../store/actions';
 const StyledButton = styled(motion.div)`
   display: inline-block;
   border-radius: 3px;
@@ -60,9 +59,13 @@ class Home extends Component{
         user.getIdToken().then((idToken) => {
           this.props.dispatch(idTokenChanged(idToken));
           this.setState({isSignedIn:true});
+          this.props.history.push('/profile');
           });
-
+          
+          
         })
+      
+     
     }
     
     componentWillUnmount = () => {
@@ -110,13 +113,14 @@ class Home extends Component{
         
         let signup;
         if(this.state.isSignedIn){
+          console.log(this.props);
           signup = <button onClick={this.signoutHandler}>Signout</button>
         }else{
           signup = <Login uiConfig={this.uiConfig} clicked={firebase.auth()}/>
         }
         return(
 
-            <div className = "Home">
+            <div className ={styles.Home}>
                     <Modal show={this.state.signing} modalClosed={this.exitSignInHandler}>
                       {signup}
                     </Modal>

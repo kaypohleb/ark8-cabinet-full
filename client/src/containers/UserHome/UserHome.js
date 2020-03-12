@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import {withRouter} from 'react-router-dom';
-import axios from 'axios';
+import { connect  } from 'react-redux';
 import './UserHome.css';
-
+import {getUserData} from '../../store/actions';
 const StyledButton = styled.button`
   background-color: red;
   color:white;
@@ -21,28 +21,22 @@ const StyledButton = styled.button`
   
 
 class UserHome extends Component{
-    state = {
-        name: '',
+    state={
+        name:'',
         id:'',
-        idToken:''
     }
+
+    componentWillReceiveProps(newProps){
+        if(newProps.name !== this.props.name){
+            this.setState({
+                name: newProps.name,
+                id: newProps.id             
+            })
+        }
+     }
     componentDidMount = () =>{
         //TODO = Handle request to server to get name
-        console.log(this.props.location.state.idToken);
-        axios.post("http://localhost:3001/getUser",{},{
-            headers: {
-                Authorization: 'Bearer ' + this.props.location.state.idToken
-            }
-        }).then(response=>{
-                this.setState({
-                    name: response.data.name,
-                    id: response.data.id,
-                    idToken: this.props.location.state.idToken
-                });
-                console.log(response);
-            })
-        
-        console.log(this.props.location);
+        this.props.dispatch(getUserData());
     }
     signoutHander = () =>{
         console.log("trying to sign out");
@@ -50,29 +44,30 @@ class UserHome extends Component{
         this.props.history.push('/');
     }
     createRoomHandler = () =>{
-        this.props.history.push({
-            pathname:"/lobby",
-            state:{
-                userID: this.state.id,
-                idToken: this.state.idToken,
-                join:false
-            }
+    //     this.props.history.push({
+    //         pathname:"/lobby",
+    //         state:{
+    //             userID: this.state.id,
+    //             idToken: this.state.idToken,
+    //             join:false
+    //         }
             
-        });
+    //     });
     }
     joinRoomHandler = () =>{
-        this.props.history.push({
-            pathname:"/join",
-            state:{
-                userID: this.state.id,
-                idToken: this.state.idToken
+        // this.props.history.push({
+        //     pathname:"/join",
+        //     state:{
+        //         userID: this.state.id,
+        //         idToken: this.state.idToken
                
-            }
+        //     }
             
-        });
+        // });
     }
     
     render(){
+        
         return(
             
             <div className ="UserHome">
@@ -91,4 +86,12 @@ class UserHome extends Component{
     
 }
 
-export default withRouter(UserHome);
+const mapStateToProps = (state) => {
+    
+    return{
+        name: state.getUserDataReducer.name,
+        id: state.getUserDataReducer.id,
+    }
+}
+
+export default connect(mapStateToProps)(withRouter(UserHome));

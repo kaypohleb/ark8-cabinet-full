@@ -16,7 +16,7 @@ class Login extends Component{
         return (
         <div className ="Login">
           <StyledHeader
-          animate={{y:-50}}
+          animate={{y:-30}}
           transition={{
             yoyo: Infinity,
             duration:2,
