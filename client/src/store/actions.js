@@ -1,12 +1,13 @@
 import{
   USER_STATE_CHANGED,
   ID_TOKEN_CHANGED,
-  GET_USER_DATA_STARTED,
   GET_USER_DATA_SUCCESS,
   GET_USER_DATA_FAILURE,
+  UPDATE_ROOM_STATE_SUCCESS,
+  UPDATE_ROOM_STATE_FAILURE
 } from './types';
 import axios from 'axios';
-
+import socketIOClient from "socket.io-client";
 
 // define our action function
 export const userStateChanged = user => {
@@ -25,7 +26,7 @@ export const idTokenChanged = idtoken => {
   
 export const getUserData = () => {
   return(dispatch,getState) =>{
-  dispatch(getUserDataStarted());
+  if(getState().idtokenReducer.idToken){
   axios.post("http://localhost:3001/getUser",{},{
             headers: {
                 Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
@@ -36,11 +37,55 @@ export const getUserData = () => {
             }).catch(err => {
               dispatch(getUserDataFailure(err.message));
             })
+    }
   }
 }
 
-const getUserDataStarted = () => ({
-  type:GET_USER_DATA_STARTED,
+const socket = socketIOClient("http://localhost:3001");
+
+export const createRoom = () =>{
+  return(dispatch,getState) =>{
+            console.log("creating Room");
+            let userID = 
+            axios.post("http://localhost:3001/createRoom",{},{
+            headers: {
+                Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
+            }
+        }).then(response=>{
+                console.log(response);
+                dispatch(enterRoom(response.data.roomId));
+            })
+  }
+}
+
+export const enterRoom = (roomID) =>{
+  return(dispatch,getState)=>{
+    let userID = getState().getUserDataReducer.id;
+    socket.open();
+    socket.emit('join', {userId: userID, roomId: roomID});
+    socket.on('roomStateUpdate', (room) =>{
+      console.log({...room});
+      dispatch(updateRoomStateSuccess(room));
+    })  
+  }
+}
+
+export const closeRoom = () =>{
+  console.log("closingRoom")
+  socket.close();
+}
+
+const updateRoomStateSuccess = (room) =>({
+  type:UPDATE_ROOM_STATE_SUCCESS,
+  payload:{
+    ...room
+    }
+  
+})
+
+const updateRoomStateFailure = (room) =>({
+  type:UPDATE_ROOM_STATE_FAILURE,
+  
 })
 
 const getUserDataSuccess = (res) => ({

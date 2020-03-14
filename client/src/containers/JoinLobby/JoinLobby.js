@@ -28,8 +28,6 @@ class JoinLobby extends Component{
         this.props.history.push({
             pathname:"/lobby",
             state:{
-                userID: this.state.userID,
-                idToken: this.state.idToken,
                 roomId: this.state.roomId,
                 join:true
             }

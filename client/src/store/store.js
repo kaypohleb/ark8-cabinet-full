@@ -6,5 +6,4 @@ const mainstore = createStore(
     rootReducer,
     applyMiddleware(thunk),
 );
-// mainstore.subscribe(() => console.log(mainstore.getState().idtokenReducer.idToken))
 export default mainstore;
