@@ -1,5 +1,5 @@
 const express = require('express');
-const { createRoom, joinRoom, leaveRoom } = require('../games/roomManager');
+const roomController = require('../controllers/room')
 
 const router = express.Router();
 
@@ -7,7 +7,7 @@ router.post('/createRoom', async (req, res) => {
     const userId = req.userId;
     const gameId = "rockpaperscissors"; // TODO : change this
 
-    const room = await createRoom({userId, gameId});
+    const room = await roomController.createRoom(userId);
 
     if (!room) {
         return res.json({
@@ -22,7 +22,7 @@ router.post('/joinRoom', async (req, res) => {
     const userId = req.userId;
     const roomId = req.body.roomId;
 
-    const room = await joinRoom({userId, roomId});
+    const room = await roomController.joinRoom(userId, roomId);
 
     if (!room) {
         return res.json({
@@ -37,7 +37,7 @@ router.post('/leaveRoom', async (req,res) => {
     const userId = req.userId;
     const roomId = req.body.roomId;
 
-    const room = await leaveRoom({userId, roomId});
+    const room = await roomController.leaveRoom(userId, roomId);
 
     if (!room) {
         return res.json({

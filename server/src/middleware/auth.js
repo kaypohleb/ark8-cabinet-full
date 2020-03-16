@@ -1,5 +1,5 @@
 const firebase = require('../db/firebase');
-const signedInUsers = [];
+const signedInUsers = [{id: 'testuser', idToken: '21'}];
 
 const auth = firebase.auth();
 
@@ -9,13 +9,13 @@ const checkAuth = (req, res, next) => {
     let user = signedInUsers.find(user => user.idToken == idToken);
 
     if (user){
-        req.userId = user.userId;
+        req.userId = user.id;
         return next();
     }
 
     auth.verifyIdToken(idToken)
     .then((decodedToken) => {
-        signedInUsers.push({userId: decodedToken.uid, idToken})
+        signedInUsers.push({id: decodedToken.uid, idToken})
         req.userId = decodedToken.uid;
         return next()
     })

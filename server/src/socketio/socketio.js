@@ -1,32 +1,61 @@
 const io = require('socket.io')();
-const { createRoom, joinRoom, leaveRoom } = require('../games/roomManager');
+const firebase = require('../db/firebase');
+const roomController = require('../controllers/room');
 
-io.on('connection', (socket) => {
-    console.log(`socket ${socket.id} connected`);
+let signedInUsers = [{id : 'testuser', idToken: '21'}];
+const auth = firebase.auth();
 
-    let socketUserId, socketRoomId;
+const checkAuth = async (idToken) => {
+    let user = signedInUsers.find(user => user.idToken == idToken);
+    
+    if (user){
+        return user;
+    }
 
-    socket.on('join', async ({userId, roomId}) => {
-        socketUserId = userId;
-        socketRoomId = roomId;
-        socket.join(roomId);
-
-        console.log(userId, roomId);
-        const room = await joinRoom({userId, roomId});
+    auth.verifyIdToken(idToken)
+    .then((decodedToken) => {
+        user = {id: decodedToken.uid, idToken};
+        signedInUsers.push(user);
         
-        io.to(roomId).emit('roomStateUpdate', room);
+        return user;
     })
-
-
-
-
-    socket.on('disconnect',async () =>{
-        console.log("temps",socketUserId, socketRoomId);
-        const room = await leaveRoom({userId: socketUserId, roomId: socketRoomId});
-        console.log("temps leftroom", room);
-        io.to(socketRoomId).emit('roomStateUpdate', room);
+    .catch(() => {
+        return null;
     })
-});
+}
+
+
+io.of(/^\/[A-Za-z0-9]{6}/).on('connect', async (socket) => {
+    const roomId = socket.nsp.name.substring(1);
+    console.log(`socket ${socket.id} connected to namespace ${roomId}`);
+
+    const idToken = socket.handshake.query.idToken;
+    if (!idToken){
+        socket.emit('test', {message: 'id not valid'});
+        return socket.disconnect(true);
+    }
+
+    const user = await checkAuth(idToken);
+    if (!user){
+        socket.emit('test', {message: 'user not valid'});
+        return socket.disconnect(true);
+    }
+
+    const room = roomController.getRoom(roomId)
+    if (!room) {
+        socket.emit('test', {message: 'room not valid'});
+        return socket.disconnect(true);
+    }
+
+    await roomController.joinRoom(user.id, roomId);
+
+    socket.emit('roomStateChange',room);
+    
+    socket.on('disconnect', () => {
+        console.log(`socket ${socket.id} disconnected from namespace ${roomId}`)
+        signedInUsers = signedInUsers.filter(user => user.idToken != idToken);
+    })
+})
 
 
 module.exports = io;
