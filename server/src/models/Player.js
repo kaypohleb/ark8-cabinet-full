@@ -10,6 +10,14 @@ class Player {
         this.ready = false;
     }
 
+    ready(){
+        this.ready = true;
+    }
+
+    unready(){
+        this.ready = false;
+    }
+
 }
 
 module.exports = Player;
