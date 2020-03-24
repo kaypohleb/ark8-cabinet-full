@@ -28,7 +28,7 @@ class Game {
 }
 
 class Action {
-    constructor(player){
+    constructor({player}){
         this.player = player;
     }
 }

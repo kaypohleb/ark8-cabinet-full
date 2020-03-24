@@ -1,10 +1,20 @@
 const firebase = require('../db/firebase');
-const signedInUsers = [{id: 'testuser', idToken: '21'}];
+const signedInUsers = [];
 
 const auth = firebase.auth();
 
-const checkAuth = (req, res, next) => {
-    console.log(req.headers);
+const getUserId = async (idToken) => {
+    try {
+        const decodedToken = await auth.verifyIdToken(idToken);
+        return decodedToken.uid;
+    }
+    catch (e){
+        console.log(e);
+        return null;
+    }
+}
+
+const checkAuth = async (req, res, next) => {
     const idToken = req.headers.authorization.split(' ')[1];
     let user = signedInUsers.find(user => user.idToken == idToken);
 
@@ -13,17 +23,17 @@ const checkAuth = (req, res, next) => {
         return next();
     }
 
-    auth.verifyIdToken(idToken)
-    .then((decodedToken) => {
-        signedInUsers.push({id: decodedToken.uid, idToken})
-        req.userId = decodedToken.uid;
-        return next()
-    })
-    .catch( () => {
+    const userId = await getUserId(idToken);
+
+    if (userId == null){
         return res.json({
-            error : "Authentication Error"
-        });
-    })
+            error: "Authentication Error"
+        })
+    }
+
+    signedInUsers.push({id: userId, idToken})
+    req.userId = userId;
+    return next()
 }
 
-module.exports = checkAuth;
+module.exports = {getUserId, checkAuth};
