@@ -45,6 +45,7 @@ class Room {
             });
 
             socket.on('room_action', async (data) => {
+                console.log("room action", data);
                 const validUser = this.authenticatedUsers.some(o => o.socketId == socket.id);
                 if (!validUser){
                     return socket.emit('room_action_error', {
@@ -52,7 +53,7 @@ class Room {
                     })
                 }
                 
-                const validAction =  constants.ROOM_ACTION_TYPES.some((type) => type == data.actionType);
+                const validAction = constants.ROOM_ACTION_TYPES.some((type) => type == data.actionType);
                 if (!validAction){
                     return socket.emit('room_action_error', {
                         message: "Invalid room action"
@@ -60,8 +61,8 @@ class Room {
                 }
 
                 if (data.actionType == constants.SET_READY_ACTION_TYPE){
-                    player.ready();
-                    const allPlayersReady = players.reduce((accumulator, currentVal) => accumulator && currentVal.ready ,true)
+                    player.ready = true;
+                    const allPlayersReady = this.players.reduce((accumulator, currentVal) => accumulator && currentVal.ready ,true)
                     if (allPlayersReady && this.game){
                         this.players.forEach(player => {this.game.addPlayer(player)});
                         this.gameStarted = true;
@@ -72,7 +73,7 @@ class Room {
                 }
 
                 if (data.actionType == constants.SET_UNREADY_ACTION_TYPE && !this.gameStarted){
-                    player.unready();
+                    player.ready = false;
                     return nsp.emit('room_state_update', this.getRoomState());
                 }
 
@@ -84,8 +85,12 @@ class Room {
                         })
                     }
                     
-                    this.game = new constants.GAMES[data.gameId](); 
+                    const updateCallback = function(){
+                        nsp.emit('game_state_update', this.game.getState());
+                    };
+                    this.game = new constants.GAMES[data.gameId](updateCallback.bind(this)); 
 
+                    const allPlayersReady = this.players.reduce((accumulator, currentVal) => accumulator && currentVal.ready ,true)
                     if (allPlayersReady && this.game){
                         this.players.forEach(player => {this.game.addPlayer(player)});
                         this.gameStarted = true;
@@ -111,7 +116,7 @@ class Room {
                     this.players.forEach(player => {this.game.addPlayer(player)});
                     this.gameStarted = true;
                     this.game.start();
-
+                    
                     return nsp.emit('room_state_update', this.getRoomState());
                 }
 
@@ -137,8 +142,6 @@ class Room {
                         message: `Game has not started in room ${this.id}`
                     })
                 }
-
-                this.game.setCallback(() => {nsp.emit('game_state_update', this.game.getState())});
 
                 try {
                     this.game.makeAction(player, data);
@@ -166,25 +169,11 @@ class Room {
      */
 
     addPlayer(player){
-        if (!(player instanceof Player)){
-            throw new Error("addPlayer expected a Player object")
-        }
-
         this.players.push(player);
         return this;
     }
 
     removePlayer(player){
-        if (!(player instanceof Player)){
-            throw new Error("removePlayer expected a Player object")
-        }
-
-        const foundPlayer = this.players.find( existingPlayer => existingPlayer.id == player.id);
-
-        if (!foundPlayer){
-            throw new Error(`player with id ${player.id} not found in room with id ${this.id}`)
-        }
-        
         this.players = this.players.filter((existingPlayer) => existingPlayer.id != player.id);
 
         return this;
@@ -194,7 +183,7 @@ class Room {
         return {
             id : this.id,
             createdBy: this.createdBy,
-            gameId : this.game ? this.game.id : null,
+            game : !!this.game ? this.game: null,
             gameStarted: this.gameStarted,
             players: this.players
         }
