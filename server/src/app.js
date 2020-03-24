@@ -14,13 +14,12 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 // Middleware
-const authMiddleware = require('./middleware/auth');
-app.use(authMiddleware);
+app.use(require('./middleware/auth').checkAuth);
 app.use(express.json());
 
-
-// Route handlers
+// API route handlers
 app.use(require('./api/user'));
 app.use(require('./api/room'));
 
