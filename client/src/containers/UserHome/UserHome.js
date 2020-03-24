@@ -77,12 +77,23 @@ class UserHome extends Component{
         this.props.history.push({
             pathname:"/lobby",
             state:{
-                join:false
+                join:false,
+                
             }
             
         });
     }
-    joinRoomHandler = () =>{
+    joinRoomHandler = () => {
+        this.props.history.push({
+            pathname:"/lobby",
+            state:{
+                join:true,
+                roomID: this.state.joinRoomId,
+            }
+            
+        });
+    }
+    joinRoomScreenHandler = () =>{
         this.setState({
             joining:true,
           })
@@ -102,9 +113,11 @@ class UserHome extends Component{
         });
       };
     roomIDComplete = value => {
-        console.log("complete");
+       
+        const upperValue = value.toUpperCase();
+        console.log(upperValue);
         this.setState({
-            joinRoomId: value,
+            joinRoomId: upperValue,
             joinIdComplete: true,
         });
       };
@@ -123,7 +136,7 @@ class UserHome extends Component{
               />)
         }
         if(this.state.joinIdComplete){
-            joinButton = (<button>join room</button>)
+            joinButton = (<button onClick={this.joinRoomHandler}>JOIN ROOM</button>)
         }
 
         return(
@@ -146,7 +159,7 @@ class UserHome extends Component{
                 <StyledButton 
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={this.joinRoomHandler}>Join Room</StyledButton>
+                onClick={this.joinRoomScreenHandler}>Join Room</StyledButton>
                 <StyledButton 
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}

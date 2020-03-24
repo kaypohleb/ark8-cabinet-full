@@ -7,7 +7,7 @@ const Player = require('./Player');
 
 const db = firebase.firestore();
 
-const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 class RoomController {
     constructor(){

@@ -10,7 +10,7 @@ import axios from 'axios';
 import socketIOClient from "socket.io-client";
 
 const BASE_URL = 'http://localhost:3001'
-const socket = socketIOClient(BASE_URL);
+
 
 // define our action function
 export const userStateChanged = user => {
@@ -50,10 +50,10 @@ export const fetchUserData = () => {
 
 
 export const createRoom = () =>{
-  return(dispatch,getState) =>{
+  return async(dispatch,getState) =>{
       console.log("creating Room");
       let requestURL = `${BASE_URL}/createRoom`;
-      axios.post(
+      await axios.post(
         requestURL,
         {},
         {
@@ -62,7 +62,7 @@ export const createRoom = () =>{
         }
         }).then(response=>{
           console.log(response);
-          dispatch(enterRoom(response.data.roomId));
+          dispatch(enterRoom(response.data.id));
         }).catch(error => {
           dispatch({
             type: UPDATE_ROOM_STATE_ERROR,
@@ -72,12 +72,16 @@ export const createRoom = () =>{
   }
 }
 
+let socket;
 export const enterRoom = (roomID) =>{
+  console.log(roomID);
   return(dispatch,getState)=>{
-    let userID = getState().getUserDataReducer.id;
+    // console.log(getState().idtokenReducer.idToken);
+    // console.log(BASE_URL+"/"+roomID);
+    socket = socketIOClient(BASE_URL+"/"+roomID);
     socket.open();
-    socket.emit('join', {userId: userID, roomId: roomID});
-    socket.on('roomStateUpdate', (room) =>{
+    socket.emit('authentication', getState().idtokenReducer.idToken);
+    socket.on('room_state_update', (room) =>{
       console.log({...room});
       dispatch(updateRoomStateSuccess(room));
     })  
@@ -86,11 +90,45 @@ export const enterRoom = (roomID) =>{
 
 
 export const closeRoom = () =>{
-  return (dispatch)  =>{
-  console.log("closingRoom")
-  socket.close();
+  return (dispatch) =>{
+    console.log("closingRoom")
+    if(socket.connected){
+      socket.close();
+    }
   }
   
+}
+
+export const setGameTitle = (value)=>{
+  return (dispatch) => {
+    if(socket.connected){
+      socket.emit('room_action',{actionType:"ADD_GAME",gameId:value});
+    }
+  }
+}
+
+export const readyPlayer = () => {
+  return (dispatch) => {
+    if(socket.connected){
+      socket.emit('room_action',{actionType:"SET_READY"});
+    }
+  }
+}
+
+export const unreadyPlayer = () => {
+  return (dispatch) => {
+    if(socket.connected){
+      socket.emit('room_action',{actionType:"SET_UNREADY"});
+    }
+  }
+}
+
+export const startGame = () => {
+  return (dispatch) => {
+    if(socket.connected){
+      socket.emit('room_action',{actionType:"START_GAME"});
+    }
+  }
 }
 
 const updateRoomStateSuccess = (room) =>({
@@ -106,7 +144,6 @@ const fetchUserDataError = () =>({
     payload:{
       name:'', 
       id:'',
-      success:false,
     }
 })
 
@@ -116,7 +153,6 @@ const fetchUserDataSuccess = (res) => ({
   type:FETCH_USER_DATA_SUCCESS,
   payload:{
     ...res,
-    success: true
   }
 })
 
