@@ -27,12 +27,14 @@ firebase.initializeApp({
 class Home extends Component{
     constructor(props) {
         super(props);
+        console.log(this.state);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);   
     }
 
     state = {
       signing : false,
       isSignedIn: false,
+      enter: false,
       name:'John Doe',
       
     }
@@ -53,17 +55,8 @@ class Home extends Component{
     componentDidMount = () => {
       this.updateWindowDimensions();
       window.addEventListener('resize', this.updateWindowDimensions);
-
-      firebase.auth().onAuthStateChanged(user=>{
-        this.props.dispatch(userStateChanged(user));
-        user.getIdToken().then((idToken) => {
-          this.props.dispatch(idTokenChanged(idToken));
-          this.setState({isSignedIn:true});
-          this.props.history.push('/profile');
-          });
-          
-          
-        })
+    
+      
       
      
     }
@@ -84,6 +77,22 @@ class Home extends Component{
         this.setState({
           signing:true,
         })
+        firebase.auth().onAuthStateChanged(user=>{
+          if(user!==null){
+          this.props.dispatch(userStateChanged(user));
+            user.getIdToken().then((idToken) => {
+            this.props.dispatch(idTokenChanged(idToken));
+            this.setState({isSignedIn:true});
+            this.props.history.push({
+              pathname:"/profile",
+              state:{
+                  error: false,
+              }
+            });
+          });
+          } 
+            
+          })
      }
 
     exitSignInHandler = () => {

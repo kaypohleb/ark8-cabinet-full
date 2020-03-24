@@ -25,6 +25,7 @@ class Lobby extends Component{
     
     componentWillReceiveProps(newProps){
         if(newProps.players !== this.props.players){
+            console.log("Updating..")
             this.setState({
                 roomId: newProps.roomId,
                 createdBy: newProps.createdBy,
@@ -39,7 +40,9 @@ class Lobby extends Component{
     componentWillUnmount(){
        this.props.dispatch(closeRoom());
     }
-
+    backHandler = () =>{
+        this.props.history.push('/profile');
+    }
     render(){
         
         let players,createdBy = null;
@@ -56,7 +59,7 @@ class Lobby extends Component{
             
             <div className="Lobby">
                 <header>
-                    <button onClick={()=>{this.props.history.goBack()}}>Back</button>
+                    <button onClick={this.backHandler}>Back</button>
                 </header>
                 <div className="card">           
                 <h1>Waiting Room</h1>

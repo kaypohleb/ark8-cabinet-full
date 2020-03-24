@@ -1,13 +1,16 @@
 import{
   USER_STATE_CHANGED,
   ID_TOKEN_CHANGED,
-  GET_USER_DATA_SUCCESS,
-  GET_USER_DATA_FAILURE,
+  FETCH_USER_DATA_SUCCESS, 
   UPDATE_ROOM_STATE_SUCCESS,
-  UPDATE_ROOM_STATE_FAILURE
+  FETCH_USER_ERROR,
+  UPDATE_ROOM_STATE_ERROR,
 } from './types';
 import axios from 'axios';
 import socketIOClient from "socket.io-client";
+
+const BASE_URL = 'http://localhost:3001'
+const socket = socketIOClient(BASE_URL);
 
 // define our action function
 export const userStateChanged = user => {
@@ -24,37 +27,48 @@ export const idTokenChanged = idtoken => {
     };
   }
   
-export const getUserData = () => {
-  return(dispatch,getState) =>{
-  if(getState().idtokenReducer.idToken){
-  axios.post("http://localhost:3001/getUser",{},{
-            headers: {
-                Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
-            }
-        }).then(response=>{
-                console.log(response);
-                dispatch(getUserDataSuccess(response.data));
-            }).catch(err => {
-              dispatch(getUserDataFailure(err.message));
-            })
-    }
+export const fetchUserData = () => {
+  return async(dispatch,getState) =>{
+  let requestURL = `${BASE_URL}/getUser`;
+  await axios.post(
+    requestURL,
+    {},
+    {
+      headers: {
+        Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
+      }
+    }).then(response=>{
+          console.log(response);
+          dispatch(fetchUserDataSuccess(response.data));
+      }).catch(error => {
+        dispatch(fetchUserDataError());
+      })
+  
   }
 }
 
-const socket = socketIOClient("http://localhost:3001");
+
 
 export const createRoom = () =>{
   return(dispatch,getState) =>{
-            console.log("creating Room");
-            let userID = 
-            axios.post("http://localhost:3001/createRoom",{},{
-            headers: {
-                Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
-            }
+      console.log("creating Room");
+      let requestURL = `${BASE_URL}/createRoom`;
+      axios.post(
+        requestURL,
+        {},
+        {
+        headers: {
+          Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
+        }
         }).then(response=>{
-                console.log(response);
-                dispatch(enterRoom(response.data.roomId));
-            })
+          console.log(response);
+          dispatch(enterRoom(response.data.roomId));
+        }).catch(error => {
+          dispatch({
+            type: UPDATE_ROOM_STATE_ERROR,
+            error
+          })
+        })
   }
 }
 
@@ -70,9 +84,13 @@ export const enterRoom = (roomID) =>{
   }
 }
 
+
 export const closeRoom = () =>{
+  return (dispatch)  =>{
   console.log("closingRoom")
   socket.close();
+  }
+  
 }
 
 const updateRoomStateSuccess = (room) =>({
@@ -83,19 +101,23 @@ const updateRoomStateSuccess = (room) =>({
   
 })
 
-const updateRoomStateFailure = (room) =>({
-  type:UPDATE_ROOM_STATE_FAILURE,
-  
+const fetchUserDataError = () =>({
+    type: FETCH_USER_ERROR,
+    payload:{
+      name:'', 
+      id:'',
+      success:false,
+    }
 })
 
-const getUserDataSuccess = (res) => ({
-  type:GET_USER_DATA_SUCCESS,
+
+
+const fetchUserDataSuccess = (res) => ({
+  type:FETCH_USER_DATA_SUCCESS,
   payload:{
-    ...res
+    ...res,
+    success: true
   }
 })
 
-const getUserDataFailure = (res) => ({
-  type:GET_USER_DATA_FAILURE,
- 
-})
+
