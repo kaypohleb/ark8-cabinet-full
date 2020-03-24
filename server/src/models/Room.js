@@ -16,6 +16,7 @@ class Room {
         this.id = roomId;
         this.createdBy = createdBy;
         this.game = game;
+        this.gameStarted = false;
         this.players = [];
         this.authenticatedUsers = [];
 
@@ -40,25 +41,83 @@ class Room {
                 }
 
                 socket.emit('authentication', {message: 'Authentication success'});
-                nsp.emit('room_state_update', this.getRoomState())
+                return nsp.emit('room_state_update', this.getRoomState())
             });
 
             socket.on('room_action', async (data) => {
+                console.log("room action", data);
                 const validUser = this.authenticatedUsers.some(o => o.socketId == socket.id);
                 if (!validUser){
                     return socket.emit('room_action_error', {
                         message: `Socket is not authenticated for this room`
                     })
                 }
-
-                if (!data.actionType){
-                    socket.emit('room_action_error', {
+                
+                const validAction = constants.ROOM_ACTION_TYPES.some((type) => type == data.actionType);
+                if (!validAction){
+                    return socket.emit('room_action_error', {
                         message: "Invalid room action"
                     })
                 }
 
-                if (data.actionType == constants.ADD_GAME_ACTION_TYPE){
+                if (data.actionType == constants.SET_READY_ACTION_TYPE){
+                    player.ready = true;
+                    const allPlayersReady = this.players.reduce((accumulator, currentVal) => accumulator && currentVal.ready ,true)
+                    if (allPlayersReady && this.game){
+                        this.players.forEach(player => {this.game.addPlayer(player)});
+                        this.gameStarted = true;
+                        this.game.start();
+                    }
 
+                    return nsp.emit('room_state_update', this.getRoomState());
+                }
+
+                if (data.actionType == constants.SET_UNREADY_ACTION_TYPE && !this.gameStarted){
+                    player.ready = false;
+                    return nsp.emit('room_state_update', this.getRoomState());
+                }
+
+                if (data.actionType == constants.ADD_GAME_ACTION_TYPE){
+                    const validGame = constants.GAME_IDS.some((gameId) => gameId == data.gameId);
+                    if (!validGame){
+                        return socket.emit('room_action_error', {
+                            message: "Invalid game selected"
+                        })
+                    }
+                    
+                    const updateCallback = function(){
+                        nsp.emit('game_state_update', this.game.getState());
+                    };
+                    this.game = new constants.GAMES[data.gameId](updateCallback.bind(this)); 
+
+                    const allPlayersReady = this.players.reduce((accumulator, currentVal) => accumulator && currentVal.ready ,true)
+                    if (allPlayersReady && this.game){
+                        this.players.forEach(player => {this.game.addPlayer(player)});
+                        this.gameStarted = true;
+                        this.game.start();
+                    }
+
+                    return nsp.emit('room_state_update', this.getRoomState());
+                }
+
+                if (data.actionType == constants.START_GAME_ACTION_TYPE){
+                    if (!game){
+                        return socket.emit('room_action_error', {
+                            message: "Cannot start game without adding a game first"
+                        })
+                    }
+                    
+                    if (player.id != this.createdBy){
+                        return socket.emit('room_action_error', {
+                            message: "Game can only be started by room creator"
+                        })
+                    }
+
+                    this.players.forEach(player => {this.game.addPlayer(player)});
+                    this.gameStarted = true;
+                    this.game.start();
+                    
+                    return nsp.emit('room_state_update', this.getRoomState());
                 }
 
 
@@ -68,7 +127,7 @@ class Room {
                 const validUser = this.authenticatedUsers.some(o => o.socketId == socket.id);
                 if (!validUser){
                     return socket.emit('room_action_error', {
-                        message: `Socket is not authenticated for this room`
+                        message: `Socket is not authenticated for this room ${this.id}`
                     })
                 }
 
@@ -78,8 +137,14 @@ class Room {
                     })
                 }
 
+                if (!this.gameStarted){
+                    return socket.emit('game_error', {
+                        message: `Game has not started in room ${this.id}`
+                    })
+                }
+
                 try {
-                    this.game.makeAction(data);
+                    this.game.makeAction(player, data);
                 }
                 catch (e) {
                     return socket.emit('game_error', {
@@ -104,25 +169,11 @@ class Room {
      */
 
     addPlayer(player){
-        if (!(player instanceof Player)){
-            throw new Error("addPlayer expected a Player object")
-        }
-
         this.players.push(player);
         return this;
     }
 
     removePlayer(player){
-        if (!(player instanceof Player)){
-            throw new Error("removePlayer expected a Player object")
-        }
-
-        const foundPlayer = this.players.find( existingPlayer => existingPlayer.id == player.id);
-
-        if (!foundPlayer){
-            throw new Error(`player with id ${player.id} not found in room with id ${this.id}`)
-        }
-        
         this.players = this.players.filter((existingPlayer) => existingPlayer.id != player.id);
 
         return this;
@@ -132,7 +183,8 @@ class Room {
         return {
             id : this.id,
             createdBy: this.createdBy,
-            gameId : this.game ? this.game.id : null,
+            game : !!this.game ? this.game: null,
+            gameStarted: this.gameStarted,
             players: this.players
         }
     }
