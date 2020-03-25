@@ -1,22 +1,18 @@
 const express = require('express');
-const firebase = require('../db/firebase');
+const {getUserData} = require('../db/utils');
 const router = express.Router();
-
-const db = firebase.firestore();
 
 router.post('/getUser', async (req, res) => {
     const userId = req.userId;
-    const user = await db.collection('users').doc(userId).get();
-    
-    if (user.exists){
+    const user = await getUserData(userId);
+
+    if (!user){
         return res.json({
-            ...user.data()
+            error : 'User not found'
         })
     }
 
-    return res.json({
-        error: "User not found"
-    })
+    return res.json(user);
 })
 
 

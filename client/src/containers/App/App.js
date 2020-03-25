@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import Home  from '../../components/Home/Home';
-import UserHome from '../../components/UserHome/UserHome';
-import Login from '../../components/Login/Login';
-import Lobby from '../../components/Lobby/Lobby';
-import JoinLobby from '../../components/JoinLobby/JoinLobby';
+import Home  from '../Home/Home';
+import UserHome from '../UserHome/UserHome';
+import Lobby from '../Lobby/Lobby';
+import GameRoom from '../GameRoom/GameRoom';
 import {
   BrowserRouter as Router,
   Switch,
@@ -22,11 +21,9 @@ class App extends Component{
         <div className = "App">
           <Switch>
             <Route exact path ="/" component={Home}/>
-            <Route exact path = "/login" component={Login}/>
             <Route exact path = "/profile" component={UserHome}/>
             <Route exact path = "/lobby" component={Lobby}/>
-            <Route exact path = "/join" component={JoinLobby}/>
-            
+            <Route exact path = "/game" component={GameRoom}/>
           </Switch>
         </div>
       </Router>

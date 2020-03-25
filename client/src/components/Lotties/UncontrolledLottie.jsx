@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Lottie from 'react-lottie'
-import animationData from '../../assets/lotties/16446-app.json'
-
+import animationData from '../../assets/lotties/glitch_full.json'
+import Mux from '../../hoc/Mux';
 class UncontrolledLottie extends Component {
 
 
@@ -17,12 +17,12 @@ class UncontrolledLottie extends Component {
     };
 
     return(
-      <div>
+      <Mux>
         <Lottie options={defaultOptions}
-              height={400}
-              width={400}
+              height={this.props.height}
+              width={this.props.width}
         />
-      </div>
+      </Mux>
     )
   }
 }
