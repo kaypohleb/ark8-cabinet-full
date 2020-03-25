@@ -1,4 +1,10 @@
 node_modules
 credentials.json
+<<<<<<< master
 coverage
 sandbox
+=======
+
+sandbox
+coverage
+>>>>>>> Tests for RockPaperScissors Class

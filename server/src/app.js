@@ -10,13 +10,13 @@ const io = require('./socketio/socketio');
 io.attach(http);
 
 app.use(cors({
-    origin:['http://localhost:3000',],
+    origin:['http://localhost:3000','*'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Middleware
-app.use(require('./middleware/auth').checkAuth);
+app.use(require('./firebase/auth').checkAuth);
 app.use(express.json());
 
 // API route handlers

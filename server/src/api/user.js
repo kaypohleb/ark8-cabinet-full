@@ -1,5 +1,5 @@
 const express = require('express');
-const {getUserData} = require('../db/utils');
+const {getUserData} = require('../firebase/utils');
 const router = express.Router();
 
 router.post('/getUser', async (req, res) => {

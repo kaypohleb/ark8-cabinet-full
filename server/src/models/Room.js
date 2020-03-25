@@ -1,8 +1,8 @@
 const io = require('../socketio/socketio');
 const Player = require('./Player');
 const constants = require('./constants');
-const {getUserId} = require('../middleware/auth');
-const {getUserData} = require('../db/utils');
+const {getUserId} = require('../firebase/auth');
+const {getUserData} = require('../firebase/utils');
 
 class Room {
     /**

@@ -9,15 +9,6 @@ class Player {
         this.name = name;
         this.ready = false;
     }
-
-    ready(){
-        this.ready = true;
-    }
-
-    unready(){
-        this.ready = false;
-    }
-
 }
 
 module.exports = Player;

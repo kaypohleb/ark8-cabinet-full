@@ -1,4 +1,4 @@
-const firebase = require('../db/firebase');
+const firebase = require('./firebase');
 const signedInUsers = [];
 
 const auth = firebase.auth();
