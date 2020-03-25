@@ -80,7 +80,7 @@ class RockPaperScissors{
         this.state.currentTurn = [];
         this.state.remainingRounds--;
         
-        console.log(this);
+        // console.log(this);
 
         this.updateCallback();
 
