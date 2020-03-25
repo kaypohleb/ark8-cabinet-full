@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import Home  from '../Home/Home';
 import UserHome from '../UserHome/UserHome';
-
 import Lobby from '../Lobby/Lobby';
-import JoinLobby from '../JoinLobby/JoinLobby';
+import GameRoom from '../GameRoom/GameRoom';
 import {
   BrowserRouter as Router,
   Switch,
@@ -24,8 +23,7 @@ class App extends Component{
             <Route exact path ="/" component={Home}/>
             <Route exact path = "/profile" component={UserHome}/>
             <Route exact path = "/lobby" component={Lobby}/>
-            <Route exact path = "/join" component={JoinLobby}/>
-            
+            <Route exact path = "/game" component={GameRoom}/>
           </Switch>
         </div>
       </Router>

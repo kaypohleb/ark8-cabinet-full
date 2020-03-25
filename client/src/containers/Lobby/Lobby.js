@@ -1,8 +1,9 @@
 import React,{ Component } from 'react';
 import { connect  } from 'react-redux';
-import {withRouter} from  'react-router-dom';
+import {withRouter,Redirect} from  'react-router-dom';
 import Player from '../../components/Player/Player';
-import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame} from '../../store/actions';
+import GameRoom from '../GameRoom/GameRoom';
+import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame} from '../../store/actions/index';
 import styles from './Lobby.module.css';
 
 
@@ -11,9 +12,9 @@ class Lobby extends Component{
     constructor(props){
         super(props);
         if(this.props.location.state.join===false){
-            this.props.dispatch(createRoom());
+            this.props.createRoom();
         }else if(this.props.location.state.join===true){
-            this.props.dispatch(enterRoom(this.props.location.state.roomID))
+            this.props.enterRoom(this.props.location.state.roomID)
         }
     }
     state={
@@ -22,47 +23,47 @@ class Lobby extends Component{
         userID:'',
         players:[],
         id:'',
-        gameId:'',
         getInfo:false,
-        value:'',
+        value:"ROCK_PAPER_SCISSORS",
+        game:{},
+        gameStarted:false,
     }
     
-    componentWillReceiveProps(newProps){
-        if(newProps.players !== this.props.players){
+    componentDidUpdate(){
+        if(this.state.players !== this.props.players){
             console.log("Updating..")
             this.setState({
-                id: newProps.id,
-                userID: newProps.userID,
-                createdBy: newProps.createdBy,
-                gameId: newProps.gameId,
-                players: newProps.players,
-                getInfo: newProps.getInfo,
+                id: this.props.id,
+                userID: this.props.userID,
+                createdBy: this.props.createdBy,
+                players: this.props.players,
+                getInfo: this.props.getInfo,
+                gameStarted: this.props.gameStarted,
+                game: this.props.game,
             })
         }
         
      }
 
     componentWillUnmount(){
-       this.props.dispatch(closeRoom());
+       //this.props.closeRoom();
     }
     
-    backHandler(){
-        this.props.history.push('/profile');
-    }
+    
     selectChangeHandler(event){
         this.setState({
             value: event.target.value,
         });
-        this.props.dispatch(setGameTitle(event.target.value));
+        this.props.setGame(event.target.value);
     }
-    readyHandler(){
-        this.props.dispatch(readyPlayer());
-    }
-    unReadyHandler(){
-        this.props.dispatch(unreadyPlayer());
-    }
+    
     startGameHandler(){
-        this.props.dispatch(startGame());
+        console.log(this.state);
+        if(this.state.game!=null){
+            console.log("pushing to game")
+            this.props.startGame();
+            console.log(this.state);
+        }
     }
 
 
@@ -71,16 +72,20 @@ class Lobby extends Component{
         let players,createdBy,startGameButton,chooseGame = null;
         
         if(this.state.userID === this.state.createdBy.id){
-            console.log("creator");
-            startGameButton = (<button>Start Game</button>);
+            //console.log("creator");
+            startGameButton = (<button onClick={()=>{this.startGameHandler()}}>Start Game</button>);
             chooseGame = (<div>
                 <p>Pick a Game</p>
-                <select value={this.state.value} onChange={this.selectChangeHandler}>
+                <select onChange={(e)=>this.selectChangeHandler(e)}>
                     <option value="WEREWOLF">werewolf</option>
                     <option value="MAFIA">mafia</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
                 </select>
                 </div>);
+        }
+
+        if(this.state.gameStarted){
+            return <Redirect to="/game" />
         }
         
         if(this.state.getInfo){
@@ -103,9 +108,9 @@ class Lobby extends Component{
                     </div>
                 </div>
                 {chooseGame}
-                <button onClick={this.backHandler}>Back</button>
-                <button onClick={this.readyHandler}>Ready</button>
-                <button onClick={this.unReadyHandler}>UnReady</button>
+                <button onClick={ ()=>{this.props.history.push('/profile')}}>Back</button>
+                <button onClick={this.props.ready}>Ready</button>
+                <button onClick={this.props.unready}>UnReady</button>
                 {startGameButton}
                 {createdBy}
                 {players}
@@ -120,12 +125,27 @@ class Lobby extends Component{
 const mapStateToProps = (state) => {
     console.log(state);
     return{
-        id: state.getLobbyDataReducer.id,
-        createdBy: state.getLobbyDataReducer.createdBy,
-        players: state.getLobbyDataReducer.players,
-        userID:state.getUserDataReducer.id,
+        id: state.fetchLobbyDataReducer.id,
+        createdBy: state.fetchLobbyDataReducer.createdBy,
+        players: state.fetchLobbyDataReducer.players,
+        userID:state.fetchUserDataReducer.id,
         getInfo: true,
+        gameStarted: state.fetchLobbyDataReducer.gameStarted,
+        game:state.fetchLobbyDataReducer.game
     }
 }
 
-export default connect(mapStateToProps)(withRouter(Lobby));
+const mapDispatchtoProps = (dispatch) =>{
+   return {
+       ready: () => dispatch(readyPlayer()),
+       unready: ()=> dispatch(unreadyPlayer()),
+       setGame: (gameTitle) => dispatch(setGameTitle(gameTitle)),
+       startGame: () => dispatch(startGame()),
+       createRoom: ()=> dispatch(createRoom()),
+       enterRoom: (roomid)=>dispatch(enterRoom(roomid)),
+       closeRoom: ()=>dispatch(closeRoom()),
+
+   }
+}
+
+export default connect(mapStateToProps,mapDispatchtoProps)(withRouter(Lobby));

@@ -101,17 +101,18 @@ class Room {
                 }
 
                 if (data.actionType == constants.START_GAME_ACTION_TYPE){
-                    if (!game){
+                    if (!this.game){
                         return socket.emit('room_action_error', {
                             message: "Cannot start game without adding a game first"
                         })
                     }
                     
-                    if (player.id != this.createdBy){
+                    if (player.id != this.createdBy.id){
                         return socket.emit('room_action_error', {
                             message: "Game can only be started by room creator"
                         })
                     }
+                    
 
                     this.players.forEach(player => {this.game.addPlayer(player)});
                     this.gameStarted = true;

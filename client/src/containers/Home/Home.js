@@ -8,7 +8,7 @@ import {motion} from 'framer-motion';
 import {connect} from 'react-redux';
 import Login from '../../components/Login/Login';
 import Modal from '../../components/UI/Modal/Modal';
-import { userStateChanged,idTokenChanged } from '../../store/actions';
+import { userStateChanged,idTokenChanged } from '../../store/actions/index';
 const StyledButton = styled(motion.div)`
   display: inline-block;
   border-radius: 3px;

@@ -1,15 +1,8 @@
 import { combineReducers } from 'redux';
-import { 
-    USER_STATE_CHANGED,
-    ID_TOKEN_CHANGED,
-    UPDATE_ROOM_STATE_SUCCESS,
-    FETCH_USER_DATA_SUCCESS,
-    FETCH_USER_ERROR,
-    } from './types';
-
+import * as type from './types';
 
 function userReducer(state = {}, action) {
-    if(action.type===USER_STATE_CHANGED){
+    if(action.type===type.USER_STATE_CHANGED){
         return {
             user: action.user,
         };
@@ -18,7 +11,7 @@ function userReducer(state = {}, action) {
 }
 
 function idtokenReducer(state = '', action) {
-    if(action.type===ID_TOKEN_CHANGED){
+    if(action.type===type.ID_TOKEN_CHANGED){
         return {
             idToken: action.idtoken,
         };
@@ -29,14 +22,14 @@ const initUserDataState = {
     name: '',
     id: '',
 }
-function getUserDataReducer(state=initUserDataState,action){
+function fetchUserDataReducer(state=initUserDataState,action){
     switch(action.type){
-        case(FETCH_USER_DATA_SUCCESS):
+        case(type.FETCH_USER_DATA_SUCCESS):
             return ({
                 ...action.payload
             })
 
-        case(FETCH_USER_ERROR):
+        case(type.FETCH_USER_ERROR):
             return({
                 ...action.payload
             })
@@ -52,9 +45,9 @@ const initLobbyState = {
     players:[],
 }
 
-function getLobbyDataReducer(state=initLobbyState,action){
+function fetchLobbyDataReducer(state=initLobbyState,action){
     switch(action.type){
-        case(UPDATE_ROOM_STATE_SUCCESS):
+        case(type.UPDATE_ROOM_STATE_SUCCESS):
             return ({
                 ...action.payload
             })
@@ -62,9 +55,24 @@ function getLobbyDataReducer(state=initLobbyState,action){
             return state;
     }
 }
+
+function fetchGameDataReducer(state={},action){
+    switch(action.type){
+        case(type.UPDATE_GAME_STATE_SUCCESS):
+            return ({
+                ...action.payload
+            })
+        default: 
+            return state;
+    }
+}
+
+
 export const rootReducer = combineReducers({
     userReducer,
     idtokenReducer,
-    getUserDataReducer,
-    getLobbyDataReducer,
+    fetchUserDataReducer,
+    fetchLobbyDataReducer,
+    fetchGameDataReducer,
+    
 });

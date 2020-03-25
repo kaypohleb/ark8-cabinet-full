@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import {motion} from 'framer-motion';
-import {withRouter,Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './UserHome.module.css';
-import {fetchUserData} from '../../store/actions';
+import {fetchUserData} from '../../store/actions/authactions';
 import Modal from '../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
 const StyledButton = styled(motion.button)`
@@ -172,10 +172,10 @@ class UserHome extends Component{
 }
 
 const mapStateToProps = (state) => {
-    
+    console.log(state);
     return{
-        name: state.getUserDataReducer.name,
-        id: state.getUserDataReducer.id,
+        name: state.fetchUserDataReducer.name,
+        id: state.fetchUserDataReducer.id,
     }
 }
 
