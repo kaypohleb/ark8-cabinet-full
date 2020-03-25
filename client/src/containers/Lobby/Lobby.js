@@ -12,6 +12,7 @@ class Lobby extends Component{
     constructor(props){
         super(props);
         if(this.props.location.state.join===false){
+            
             this.props.createRoom();
         }else if(this.props.location.state.join===true){
             this.props.enterRoom(this.props.location.state.roomID)
@@ -27,26 +28,28 @@ class Lobby extends Component{
         value:"ROCK_PAPER_SCISSORS",
         game:{},
         gameStarted:false,
+        isSignedIn:true,
     }
     
-    componentDidUpdate(){
-        if(this.state.players !== this.props.players){
-            console.log("Updating..")
-            this.setState({
-                id: this.props.id,
-                userID: this.props.userID,
-                createdBy: this.props.createdBy,
-                players: this.props.players,
-                getInfo: this.props.getInfo,
-                gameStarted: this.props.gameStarted,
-                game: this.props.game,
-            })
-        }
+    componentWillReceiveProps(newProps){
+
+        console.log("Updating..")
+        this.setState({
+            id: newProps.id,
+            userID: newProps.userID,
+            createdBy: newProps.createdBy,
+            players: newProps.players,
+            getInfo: newProps.getInfo,
+            gameStarted: newProps.gameStarted,
+            game: newProps.game,
+            isSignedIn: newProps.isSignedIn,
+        });
+    
         
      }
 
-    componentWillUnmount(){
-       //this.props.closeRoom();
+    componentDidMount(){
+       console.log(this.state);
     }
     
     
@@ -62,7 +65,7 @@ class Lobby extends Component{
         if(this.state.game!=null){
             console.log("pushing to game")
             this.props.startGame();
-            console.log(this.state);
+            // console.log(this.state);
         }
     }
 
@@ -85,7 +88,12 @@ class Lobby extends Component{
         }
 
         if(this.state.gameStarted){
-            return <Redirect to="/game" />
+            return <GameRoom game={this.state.game}></GameRoom>
+        }
+        
+        if(!this.state.isSignedIn){
+            console.log("reflect")
+            return <Redirect to="/"></Redirect>
         }
         
         if(this.state.getInfo){
@@ -131,11 +139,13 @@ const mapStateToProps = (state) => {
         userID:state.fetchUserDataReducer.id,
         getInfo: true,
         gameStarted: state.fetchLobbyDataReducer.gameStarted,
-        game:state.fetchLobbyDataReducer.game
+        game:state.fetchLobbyDataReducer.game,
+        isSignedIn:state.fetchLobbyDataReducer.isSignedIn,
     }
 }
 
 const mapDispatchtoProps = (dispatch) =>{
+
    return {
        ready: () => dispatch(readyPlayer()),
        unready: ()=> dispatch(unreadyPlayer()),

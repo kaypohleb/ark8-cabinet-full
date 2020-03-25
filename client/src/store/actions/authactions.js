@@ -36,6 +36,7 @@ export const fetchUserData = () => {
             console.log(response);
             dispatch(fetchUserDataSuccess(response.data));
         }).catch(error => {
+         
           dispatch(fetchUserDataError());
         })
     
@@ -48,6 +49,7 @@ const fetchUserDataError = () =>({
     payload:{
       name:'', 
       id:'',
+      isSignedIn:false,
     }
 })
 

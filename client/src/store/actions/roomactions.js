@@ -84,15 +84,18 @@ export const unreadyPlayer = () => {
 }
 
 export const startGame = () => {
-  return (dispatch) => {
+  return () => {
       socket.emit('room_action',{actionType:"START_GAME"});
-      socket.on('game_state_update', (data) => {
-        console.log({...data});
-        dispatch(updateGameStateSuccess(data));
-    })
   }
 }
-
+export const setRefreshGameState = () =>{
+    return (dispatch) =>{
+        socket.on('game_state_update', (data) => {
+            console.log({...data});
+            dispatch(updateGameStateSuccess(data));
+        })
+    }
+}
 export const publishGameAction = (selection) =>{
     return()=>{
         socket.emit('game_action',{selection});

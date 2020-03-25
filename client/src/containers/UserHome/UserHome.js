@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
 import {motion} from 'framer-motion';
-import {withRouter} from 'react-router-dom';
+import {withRouter,Redirect} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './UserHome.module.css';
 import {fetchUserData} from '../../store/actions/authactions';
@@ -45,15 +45,16 @@ class UserHome extends Component{
         id:'',
         joining: false,
         joinIdComplete:false,
-        
+        isSignedIn:true,
     }
 
     componentWillReceiveProps(newProps){
         
-        console.log("Updating Profile..")
+       //console.log("Updating Profile..")
         this.setState({
             name: newProps.name,
-            id: newProps.id         
+            id: newProps.id,
+            isSignedIn:newProps.isSignedIn,       
         })
        
         
@@ -138,6 +139,9 @@ class UserHome extends Component{
         if(this.state.joinIdComplete){
             joinButton = (<button onClick={this.joinRoomHandler}>JOIN ROOM</button>)
         }
+        if(!this.state.isSignedIn){
+            return <Redirect to='/'></Redirect>
+        }
 
         return(
         
@@ -176,6 +180,7 @@ const mapStateToProps = (state) => {
     return{
         name: state.fetchUserDataReducer.name,
         id: state.fetchUserDataReducer.id,
+        isSignedIn:state.fetchUserDataReducer.isSignedIn,
     }
 }
 

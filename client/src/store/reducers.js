@@ -21,14 +21,20 @@ function idtokenReducer(state = '', action) {
 const initUserDataState = {
     name: '',
     id: '',
+    isSignIn:false
 }
 function fetchUserDataReducer(state=initUserDataState,action){
     switch(action.type){
         case(type.FETCH_USER_DATA_SUCCESS):
+            let isSignIn=true;
+            if(action.payload.error){
+                isSignIn=false;
+            }
             return ({
-                ...action.payload
+                ...action.payload,
+                isSignedIn:isSignIn
             })
-
+            break;
         case(type.FETCH_USER_ERROR):
             return({
                 ...action.payload
@@ -43,14 +49,21 @@ const initLobbyState = {
     userID:'',
     checkCreated: false,
     players:[],
+    isSignedIn:false,
 }
 
 function fetchLobbyDataReducer(state=initLobbyState,action){
     switch(action.type){
         case(type.UPDATE_ROOM_STATE_SUCCESS):
+            let isSignIn=true;
+            if(action.payload.error){
+                isSignIn=false;
+            }
             return ({
-                ...action.payload
+                ...action.payload,
+                isSignedIn:isSignIn,
             })
+            break;
         default: 
             return state;
     }

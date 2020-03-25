@@ -82,13 +82,8 @@ class Home extends Component{
           this.props.dispatch(userStateChanged(user));
             user.getIdToken().then((idToken) => {
             this.props.dispatch(idTokenChanged(idToken));
-            this.setState({isSignedIn:true});
-            this.props.history.push({
-              pathname:"/profile",
-              state:{
-                  error: false,
-              }
-            });
+            this.setState({isSignedIn: true,});
+            this.props.history.push('/profile');
           });
           } 
             
