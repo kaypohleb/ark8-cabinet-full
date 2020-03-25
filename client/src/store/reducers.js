@@ -2,10 +2,10 @@ import { combineReducers } from 'redux';
 import { 
     USER_STATE_CHANGED,
     ID_TOKEN_CHANGED,
-    GET_USER_DATA_SUCCESS,
-    GET_USER_DATA_FAILURE,
     UPDATE_ROOM_STATE_SUCCESS,
-    UPDATE_ROOM_STATE_FAILURE } from './types';
+    FETCH_USER_DATA_SUCCESS,
+    FETCH_USER_ERROR,
+    } from './types';
 
 
 function userReducer(state = {}, action) {
@@ -31,13 +31,15 @@ const initUserDataState = {
 }
 function getUserDataReducer(state=initUserDataState,action){
     switch(action.type){
-        case(GET_USER_DATA_SUCCESS):
+        case(FETCH_USER_DATA_SUCCESS):
             return ({
                 ...action.payload
             })
-        case(GET_USER_DATA_FAILURE):
-            //console.log('error');
-            return state;
+
+        case(FETCH_USER_ERROR):
+            return({
+                ...action.payload
+            })
         default: 
             return state;
     }
@@ -56,9 +58,6 @@ function getLobbyDataReducer(state=initLobbyState,action){
             return ({
                 ...action.payload
             })
-        case(UPDATE_ROOM_STATE_FAILURE):
-            //console.log('error');
-            return state;
         default: 
             return state;
     }

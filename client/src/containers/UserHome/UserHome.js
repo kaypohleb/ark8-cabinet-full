@@ -1,23 +1,24 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase';
-import {withRouter} from 'react-router-dom';
+import {motion} from 'framer-motion';
+import {withRouter,Redirect} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './UserHome.module.css';
-import {getUserData} from '../../store/actions';
+import {fetchUserData} from '../../store/actions';
 import Modal from '../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
-const StyledButton = styled.button`
-  background-color: red;
+const StyledButton = styled(motion.button)`
+  background-color: transparent;
   color:white;
+  margin: 20px;
+  width:10vw;
+  height:4vh;
   font: inherit;
   border-radius:8px;
-  padding: 8px;
+  padding: 10px;
   cursor: pointer;
-  &:hover {
-    background-color: salmon;
-    color: black;
-  }
+  border: 1px solid white;
 `
 const pinStyle = {
   color:'white',
@@ -33,27 +34,40 @@ const pinStyle = {
   
 
 class UserHome extends Component{
-
+    
     constructor(props){
         super(props);
-        this.props.dispatch(getUserData());
+        this.props.dispatch(fetchUserData());
+        
     }
     state={
         name:'',
         id:'',
         joining: false,
         joinIdComplete:false,
+        
     }
 
     componentWillReceiveProps(newProps){
-        if(newProps.name !== this.props.name){
-            this.setState({
-                name: newProps.name,
-                id: newProps.id             
-            })
-        }
+        
+        console.log("Updating Profile..")
+        this.setState({
+            name: newProps.name,
+            id: newProps.id         
+        })
+       
+        
      }
-    
+    componentDidMount(){
+        this.setState({
+            name: this.props.name,
+            id: this.props.id,   
+            
+        });
+        console.log(this.state);
+        
+        
+    }
     signoutHander = () =>{
         console.log("trying to sign out");
         firebase.auth().signOut();
@@ -63,12 +77,23 @@ class UserHome extends Component{
         this.props.history.push({
             pathname:"/lobby",
             state:{
-                join:false
+                join:false,
+                
             }
             
         });
     }
-    joinRoomHandler = () =>{
+    joinRoomHandler = () => {
+        this.props.history.push({
+            pathname:"/lobby",
+            state:{
+                join:true,
+                roomID: this.state.joinRoomId,
+            }
+            
+        });
+    }
+    joinRoomScreenHandler = () =>{
         this.setState({
             joining:true,
           })
@@ -88,9 +113,11 @@ class UserHome extends Component{
         });
       };
     roomIDComplete = value => {
-        console.log("complete");
+       
+        const upperValue = value.toUpperCase();
+        console.log(upperValue);
         this.setState({
-            joinRoomId: value,
+            joinRoomId: upperValue,
             joinIdComplete: true,
         });
       };
@@ -109,25 +136,35 @@ class UserHome extends Component{
               />)
         }
         if(this.state.joinIdComplete){
-            joinButton = (<button>join room</button>)
+            joinButton = (<button onClick={this.joinRoomHandler}>JOIN ROOM</button>)
         }
-        
+
         return(
-            
-            <div className = {styles.UserHome}>
-                 <Modal show={this.state.joining} modalClosed={this.exitJoinScreenandler}>
-                    {join}
-                    {joinButton}
-                    </Modal>
-                <header>
-                    <StyledButton onClick={this.signoutHander}>SignOut</StyledButton>
-                </header>
-                <div className={styles.card}>
-                <h1>Hello Buddy : {this.state.name}</h1>
-                <p>User ID: {this.state.id}</p>
-                <StyledButton onClick={this.createRoomHandler}>Create Room</StyledButton>
-                <StyledButton onClick={this.joinRoomHandler}>Join Room</StyledButton>
+        
+        <div className = {styles.UserHome}>
+            <Modal show={this.state.joining} modalClosed={this.exitJoinScreenandler}>
+                <div className={styles.joinCard}>
+                <p className={styles.joinTitle}>Please type the room number</p>
+                {join}
+                {joinButton}
                 </div>
+               </Modal>   
+            <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.state.name}</h1>
+            <p className={styles.uid}>User ID: {this.props.id}</p>
+            <div className={styles.options}>
+                <StyledButton
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                onClick={this.createRoomHandler}>Create Room</StyledButton>
+                <StyledButton 
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                onClick={this.joinRoomScreenHandler}>Join Room</StyledButton>
+                <StyledButton 
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                onClick={this.signoutHander}>SignOut</StyledButton>
+            </div>
             </div>
         );
     }
