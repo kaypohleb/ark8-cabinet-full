@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.post('/createRoom', async (req, res) => {
     const userId = req.userId;
-
     const room = await roomController.createRoom(userId);
 
     if (!room) {

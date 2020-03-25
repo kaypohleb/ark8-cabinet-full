@@ -50,6 +50,24 @@ test('10-round game with no players', ()=> {
     expect(updateCallback).toBeCalledTimes(5);
 })
 
+test('1-round game with one player, player makes multiple selections', () => {
+    const game = new RockPaperScissors(()=>{});
+    const player = new Player("Jotaro", "Jotaro");
+
+    game.setRounds(1);
+
+    game.addPlayer(player);
+
+    game.start();
+    game.makeAction(player, {selection : "paper"});
+    game.makeAction(player, {selection : "scissors"});
+    game.makeAction(player, {selection : "rock"});
+
+    jest.advanceTimersByTime(10000);
+
+    expect(game.state.history[0].length).toEqual(1);
+})
+
 test('1-round game with two players', () => {
     const game = new RockPaperScissors(()=>{game.getState()});
     
