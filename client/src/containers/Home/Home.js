@@ -1,24 +1,14 @@
 import React, {Component} from 'react';
 import firebase from "firebase";
 import UncontrolledLottie from '../../components/Lotties/UncontrolledLottie';
-import styled from 'styled-components';
+import {StyledButton} from '../../components/StyledComponents/StyledButton';
 import {withRouter} from 'react-router-dom';
 import styles from './Home.module.css';
-import {motion} from 'framer-motion';
 import {connect} from 'react-redux';
 import Login from '../../components/Login/Login';
 import Modal from '../../components/UI/Modal/Modal';
 import { userStateChanged,idTokenChanged } from '../../store/actions/index';
-const StyledButton = styled(motion.div)`
-  display: inline-block;
-  border-radius: 3px;
-  padding: 1rem 0;
-  margin: 0.5rem 1rem;
-  width: 11rem;
-  background: white;
-  color: black;
-  cursor: pointer;
-`
+
 firebase.initializeApp({
   apiKey:"AIzaSyDAqWHBVCQhSMXGopU-U_IAKwjO7lt-LFs",
   authDomain:"ark8-cabinet.firebaseapp.com",
