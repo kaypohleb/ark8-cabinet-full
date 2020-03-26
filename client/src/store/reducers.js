@@ -34,7 +34,6 @@ function fetchUserDataReducer(state=initUserDataState,action){
                 ...action.payload,
                 isSignedIn:isSignIn
             })
-            break;
         case(type.FETCH_USER_ERROR):
             return({
                 ...action.payload
@@ -63,7 +62,6 @@ function fetchLobbyDataReducer(state=initLobbyState,action){
                 ...action.payload,
                 isSignedIn:isSignIn,
             })
-            break;
         default: 
             return state;
     }

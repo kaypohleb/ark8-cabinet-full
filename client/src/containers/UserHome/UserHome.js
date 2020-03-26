@@ -1,25 +1,14 @@
 import React, {Component} from 'react';
-import styled from 'styled-components';
 import firebase from 'firebase';
-import {motion} from 'framer-motion';
 import {withRouter,Redirect} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './UserHome.module.css';
+import LoadingLottie from '../../components/Lotties/LoadingLottie';
 import {fetchUserData} from '../../store/actions/authactions';
 import Modal from '../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
-const StyledButton = styled(motion.button)`
-  background-color: transparent;
-  color:white;
-  margin: 20px;
-  width:10vw;
-  height:4vh;
-  font: inherit;
-  border-radius:8px;
-  padding: 10px;
-  cursor: pointer;
-  border: 1px solid white;
-`
+import {StyledTransparentButton} from '../../components/StyledComponents/StyledButton';
+
 const pinStyle = {
   color:'white',
   padding:'0 !important',
@@ -142,6 +131,12 @@ class UserHome extends Component{
         if(!this.state.isSignedIn){
             return <Redirect to='/'></Redirect>
         }
+        if(!this.state.name){
+            return(
+            <div className = {styles.UserHome}>
+                <LoadingLottie/>
+            </div>)
+        }
 
         return(
         
@@ -156,18 +151,18 @@ class UserHome extends Component{
             <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.state.name}</h1>
             <p className={styles.uid}>User ID: {this.props.id}</p>
             <div className={styles.options}>
-                <StyledButton
+                <StyledTransparentButton
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={this.createRoomHandler}>Create Room</StyledButton>
-                <StyledButton 
+                onClick={this.createRoomHandler}>Create Room</StyledTransparentButton>
+                <StyledTransparentButton 
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={this.joinRoomScreenHandler}>Join Room</StyledButton>
-                <StyledButton 
+                onClick={this.joinRoomScreenHandler}>Join Room</StyledTransparentButton>
+                <StyledTransparentButton 
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={this.signoutHander}>SignOut</StyledButton>
+                onClick={this.signoutHander}>SignOut</StyledTransparentButton>
             </div>
             </div>
         );
