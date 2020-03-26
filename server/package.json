@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./src/app.js",
     "dev": "nodemon ./src/app.js",
-    "test": "jest --coverage --verbose --env=node"
+    "test": "jest --coverage --verbose --env=node -i"
   },
   "repository": {
     "type": "git",
@@ -29,6 +29,7 @@
   "devDependencies": {
     "axios": "^0.19.2",
     "jest": "^25.1.0",
+    "jest-serial-runner": "^1.1.0",
     "socket.io-client": "^2.3.0"
   }
 }

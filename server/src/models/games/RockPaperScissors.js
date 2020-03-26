@@ -2,7 +2,7 @@ class RockPaperScissors{
     constructor(fn){
         this.id = 'ROCK_PAPER_SCISSORS';
         this.rounds = 5; 
-        this.timeout = 10000;
+        this.timeout = 1000;
         this.updateCallback = fn;
         this.state = {
             turnStart: null,
