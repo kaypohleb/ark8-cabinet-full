@@ -1,5 +1,7 @@
+const users = require('../__fixtures__/users');
+
 const getUserId = async (idToken) => {
-    if (!idToken){
+    if (!(idToken in users)){
         return null;
     }
 
@@ -20,7 +22,15 @@ const checkAuth = async (req, res, next) => {
         })
     }
 
-    req.userId = "420";
+    const userId = await getUserId(idToken);
+    if (!userId){
+        return res.json({
+            error: "Authentication Error"
+        })
+    }
+
+    req.userId = userId;
+
     return next();
 }
 
