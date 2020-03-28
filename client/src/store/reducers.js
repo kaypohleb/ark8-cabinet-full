@@ -78,12 +78,22 @@ function fetchGameDataReducer(state={},action){
     }
 }
 
-
+function fetchDrawingStateReducer(state={},action){
+    switch(action.type){
+        case(type.UPDATE_DRAWING_STATE_SUCCESS):
+        return ({
+            ...action.drawing
+        })
+        default:
+            return state;
+        
+    }
+}
 export const rootReducer = combineReducers({
     userReducer,
     idtokenReducer,
     fetchUserDataReducer,
     fetchLobbyDataReducer,
     fetchGameDataReducer,
-    
+    fetchDrawingStateReducer,
 });

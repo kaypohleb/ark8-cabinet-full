@@ -122,9 +122,14 @@ class Home extends Component{
                     <StyledButton 
                     whileHover={{scale:1.2}}
                     whileTap={{scale:0.8}}
-
                     onClick = {this.enterSignInHandler}>
-                       join the party!
+                       JOIN THE PARTY!
+                    </StyledButton>
+                    <StyledButton
+                     whileHover={{scale:1.2}}
+                     whileTap={{scale:0.8}}
+                     onClick = {()=>{this.props.history.push('/test')}}>
+                       TEST
                     </StyledButton>
                     
                     
