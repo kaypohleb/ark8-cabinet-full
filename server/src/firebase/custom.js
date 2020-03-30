@@ -1,4 +1,4 @@
-const firebase = require('../db/firebase');
+const firebase = require('./firebase');
 
 // var serviceAccount = require("./serviceAccountKey.json");
 // firebase.initializeApp({
@@ -11,17 +11,23 @@ let db = firebase.firestore().collection("games");
 /* 
 Get the custom game settings from firestore 
 */
-async function get_data(type, game, name) {
+async function get_setting(type, game, name) {
     let settings = db.doc(type).collection(game).doc(name).get().then(doc => {
         if (doc.exists) {
             return doc.data();
         } else {
-            console.log("Failed to get settings")
+            console.log("Failed to get settings");
+            return false;
         }
     }).catch((err) => {
         console.log('Error getting documents', err);
     });
     return settings;
+}
+
+async function delete_setting(type, game, name) {
+    let deleteDoc = db.doc(type).collection(game).doc(name).delete();
+    return deleteDoc;
 }
 
 /*
@@ -41,28 +47,28 @@ async function new_werewolf(name, data) {
             data.min_number_of_players = default_data.min_number_of_players;
             console.log("Cannot hold less than " + default_data.min_number_of_players + " players in the room");
         }
-        for (let key in data){
-            if (typeof(data[key])=="object"){
-                if ("percent" in data[key]){
+        for (let key in data) {
+            if (typeof (data[key]) == "object") {
+                if ("percent" in data[key]) {
                     percent += data[key]["percent"];
-                    if (percent > 1){
+                    if (percent > 1) {
                         return false;
                     }
                 }
             }
-            if (key in default_data){
-                if (typeof(data[key])!=typeof(default_data[key])){
+            if (key in default_data) {
+                if (typeof (data[key]) != typeof (default_data[key])) {
                     data[key] = default_data[key];
-                } else if (typeof(data[key])=="object"){
-                    for (var key1 in data[key]){
-                        if (key1=="max" && data[key][key1]>default_data[key][key1]){
+                } else if (typeof (data[key]) == "object") {
+                    for (var key1 in data[key]) {
+                        if (key1 == "max" && data[key][key1] > default_data[key][key1]) {
                             data[key][key1] = default_data[key][key1];
-                        } else if (key1=="min" && data[key][key1]<default_data[key][key1]){
+                        } else if (key1 == "min" && data[key][key1] < default_data[key][key1]) {
                             data[key][key1] = default_data[key][key1];
-                        } else if (key1=="actions"){
+                        } else if (key1 == "actions") {
                             let d = new Set(data[key][key1]);
                             data[key][key1] = Array.from(d);
-                        } 
+                        }
                     }
                 }
             }
@@ -71,7 +77,7 @@ async function new_werewolf(name, data) {
     }).catch((err) => {
         console.log('Error checking the new settings', err);
     }).then(s => {
-        if (s){
+        if (s) {
             console.log("Checking finish uploading to the database");
             db.doc("role_game").collection("werewolf").doc(name).set(data);
         } else {
@@ -85,8 +91,32 @@ async function new_werewolf(name, data) {
 /*
 Set up the default game rules, including the limits
 */
-async function set_default(type, game, data){
+async function set_default(type, game, data) {
     db.doc(type).collection(game).doc("default").set(data);
+}
+
+async function add_charactor(data, charactor, minimun, maximum, action, percentage) {
+    data[charactor] = {
+        min: minimun,
+        max: maximum,
+        actions: action,
+        percent: percentage
+    }
+    return data;
+}
+
+async function remove_charactor(data, charactor) {
+    if (charactor in data) {
+        delete data[charactor];
+        return data;
+    }
+}
+
+async function change_charactor(data, charactor, property, value) {
+    if (charactor in data) {
+        data[charactor][property] = value;
+    }
+    return data;
 }
 
 /*
@@ -123,4 +153,13 @@ const default_werewolf =
     }
 }
 
-module.exports = router;
+module.exports = {
+    get_setting,
+    delete_setting,
+    set_default,
+    new_werewolf,
+    add_charactor,
+    remove_charactor,
+    change_charactor,
+    default_werewolf
+}
