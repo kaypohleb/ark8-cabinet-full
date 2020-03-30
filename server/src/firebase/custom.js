@@ -37,55 +37,59 @@ if check finish, upload to firebase
 else return Promise {false}
 */
 async function new_werewolf(name, data) {
-    let success = get_data("role_game", "werewolf", "default").then(default_data => {
-        let percent = 0;
-        if (data.max_number_of_players > default_data.max_number_of_players) {
-            data.max_number_of_players = default_data.max_number_of_players;
-            console.log("Cannot hold more than " + default_data.max_number_of_players + " players in the room");
-        }
-        if (data.min_number_of_players < default_data.min_number_of_players) {
-            data.min_number_of_players = default_data.min_number_of_players;
-            console.log("Cannot hold less than " + default_data.min_number_of_players + " players in the room");
-        }
-        for (let key in data) {
-            if (typeof (data[key]) == "object") {
-                if ("percent" in data[key]) {
-                    percent += data[key]["percent"];
-                    if (percent > 1) {
-                        return false;
-                    }
-                }
-            }
-            if (key in default_data) {
-                if (typeof (data[key]) != typeof (default_data[key])) {
-                    data[key] = default_data[key];
-                } else if (typeof (data[key]) == "object") {
-                    for (var key1 in data[key]) {
-                        if (key1 == "max" && data[key][key1] > default_data[key][key1]) {
-                            data[key][key1] = default_data[key][key1];
-                        } else if (key1 == "min" && data[key][key1] < default_data[key][key1]) {
-                            data[key][key1] = default_data[key][key1];
-                        } else if (key1 == "actions") {
-                            let d = new Set(data[key][key1]);
-                            data[key][key1] = Array.from(d);
-                        }
-                    }
+    let percentage = 0;
+    if (data.max_number_of_players > default_werewolf.max_number_of_players) {
+        data.max_number_of_players = default_werewolf.max_number_of_players;
+        console.log("Cannot hold more than " + default_werewolf.max_number_of_players + " players in the room");
+    }
+    if (data.min_number_of_players < default_werewolf.min_number_of_players) {
+        data.min_number_of_players = default_werewolf.min_number_of_players;
+        console.log("Cannot hold less than " + default_werewolf.min_number_of_players + " players in the room");
+    }
+    for (let element in data) {
+        if (typeof (data[element]) == "object") {
+            for (let k in data[element]) {
+                if ("percent" == k) {
+                    percentage += data[element]["percent"];
                 }
             }
         }
-        return true;
-    }).catch((err) => {
-        console.log('Error checking the new settings', err);
-    }).then(s => {
-        if (s) {
-            console.log("Checking finish uploading to the database");
-            db.doc("role_game").collection("werewolf").doc(name).set(data);
-        } else {
-            console.log("Sum of percentages is larger than 1");
+    }
+    if (percentage > 1) {
+        console.log("Sum of percentages is larger than 1");
+        return false;
+    }
+
+    for (let element in data) {
+        if (typeof (data[element]) == "object") {
+            for (let k in data[element]) {
+                if ("actions" == k) {
+                    let d = new Set(data[element]["actions"]);
+                    data[element]["actions"] = Array.from(d);
+                }
+            }
         }
-        return s;
-    })
-    return success;
+    }
+    let nplayer = 0
+    for (let element in data) {
+        if (typeof (data[element]) == "object") {
+            for (let k in data[element]) {
+                if ("min" == k) {
+                    nplayer += data[element]["min"];
+                }
+            }
+        }
+    }
+    if (nplayer > default_werewolf.max_number_of_players){
+        console.log("The min for each role is larger than total number of players")
+        return false;
+    }
+
+    console.log("Checking finish uploading to the database");
+    db.doc("role_game").collection("werewolf").doc(name).set(data).catch((err) => {
+        console.log('Error uploading', err);
+    });
+    return true;
 }
 
 /*
@@ -109,14 +113,18 @@ async function remove_charactor(data, charactor) {
     if (charactor in data) {
         delete data[charactor];
         return data;
+    } else {
+        return false;
     }
 }
 
 async function change_charactor(data, charactor, property, value) {
     if (charactor in data) {
         data[charactor][property] = value;
+        return data;
+    } else {
+        return false;
     }
-    return data;
 }
 
 /*
