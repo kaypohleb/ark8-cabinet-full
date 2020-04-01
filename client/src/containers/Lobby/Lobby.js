@@ -50,6 +50,7 @@ class Lobby extends Component{
     selectChangeHandler(event){
         this.setState({
             value: event.target.value,
+            
         });
         this.props.setGame(event.target.value);
     }
@@ -90,7 +91,7 @@ class Lobby extends Component{
                 <p>Pick a Game</p>
                 <StyledSelect onChange={(e)=>this.selectChangeHandler(e)}>
                     <option value="WEREWOLF">werewolf</option>
-                    <option value="MAFIA">mafia</option>
+                    <option value="DRAWFUL">drawful</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
                 </StyledSelect>
                 </div>);

@@ -1,11 +1,10 @@
-.Home{
+.JoinLobby{
     font-family: 'Raleway', sans-serif;
-    background-color: hsl(0, 0%, 11%);
-    position: fixed;
+    background-color: #0213b4;
+    position: absolute;
     height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 }

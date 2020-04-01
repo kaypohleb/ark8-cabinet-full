@@ -4,6 +4,8 @@ import Home  from '../Home/Home';
 import UserHome from '../UserHome/UserHome';
 import Lobby from '../Lobby/Lobby';
 import GameRoom from '../GameRoom/GameRoom';
+import Test from '../Test/Test';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -24,6 +26,8 @@ class App extends Component{
             <Route exact path = "/profile" component={UserHome}/>
             <Route exact path = "/lobby" component={Lobby}/>
             <Route exact path = "/game" component={GameRoom}/>
+            <Route exact path = "/test" component={Test}/>
+            <Route exact path = "/testDrawing"/>
           </Switch>
         </div>
       </Router>

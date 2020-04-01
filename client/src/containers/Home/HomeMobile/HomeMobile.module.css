@@ -1,4 +1,4 @@
-.Home{
+.HomeMobile{
     font-family: 'Raleway', sans-serif;
     background-color: hsl(0, 0%, 11%);
     position: fixed;
@@ -10,8 +10,3 @@
     align-items: center;
 }
 
-.card{
-    background-color: #fff;
-    border-radius: 15px;
-    padding: 0.8rem;
-}

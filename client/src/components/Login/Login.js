@@ -24,7 +24,7 @@ class Login extends Component{
           }}>Sign in</StyledHeader>
           <StyledFirebaseAuth
           uiConfig={this.props.uiConfig}
-          firebaseAuth = {this.props.clicked}
+          firebaseAuth = {this.props.clicked()}
           />
         </div>
         )

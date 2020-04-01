@@ -1,0 +1,8 @@
+.Drawful{
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    bottom: 10%;
+}
