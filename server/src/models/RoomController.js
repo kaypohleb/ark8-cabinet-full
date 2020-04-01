@@ -1,11 +1,8 @@
 const generate = require('nanoid/generate');
-const firebase = require('../db/firebase');
-const {getUserData} = require('../db/utils');
+const {getUserData} = require('../firebase/utils');
 
 const Room = require('./Room');
 const Player = require('./Player');
-
-const db = firebase.firestore();
 
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

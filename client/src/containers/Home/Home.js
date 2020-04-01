@@ -8,6 +8,8 @@ import {connect} from 'react-redux';
 import Login from '../../components/Login/Login';
 import Modal from '../../components/UI/Modal/Modal';
 import { userStateChanged,idTokenChanged } from '../../store/actions/index';
+import { Media } from 'react-breakpoints';
+import withBreakpoints from 'react-breakpoints';
 
 firebase.initializeApp({
   apiKey:"AIzaSyDAqWHBVCQhSMXGopU-U_IAKwjO7lt-LFs",
@@ -95,11 +97,28 @@ class Home extends Component{
   }
     
     render(){
-        let lottie;
+      let lottie;
+        // <Media>
+        // {({ breakpoints, currentBreakpoint }) =>
+        //   {if (breakpoints[currentBreakpoint] > breakpoints.desktop){
+        //     return lottie = <UncontrolledLottie height={600} width ={1000}/>
+        //   }
+        //   else if (breakpoints[currentBreakpoint] > breakpoints.tablet){
+        //     return lottie = <UncontrolledLottie height={400} width ={670}/>
+        //   }
+        //   else if (breakpoints[currentBreakpoint] > breakpoints.mobile){
+        //     return lottie = <UncontrolledLottie height={250} width ={419}/>
+        //   }
+        //   else if (breakpoints[currentBreakpoint] > 0){
+        //     return lottie = <UncontrolledLottie height={currentBreakpoint / 3} width ={currentBreakpoint * 0.55833}/>
+        //   }
+        //   }
+        // }
+        // </Media>
         if(this.state.width<1200 && this.state.width>=600){
             lottie = <UncontrolledLottie height={400} width ={670}/>
         }else if(this.state.width<600){
-            lottie = <UncontrolledLottie height={200} width ={335}/>
+            lottie = <UncontrolledLottie height={this.state.width /3 } width ={this.state.width * 0.5}/>
         }
         else{
             lottie = <UncontrolledLottie height={600} width ={1000}/>
@@ -113,7 +132,7 @@ class Home extends Component{
           signup = <Login uiConfig={this.uiConfig} clicked={firebase.auth()}/>
         }
         return(
-
+            
             <div className ={styles.Home}>
                     <Modal show={this.state.signing} modalClosed={this.exitSignInHandler}>
                       {signup}

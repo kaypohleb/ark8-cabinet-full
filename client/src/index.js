@@ -5,11 +5,19 @@ import App from './containers/App/App';
 import { Provider }from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import store from './store/store';
+import ReactBreakpoints from 'react-breakpoints';
 
+const breakpoints = {
+    mobile: 320,
+    tablet: 768,
+    desktop: 1200,
+}
 
 ReactDOM.render(
     <Provider store ={store}>
-    <App />
+    <ReactBreakpoints breakpoints = {breakpoints}>
+        <App />
+    </ReactBreakpoints>
     </Provider>
     , document.getElementById('root'));
 

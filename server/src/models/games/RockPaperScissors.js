@@ -2,7 +2,7 @@ class RockPaperScissors{
     constructor(fn){
         this.id = 'ROCK_PAPER_SCISSORS';
         this.rounds = 5; 
-        this.timeout = 10000;
+        this.timeout = 1000;
         this.updateCallback = fn;
         this.state = {
             turnStart: null,
@@ -29,7 +29,9 @@ class RockPaperScissors{
     }
 
     getState(){
-        return this.state;
+        const state = {...this.state};
+        delete state.currentTurn
+        return state;
     }
 
     makeAction(player, data){
@@ -38,12 +40,15 @@ class RockPaperScissors{
         if (madeAction){
             this.state.currentTurn = this.state.currentTurn.map((turn) => {
                 if (turn.playerId == player.id){
-                    return {playedId: player.id, selection};
+                    return {playerId: player.id, selection};
+                }
+                else {
+                    return turn;
                 }
             })
         }
         else {
-            this.state.currentTurn.push({playedId: player.id, selection});
+            this.state.currentTurn.push({playerId: player.id, selection});
         }
     }
 
@@ -69,13 +74,13 @@ class RockPaperScissors{
         this.prevWinner = winningSelection;
         currentTurn.forEach((turn) => {
             if (turn.selection == winningSelection){
-                this.state.scores[turn.playedId] ++;
+                this.state.scores[turn.playerId] ++;
             }
         })
         this.state.currentTurn = [];
         this.state.remainingRounds--;
         
-        console.log(this);
+        // console.log(this);
 
         this.updateCallback();
 
