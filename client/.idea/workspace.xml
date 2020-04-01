@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f694745f-9701-43b5-aa34-9154836bf6c5" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1Zw2MRn593RyCUIe6fqHS0MTwJK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+  </component>
+  <component name="RunManager" selected="npm.start">
+    <configuration name="Unnamed" type="ReactNative" factoryName="React Native" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <react-native value="" />
+      <platform value="ANDROID" />
+      <envs />
+      <only-packager />
+      <browser value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
+      <method v="2">
+        <option name="ReactNativePackager" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="$APPLICATION_CONFIG_DIR$/node/node-v12.13.1-win-x64/node" />
+      <package-manager value="npm" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="npm.start" />
+      <item itemvalue="React Native.Unnamed" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f694745f-9701-43b5-aa34-9154836bf6c5" name="Default Changelist" comment="" />
+      <created>1585735787927</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585735787927</updated>
+      <workItem from="1585735789898" duration="1015000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="364" y="0" key="#Unnamed" timestamp="1585736137362">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="364" y="0" key="#Unnamed/0.0.1280.680@0.0.1280.680" timestamp="1585736137362" />
+    <state x="97" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1585736796925">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="97" y="0" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1280.680@0.0.1280.680" timestamp="1585736796925" />
+    <state x="310" y="23" key="#run" timestamp="1585736297469">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="310" y="23" key="#run/0.0.1280.680@0.0.1280.680" timestamp="1585736297469" />
+    <state width="1259" height="142" key="GridCell.Tab.0.bottom" timestamp="1585736805538">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1259" height="142" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1585736805538" />
+    <state width="1259" height="142" key="GridCell.Tab.0.center" timestamp="1585736805538">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1259" height="142" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1585736805538" />
+    <state width="1259" height="142" key="GridCell.Tab.0.left" timestamp="1585736805536">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1259" height="142" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1585736805536" />
+    <state width="1259" height="142" key="GridCell.Tab.0.right" timestamp="1585736805538">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1259" height="142" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1585736805538" />
+  </component>
+</project>

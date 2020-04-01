@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "global": "^4.4.0",
+    "nodemon": "^2.0.2",
+    "react-breakpoints": "^3.0.3"
+  }
+}
