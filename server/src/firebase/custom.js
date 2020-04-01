@@ -1,18 +1,11 @@
 const firebase = require('./firebase');
-
-// var serviceAccount = require("./serviceAccountKey.json");
-// firebase.initializeApp({
-//   credential: firebase.credential.cert(serviceAccount),
-//   databaseURL: "https://ark8-cabinet.firebaseio.com"
-// });
-
 let db = firebase.firestore().collection("games");
 
-/* 
-Get the custom game settings from firestore 
+/*
+Get the custom game settings from firestore
 */
 async function get_setting(type, game, name) {
-    let settings = db.doc(type).collection(game).doc(name).get().then(doc => {
+    return db.doc(type).collection(game).doc(name).get().then(doc => {
         if (doc.exists) {
             return doc.data();
         } else {
@@ -22,71 +15,81 @@ async function get_setting(type, game, name) {
     }).catch((err) => {
         console.log('Error getting documents', err);
     });
-    return settings;
-}
-
-async function delete_setting(type, game, name) {
-    let deleteDoc = db.doc(type).collection(game).doc(name).delete();
-    return deleteDoc;
 }
 
 /*
-Check if the custom settings exceeds the max limits 
+delete the setting in the firebase
+ */
+async function delete_setting(type, game, name) {
+    return db.doc(type).collection(game).doc(name).delete();
+}
+
+/*
+Check if the custom settings exceeds the max limits
 and also check the percentage is summing up more than 1
 if check finish, upload to firebase
-else return Promise {false}
+else return false
 */
 async function new_werewolf(name, data) {
-    let percentage = 0;
-    if (data.max_number_of_players > default_werewolf.max_number_of_players) {
-        data.max_number_of_players = default_werewolf.max_number_of_players;
+    let sum = 0;
+
+    if (data.nplayers > default_werewolf.max_number_of_players) {
         console.log("Cannot hold more than " + default_werewolf.max_number_of_players + " players in the room");
-    }
-    if (data.min_number_of_players < default_werewolf.min_number_of_players) {
-        data.min_number_of_players = default_werewolf.min_number_of_players;
-        console.log("Cannot hold less than " + default_werewolf.min_number_of_players + " players in the room");
-    }
-    for (let element in data) {
-        if (typeof (data[element]) == "object") {
-            for (let k in data[element]) {
-                if ("percent" == k) {
-                    percentage += data[element]["percent"];
-                }
-            }
-        }
-    }
-    if (percentage > 1) {
-        console.log("Sum of percentages is larger than 1");
-        return false;
+        data.nplayers = default_werewolf.max_number_of_players;
     }
 
     for (let element in data) {
         if (typeof (data[element]) == "object") {
             for (let k in data[element]) {
-                if ("actions" == k) {
-                    let d = new Set(data[element]["actions"]);
-                    data[element]["actions"] = Array.from(d);
+                if (k === "nplayers") {
+                    if (data[element]["nplayers"] > default_werewolf.max_number_of_players) {
+                        console.log("Cannot have so many players for this charactor");
+                        return false;
+                    }
+                    sum += data[element]["nplayers"];
                 }
             }
         }
-    }
-    let nplayer = 0
-    for (let element in data) {
-        if (typeof (data[element]) == "object") {
-            for (let k in data[element]) {
-                if ("min" == k) {
-                    nplayer += data[element]["min"];
-                }
-            }
-        }
-    }
-    if (nplayer > default_werewolf.max_number_of_players){
-        console.log("The min for each role is larger than total number of players")
-        return false;
     }
 
+    if (sum > data.nplayers) {
+        console.log("Sum of roles larger than the total number of players");
+        return false;
+    } else if (sum < data.nplayers) {
+        data.nplayers = sum;
+    }
+
+    let role_names = new Set();
+    for (let element in data) {
+        if (typeof (data[element]) == "object") {
+            role_names.add(element);
+        }
+    }
+    for (let role of role_names){
+        let checkedaction = new Set();
+        for (let a of data[role]["actions"]) {
+            if ((a === 'DOCTOR_SAVE' || a === 'SEER_REVEAL' || a === 'WEREWOLF_KILL_VOTE') && !checkedaction.has(a)) {
+                checkedaction.add(a);
+            } else {
+                // console.log("Repeat action or action does not defined");
+            }
+        }
+        data[role]["actions"] = Array.from(checkedaction);
+
+        let checkedplayers = new Set();
+        for (let i of data[role]["selectablePlayers"]){
+            if ((role_names.has(i) || i === "ALL") && !(checkedplayers.has(i))){
+                checkedplayers.add(i);
+            } else {
+                // console.log("Repeat role or role does not defined");
+            }
+        }
+        data[role]["selectablePlayers"] = Array.from(checkedplayers);
+        // console.log(data[role]["actions"]);
+        // console.log(data[role]["selectablePlayers"]);
+    }
     console.log("Checking finish uploading to the database");
-    db.doc("role_game").collection("werewolf").doc(name).set(data).catch((err) => {
+    db.doc("role_game").collection("WEREWOLF").doc(name).set(data).catch((err) => {
         console.log('Error uploading', err);
     });
     return true;
@@ -99,18 +102,28 @@ async function set_default(type, game, data) {
     db.doc(type).collection(game).doc("default").set(data);
 }
 
-async function add_charactor(data, charactor, minimun, maximum, action, percentage) {
-    data[charactor] = {
-        min: minimun,
-        max: maximum,
-        actions: action,
-        percent: percentage
+/*
+add a new charactor in the setting profile, if exist, change the setting
+ */
+async function add_charactor(data, charactor, action, num, targets) {
+    if (!(charactor in data)) {
+        data[charactor] = {
+            actions: action,
+            nplayers: num,
+            selectablePlayers: targets,
+        };
+        data.nplayers += num;
+        return data;
     }
-    return data;
+    return false;
 }
 
+/*
+remove a charactor in the setting profile, if not exist return false
+ */
 async function remove_charactor(data, charactor) {
     if (charactor in data) {
+        data.nplayers -= data[charactor].nplayers;
         delete data[charactor];
         return data;
     } else {
@@ -118,8 +131,17 @@ async function remove_charactor(data, charactor) {
     }
 }
 
+/*
+change the setting of a charactor, if not exist then return false
+ */
 async function change_charactor(data, charactor, property, value) {
     if (charactor in data) {
+        if (property === "nplayers") {
+            let origin = data[charactor]["nplayers"];
+            data.nplayers += (value - origin);
+            console.log("original value:" + origin);
+            data[charactor][property] += value;
+        }
         data[charactor][property] = value;
         return data;
     } else {
@@ -130,36 +152,30 @@ async function change_charactor(data, charactor, property, value) {
 /*
 Default game rules settings and limits
 */
-const default_werewolf =
-{
+const default_werewolf = {
     max_number_of_players: 50,
-    min_number_of_players: 5,
-    doctor: {
-        actions: ['vote', 'cure'],
-        max: 5,
-        min: 1,
-        percent: 0.2
+    nplayers: 10,
+    DOCTOR: {
+        actions: ['DOCTOR_SAVE'],
+        nplayers: 1,
+        selectablePlayers: ["ALL"],
     },
-    seer: {
-        actions: ['vote', 'kill'],
-        max: 5,
-        min: 1,
-        percent: 0.2
+    SEER: {
+        actions: ['SEER_REVEAL'],
+        nplayers: 1,
+        selectablePlayers: ["DOCTOR", "WEREWOLF", "VILLAGER"],
     },
-    walf: {
-        actions: ['vote', 'kill'],
-        max: 10,
-        min: 2,
-        percent: 0.2
+    WEREWOLF: {
+        actions: ['WEREWOLF_KILL_VOTE'],
+        nplayers: 3,
+        selectablePlayers: ["DOCTOR", "SEER", "VILLAGER"],
     },
-    villeger:
-    {
-        actions: ['vote'],
-        max: 47,
-        min: 2,
-        percent: 0.4
+    VILLAGER: {
+        actions: [],
+        nplayers: 5,
+        selectablePlayers: ["ALL"],
     }
-}
+};
 
 module.exports = {
     get_setting,
@@ -170,4 +186,4 @@ module.exports = {
     remove_charactor,
     change_charactor,
     default_werewolf
-}
+};
