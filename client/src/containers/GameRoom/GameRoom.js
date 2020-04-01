@@ -1,23 +1,24 @@
 import React,{ Component } from 'react';
 import styles from './GameRoom.module.css';
 import RockPaperScissorsGame from '../../components/RockPaperScissorsGame/RockPaperScissorsGame';
-
+import Drawful from '../../components/Drawful/Drawful';
 class GameRoom extends Component{
     render(){
+        let game=null;
+        
         if(this.props.game==null){
-            return <div>loading...</div>
+            game = <p>loading...</p>;
         }
         else{
-            
             if(this.props.game.id==="ROCK_PAPER_SCISSORS"){
-                
-                return <div className={styles.GameRoom}>
-                    <RockPaperScissorsGame/>
-                    </div>
+                game =  <RockPaperScissorsGame/>
+            }
+            if(this.props.game.id==="DRAWFUL"){
+                game = <Drawful/>
             }
         }
         return(
-            <div>gameroom</div>
+            <div className={styles.GameRoom}>{game}</div>
         )
     }
 }

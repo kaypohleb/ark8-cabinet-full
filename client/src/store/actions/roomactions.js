@@ -91,7 +91,7 @@ export const startGame = () => {
 export const setRefreshGameState = () =>{
     return (dispatch) =>{
         socket.on('game_state_update', (data) => {
-            console.log({...data});
+            //console.log({...data});
             dispatch(updateGameStateSuccess(data));
         })
     }
