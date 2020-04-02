@@ -10,11 +10,12 @@ class RoomController {
         this.rooms = [];
     }
 
-    createRoom(userId){
+    async createRoom(userId){
         const socketRouter = new SocketRouter();
         let nsp;
         let roomId;
 
+        
         while (!nsp){
             try {
                 roomId = generate(alphabet, 6);
@@ -30,11 +31,8 @@ class RoomController {
         room.roomStateUpdateCallback = (() => {nsp.emit('room_state_update', room.printRoomState() )});
         room.gameStateUpdateCallback = (() => {nsp.emit('game_state_update', room.printGameState() )});
 
-        const {disconnectHandler, authenticationHandler,
-                roomActionHandler, gameActionHandler} = socketRouter;
-        
         socketRouter.room = room;
-        socketRouter.listen(nsp, disconnectHandler, authenticationHandler, roomActionHandler, gameActionHandler);
+        socketRouter.listen(nsp);
 
         this.rooms.push({room, socketRouter});
 

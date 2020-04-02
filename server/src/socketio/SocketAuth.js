@@ -10,10 +10,11 @@ class SocketAuth {
 
     getAuthenticatedUserId(socketId){
         const user = this.getAuthenticatedUser(socketId);
+
         if (!user) {
             return null;
         }
-        return user.id;
+        return user.userId;
     }
 
     /**
@@ -41,7 +42,6 @@ class SocketAuth {
         if (socket[0] == 'authentication'){
             return next()
         }
-
         const authenticatedUser = this.getAuthenticatedUser(socket.id);
 
         if (authenticatedUser){

@@ -1,5 +1,6 @@
 const roomActionValidator = require('./roomActionValidator');
 const games = require('./games');
+const Player = require('./Player');
 
 class Room {
     constructor(id, createdBy){
@@ -12,6 +13,25 @@ class Room {
 
         this.roomStateUpdateCallback = null;
         this.gameStateUpdateCallback = null;
+    }
+
+    printRoomState(){
+        return {
+            id: this.id,
+            createdBy: this.createdBy,
+            admin: this.admin,
+            game: this.game ? this.game.id : null,
+            gameStarted: this.gameStarted,
+            players: this.players
+        }
+    }
+
+    printGameState(){
+        if (!this.game){
+            return null;
+        }
+
+        return this.game.printState();
     }
 
     addPlayer(userId, name){

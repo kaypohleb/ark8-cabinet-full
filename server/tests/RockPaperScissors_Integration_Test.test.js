@@ -2,6 +2,8 @@ jest.mock('../src/firebase/firebase');
 jest.mock('../src/firebase/auth');
 jest.mock('../src/firebase/utils');
 
+jest.setTimeout(3000);
+
 const axios = require('axios');
 const io = require('socket.io-client');
 const BASE_URL = "http://localhost:3001";
@@ -18,7 +20,7 @@ afterEach(() => {
 })
 
 
-test('create room', async () => {
+test('create room', async (done) => {
     const result = await axios.post(BASE_URL+'/createRoom', {}, {
         headers: {
             Authorization: 'Bearer ' + '1234567890',
@@ -26,6 +28,7 @@ test('create room', async () => {
     });
     
     expect(result.data.id).toHaveLength(6);
+    done();
 });
 
 test('create and join room', async (done) => {
@@ -69,15 +72,19 @@ test('2 players in a room', async (done) => {
     })
 
     socket0.on('room_state_update', (data) => {
+        console.log(data);
+        console.log(data.players.length);
         if (data.players.length == 2){
             socket0.close();
             socket1.close();
             done();
         }
     })
+
+    
 })
 
-test('2 players in a room', async (done) => {
+test('2 players in a room, 1 leaves', async (done) => {
     const result = await axios.post(BASE_URL+'/createRoom', {}, {
         headers: {
             Authorization: 'Bearer ' + '1234567890',
@@ -100,6 +107,8 @@ test('2 players in a room', async (done) => {
     let twoPlayersEntered = false;
 
     socket0.on('room_state_update', (data) => {
+        console.log(data);
+        console.log(data.players.length);
         if (data.players.length == 2){
             twoPlayersEntered = true;
             socket1.close();
@@ -109,4 +118,6 @@ test('2 players in a room', async (done) => {
             done();
         }
     })
+
+    
 })

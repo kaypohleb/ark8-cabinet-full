@@ -19,7 +19,7 @@ class SocketRouter {
     createNamespace(server, roomId){
         const nsp = server.of(`/${roomId}`);
 
-        if (nsp.connected){
+        if ( Object.keys(nsp.connected).length != 0 ){
             throw new Error(`namespace ${roomId} is not empty`)
         }
 
@@ -33,9 +33,21 @@ class SocketRouter {
      * @param {namespace} nsp 
      * @param  {...function} handlers 
      */
-    listen(nsp, ...handlers){
-        nsp.on('connection', (socket) => {
-            handlers.forEach(handler => { handler(nsp, socket)});
+    listen(nsp){
+        const authMiddleware = this.socketAuth.authentication.bind(this.socketAuth);
+
+        const disconnectHandler = this.disconnectHandler.bind(this);
+        const authenticationHandler = this.authenticationHandler.bind(this);
+        const roomActionHandler = this.roomActionHandler.bind(this);
+        const gameActionHandler = this.gameActionHandler.bind(this);
+
+        nsp.on('connection', (socket) => { 
+            socket.use(authMiddleware);
+            
+            disconnectHandler(nsp, socket);
+            authenticationHandler(nsp, socket);
+            roomActionHandler(nsp, socket);
+            gameActionHandler(nsp, socket);    
         })
     }
 
@@ -45,10 +57,14 @@ class SocketRouter {
      * @param {socket} socket 
      */
     disconnectHandler(nsp, socket){
+        const getAuthenticatedUserId = this.socketAuth.getAuthenticatedUserId.bind(this.socketAuth);
+        const removeAuthenticatedUser = this.socketAuth.removeAuthenticatedUser.bind(this.socketAuth);
         socket.on('disconnect', () => {
-            const userId = this.socketAuth.getAuthenticatedUserId(socket.id);
-            this.socketAuth.removeAuthenticatedUser(socket.id);
+            const userId = getAuthenticatedUserId(socket.id);
+            removeAuthenticatedUser(socket.id);
             this.room.removePlayer(userId);
+
+            console.log('DISCONNECTED', socket.id, userId)
 
             nsp.emit('room_state_update', this.room.printRoomState());
             nsp.emit('game_state_update', this.room.printGameState());
@@ -61,6 +77,8 @@ class SocketRouter {
      * @param {socket} socket 
      */
     authenticationHandler(nsp, socket){
+        const addAuthenticatedUser = this.socketAuth.addAuthenticatedUser.bind(this.socketAuth);
+
         socket.on('authentication', async (tokenId) => {
             const userId = await getUserId(tokenId);
             
@@ -72,8 +90,7 @@ class SocketRouter {
             if (!userData){
                 return socket.emit('authentication_error', { message: 'Unable to get user data'});
             }
-
-            this.socketAuth.addAuthenticatedUser(socket.id, userId);
+            addAuthenticatedUser(socket.id, userId);
             this.room.addPlayer(userId, userData.name);
 
             socket.emit('authentication', { message: 'Authentication success'});
@@ -91,8 +108,8 @@ class SocketRouter {
     roomActionHandler(nsp, socket){
         socket.on('room_action', (data) => {
             try {
-                this.room.validateRoomAction(data);
-                this.room.makeRoomAction(data);
+                this.room.validateRoomAction(socket.userId, data);
+                this.room.makeRoomAction(socket.userId, data);
                 nsp.emit('room_state_update', this.room.printRoomState());
                 nsp.emit('game_state_update', this.room.printGameState());
             }
@@ -110,8 +127,8 @@ class SocketRouter {
     gameActionHandler(nsp, socket){
         socket.on('game_action', (data) => {
             try {
-                this.room.validateGameAction(data);
-                this.room.makeGameAction(data);
+                this.room.validateGameAction(socket.userId, data);
+                this.room.makeGameAction(socket.userId, data);
                 nsp.emit('room_state_update', this.room.printRoomState());
                 nsp.emit('game_state_update', this.room.printGameState());
             }
