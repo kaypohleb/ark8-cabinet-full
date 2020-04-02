@@ -1,13 +1,21 @@
 class Player {
-    /**
-     * Player constructor
-     * @param {string} id 
-     * @param {string} name 
-     */
     constructor(id, name){
         this.id = id;
         this.name = name;
         this.ready = false;
+        this.gameData = {};
+    }
+
+    ready(){
+        this.ready = true;
+    }
+
+    unready(){
+        this.ready = false;
+    }
+
+    printGameData(){
+        return {...this.gameData};
     }
 }
 
