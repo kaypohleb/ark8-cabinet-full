@@ -1,0 +1,38 @@
+.LobbyMobile{
+    font-family: 'Raleway', sans-serif;
+    background-color: #1d1d1d;;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    padding: 0% 5%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    color: white;
+  }
+
+  .LobbyTitle{
+    font-size: 10vh;
+    font-weight: 400;
+  }
+  .LobbyHeader{
+    font-family: 'Abduction';
+    font-weight: 400;
+    color:rgb(223, 238, 12);
+    font-size: 3vh;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin:0;
+    
+  }
+  .LobbyRoomID{
+    margin:20px 40px;
+    flex-direction: column;
+  }
+  .card{
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 0.8rem;
+  }

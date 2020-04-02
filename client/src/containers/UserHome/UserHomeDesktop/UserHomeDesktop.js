@@ -57,7 +57,7 @@ class UserHomeDesktop extends Component{
                </Modal>   
             <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
             <p className={styles.uid}>User ID: {this.props.userID}</p>
-            <div className={styles.options}>00
+            <div className={styles.options}>
                 <StyledTransparentButton
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
