@@ -28,8 +28,6 @@ class RoomController {
         }
 
         const room = new Room(roomId, userId);
-        room.roomStateUpdateCallback = (() => {nsp.emit('room_state_update', room.printRoomState() )});
-        room.gameStateUpdateCallback = (() => {nsp.emit('game_state_update', room.printGameState() )});
 
         socketRouter.room = room;
         socketRouter.listen(nsp);

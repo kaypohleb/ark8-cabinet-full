@@ -26,39 +26,26 @@ class Room {
         }
     }
 
-    printGameState(){
-        if (!this.game){
-            return null;
-        }
-
-        return this.game.printState();
-    }
-
     addPlayer(userId, name){
         const player = new Player(userId, name);
         this.players.push(player);
+
+        this.roomStateUpdateCallback( this.printRoomState() );
+        if (this.game){
+            const {game, players} = this.game.printState();
+            this.gameStateUpdateCallback(game, players);
+        }
+
     }
 
     removePlayer(userId){
         this.players = this.players.filter( player => player.id != userId);
-    }
 
-    readyPlayer(userId){
-        const player = this.players.find( player => player.id == userId);
-        if (!player){
-            throw new Error("User not found in room");
+        this.roomStateUpdateCallback( this.printRoomState() );
+        if (this.game){
+            const {game, players} = this.game.printState();
+            this.gameStateUpdateCallback(game, players);
         }
-
-        player.ready();
-    }
-
-    unreadyPlayer(userId){
-        const player = this.players.find( player => player.id == userId);
-        if (!player){
-            throw new Error("User not found in room");
-        }
-
-        player.unready();
     }
 
     validateRoomAction(userId, action){
@@ -108,10 +95,18 @@ class Room {
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            this.game = new games[action.gameId];
+            console.log("ADDING GAME!")
+            this.game = new games[action.gameId]();
+            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
         }
         else if ( actionType == 'START_GAME'){
             this.startGame();
+        }
+
+        this.roomStateUpdateCallback( this.printRoomState() );
+        if (this.game){
+            const {game, players} = this.game.printState();
+            this.gameStateUpdateCallback(game, players);
         }
     }
 
@@ -121,6 +116,8 @@ class Room {
         }
 
         this.game.start();
+
+        this.roomStateUpdateCallback( this.printRoomState() );
     }
     
     validateGameAction(userId, action){
@@ -137,6 +134,7 @@ class Room {
         }
 
         this.game.makeAction(userId, action);
+        this.roomStateUpdateCallback( this.printRoomState() );
     }
 
 }

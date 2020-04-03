@@ -42,13 +42,25 @@ class SocketRouter {
         const gameActionHandler = this.gameActionHandler.bind(this);
 
         nsp.on('connection', (socket) => { 
-            socket.use(authMiddleware);
+            socket.use( (packet, next) => {authMiddleware(packet, next, socket)});
             
             disconnectHandler(nsp, socket);
             authenticationHandler(nsp, socket);
             roomActionHandler(nsp, socket);
             gameActionHandler(nsp, socket);    
-        })
+        });
+
+        this.room.roomStateUpdateCallback = (state) => {nsp.emit('room_state_update', state)} ;
+        this.room.gameStateUpdateCallback = (gameState, playerStates) => {
+            for (socketId in nsp.connected){
+                const socket = nsp.connected[socketId];
+                socket.emit('game_state_update', {
+                    game: gameState,
+                    player: playerStates[socket.userId]
+                })
+
+            }
+        };
     }
 
     /**
@@ -57,17 +69,14 @@ class SocketRouter {
      * @param {socket} socket 
      */
     disconnectHandler(nsp, socket){
-        const getAuthenticatedUserId = this.socketAuth.getAuthenticatedUserId.bind(this.socketAuth);
         const removeAuthenticatedUser = this.socketAuth.removeAuthenticatedUser.bind(this.socketAuth);
+        const removePlayer = this.room.removePlayer.bind(this.room);
         socket.on('disconnect', () => {
-            const userId = getAuthenticatedUserId(socket.id);
-            removeAuthenticatedUser(socket.id);
-            this.room.removePlayer(userId);
+            const userId = socket.userId;
+            removeAuthenticatedUser(userId);
+            removePlayer(userId);
 
             console.log('DISCONNECTED', socket.id, userId)
-
-            nsp.emit('room_state_update', this.room.printRoomState());
-            nsp.emit('game_state_update', this.room.printGameState());
         });
     }
 
@@ -78,7 +87,7 @@ class SocketRouter {
      */
     authenticationHandler(nsp, socket){
         const addAuthenticatedUser = this.socketAuth.addAuthenticatedUser.bind(this.socketAuth);
-
+        const addPlayer = this.room.addPlayer.bind(this.room);
         socket.on('authentication', async (tokenId) => {
             const userId = await getUserId(tokenId);
             
@@ -90,13 +99,13 @@ class SocketRouter {
             if (!userData){
                 return socket.emit('authentication_error', { message: 'Unable to get user data'});
             }
+
             addAuthenticatedUser(socket.id, userId);
-            this.room.addPlayer(userId, userData.name);
+            addPlayer(userId, userData.name);
+            
+            socket.userId = userId;
 
             socket.emit('authentication', { message: 'Authentication success'});
-
-            nsp.emit('room_state_update', this.room.printRoomState());
-            nsp.emit('game_state_update', this.room.printGameState());
         })
     }
 
@@ -107,11 +116,12 @@ class SocketRouter {
      */
     roomActionHandler(nsp, socket){
         socket.on('room_action', (data) => {
+            const validateRoomAction = this.room.validateRoomAction.bind(this.room);
+            const makeRoomAction = this.room.makeRoomAction.bind(this.room);
+
             try {
-                this.room.validateRoomAction(socket.userId, data);
-                this.room.makeRoomAction(socket.userId, data);
-                nsp.emit('room_state_update', this.room.printRoomState());
-                nsp.emit('game_state_update', this.room.printGameState());
+                validateRoomAction(socket.userId, data);
+                makeRoomAction(socket.userId, data);
             }
             catch (e) {
                 return socket.emit('room_action_error', { message: e.message});
@@ -125,12 +135,13 @@ class SocketRouter {
      * @param {socket} socket 
      */
     gameActionHandler(nsp, socket){
+        const validateGameAction = this.room.validateGameAction.bind(this.room);
+        const makeGameAction = this.room.makeGameAction.bind(this.room);
+
         socket.on('game_action', (data) => {
             try {
-                this.room.validateGameAction(socket.userId, data);
-                this.room.makeGameAction(socket.userId, data);
-                nsp.emit('room_state_update', this.room.printRoomState());
-                nsp.emit('game_state_update', this.room.printGameState());
+                validateGameAction(socket.userId, data);
+                makeGameAction(socket.userId, data);
             }
             catch (e) {
                 return socket.emit('game_action_error', {message: e.message});
