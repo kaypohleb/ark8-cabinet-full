@@ -17,6 +17,15 @@ class Player {
     printGameData(){
         return {...this.gameData};
     }
+
+    ready(){
+        this.ready = true;
+    }
+
+    unready(){
+        this.ready = false;
+    }
+
 }
 
 module.exports = Player;

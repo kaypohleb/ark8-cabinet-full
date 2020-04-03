@@ -1,0 +1,20 @@
+
+.drawArea {
+    max-width: 600px;
+    width:95%;
+    height:95%;
+    margin:10%;
+    max-height: 600px;
+    position: absolute;
+    top:0;
+    left:0;
+    border: 5px solid black;
+    border-radius: 2%;
+    float: left;
+    cursor: pointer;
+    background-color: white;
+  }
+.Buttons{
+  position: absolute;
+  bottom: 0;
+}

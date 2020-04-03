@@ -5,14 +5,14 @@ import Player from '../../components/Player/Player';
 import GameRoom from '../GameRoom/GameRoom';
 import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame} from '../../store/actions/index';
 import styles from './Lobby.module.css';
-
-
+import LoadingLottie from '../../components/Lotties/LoadingLottie';
+import {StyledTransparentButton} from '../../components/StyledComponents/StyledButton';
+import {StyledSelect} from '../../components/StyledComponents/StyledSelect';
 
 class Lobby extends Component{
     constructor(props){
         super(props);
         if(this.props.location.state.join===false){
-            
             this.props.createRoom();
         }else if(this.props.location.state.join===true){
             this.props.enterRoom(this.props.location.state.roomID)
@@ -29,11 +29,10 @@ class Lobby extends Component{
         game:{},
         gameStarted:false,
         isSignedIn:true,
+        ready:false,
     }
     
     componentWillReceiveProps(newProps){
-
-        console.log("Updating..")
         this.setState({
             id: newProps.id,
             userID: newProps.userID,
@@ -47,15 +46,11 @@ class Lobby extends Component{
     
         
      }
-
-    componentDidMount(){
-       console.log(this.state);
-    }
-    
     
     selectChangeHandler(event){
         this.setState({
             value: event.target.value,
+            
         });
         this.props.setGame(event.target.value);
     }
@@ -68,30 +63,64 @@ class Lobby extends Component{
             // console.log(this.state);
         }
     }
-
+    readyHandler(){
+        this.setState({
+            ready: !this.state.ready
+        })
+        this.props.ready()
+    }
+    unreadyHandler(){
+        this.setState({
+            ready: !this.state.ready
+        })
+        this.props.unready()
+    }
 
     render(){
         
-        let players,createdBy,startGameButton,chooseGame = null;
-        
+        let players,createdBy,startGameButton,chooseGame,ready = null;
         if(this.state.userID === this.state.createdBy.id){
             //console.log("creator");
-            startGameButton = (<button onClick={()=>{this.startGameHandler()}}>Start Game</button>);
+            startGameButton = (
+            <StyledTransparentButton 
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                onClick={()=>{this.startGameHandler()}}>
+                Start Game</StyledTransparentButton>);
             chooseGame = (<div>
                 <p>Pick a Game</p>
-                <select onChange={(e)=>this.selectChangeHandler(e)}>
+                <StyledSelect onChange={(e)=>this.selectChangeHandler(e)}>
                     <option value="WEREWOLF">werewolf</option>
-                    <option value="MAFIA">mafia</option>
+                    <option value="DRAWFUL">drawful</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
-                </select>
+                </StyledSelect>
                 </div>);
+        }
+        if(this.state.ready){
+            ready = (<StyledTransparentButton
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}} 
+                onClick={()=>this.unreadyHandler()}>Cancel Ready</StyledTransparentButton>)
+        }else{
+            ready = (<StyledTransparentButton
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}} 
+                onClick={()=>this.readyHandler()}>Ready</StyledTransparentButton>)
         }
 
         if(this.state.gameStarted){
             return <GameRoom game={this.state.game}></GameRoom>
         }
-        
+
+        if(!this.state.id){
+            return(
+            <div className = {styles.Lobby}>
+                <LoadingLottie/>
+            </div>)
+        }
+
         if(!this.state.isSignedIn){
+            
             console.log("reflect")
             return <Redirect to="/"></Redirect>
         }
@@ -113,15 +142,19 @@ class Lobby extends Component{
                     <div className={styles.LobbyRoomID}>
                     <p>Room ID: </p>
                     <p>{this.state.id}</p> 
-                    </div>
+                    </div>     
                 </div>
-                {chooseGame}
-                <button onClick={ ()=>{this.props.history.push('/profile')}}>Back</button>
-                <button onClick={this.props.ready}>Ready</button>
-                <button onClick={this.props.unready}>UnReady</button>
-                {startGameButton}
                 {createdBy}
+                {chooseGame}                
                 {players}
+                {startGameButton}
+                <StyledTransparentButton
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                
+                onClick={ ()=>{this.props.history.push('/profile')}}>Back</StyledTransparentButton>
+                {ready}
+                
                 
             </div>    
         );

@@ -20,15 +20,15 @@
     font-family: 'Abduction';
     font-weight: 400;
     color:rgb(223, 238, 12);
-    font-size: 5vh;
+    font-size: 3vh;
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
+    flex-direction: row;
     margin:0;
     
   }
   .LobbyRoomID{
-    margin:0;
+    margin:20px 40px;
     flex-direction: column;
   }
   .card{
@@ -36,4 +36,3 @@
     border-radius: 15px;
     padding: 0.8rem;
   }
-  
