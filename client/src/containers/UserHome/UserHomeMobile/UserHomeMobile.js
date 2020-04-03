@@ -3,7 +3,7 @@ import styles from './UserHomeMobile.module.css';
 import LoadingLottie from '../../../components/Lotties/LoadingLottie';
 import Modal from '../../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
-import {StyledTransparentButton} from '../../../components/StyledComponents/StyledButton';
+import {StyledMobileButton} from '../../../components/StyledComponents/StyledButton';
 
 const pinStyle = {
   color:'white',
@@ -30,8 +30,8 @@ class UserHomeMobile extends Component{
                 focus
                 ref={p => (this.pin = p)}
                 type="custom"
-                onChange={()=>this.props.roomIDChange()}
-                onComplete={()=>this.props.roomIDComplete()}
+                onChange={(val)=>this.props.roomIDChange(val)}
+                onComplete={(val)=>this.props.roomIDComplete(val)}
               />)
         }
         if(this.props.joinIdComplete){
@@ -58,18 +58,31 @@ class UserHomeMobile extends Component{
             <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
             <p className={styles.uid}>User ID: {this.props.userID}</p>
             <div className={styles.options}>
-                <StyledTransparentButton
+                <StyledMobileButton
+                style ={{backgroundColor: "#12CCB1", width:"70%"}}
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={()=>this.props.createRoom()}>Create Room</StyledTransparentButton>
-                <StyledTransparentButton 
+                onClick={()=>this.props.createRoom()}>CREATE ROOM</StyledMobileButton>
+                <StyledMobileButton 
+                style ={{backgroundColor: "#E51749", width:"70%", textAlign:"center"}}
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={()=>this.props.enterJoinScreen()}>Join Room</StyledTransparentButton>
-                <StyledTransparentButton 
+                onClick={()=>this.props.enterJoinScreen()}>JOIN ROOM</StyledMobileButton>
+                <StyledMobileButton 
+                style ={{backgroundColor: "#FF8DC6", width:"70%", textAlign:"center"}}
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={()=>this.props.signOut()}>SignOut</StyledTransparentButton>
+                onClick={()=>this.props.signOut()}>GAME HISTORY</StyledMobileButton>
+                <StyledMobileButton 
+                style ={{backgroundColor: "#EBFF05", width:"70%", textAlign:"center"}}
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                onClick={()=>this.props.signOut()}>SETTINGS</StyledMobileButton>
+                <StyledMobileButton 
+                style ={{backgroundColor: "#8B940C", width:"70%", textAlign9:"center"}}
+                whileHover={{scale:1.2}}
+                whileTap={{scale:0.8}}
+                onClick={()=>this.props.signOut()}>SIGN OUT</StyledMobileButton>
             </div>
         </div>
         );

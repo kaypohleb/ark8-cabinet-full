@@ -8,7 +8,7 @@ import Paper from '../../assets/svg/paper.svg';
 import Scissors from '../../assets/svg/scissors.svg';
 import {publishGameAction,setRefreshGameState} from '../../store/actions/roomactions';
 import {motion} from 'framer-motion';
-import HistoryRoundActions from '../HistoryAction/HistoryRoundActions';
+import HistoryRoundActions from './HistoryAction/HistoryRoundActions';
 class RockPaperScissorsGame extends Component {
     
     constructor(props){

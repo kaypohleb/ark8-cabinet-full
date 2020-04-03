@@ -5,7 +5,7 @@ import {withRouter} from 'react-router-dom';
 import {motion} from 'framer-motion';
 const StyledHeader = styled(motion.div)`
   color:white;
-  font-size: 5rem;
+  font-size: 2rem;
   font-weight: 800;
   padding: 1rem;
 `
@@ -16,7 +16,7 @@ class Login extends Component{
         return (
         <div className ="Login">
           <StyledHeader
-          animate={{y:-30}}
+          animate={{y:-20}}
           transition={{
             yoyo: Infinity,
             duration:2,

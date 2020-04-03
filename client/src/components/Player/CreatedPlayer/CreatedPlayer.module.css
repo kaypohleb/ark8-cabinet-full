@@ -1,0 +1,37 @@
+.Player{
+    margin:auto;
+    background-color:white;
+    border-radius: 100px;
+    box-shadow: 0 2px 3px #ccc;
+    padding: .30rem 1rem;
+    color:black;
+    text-align: center;
+    display:inline-flex;
+    text-align: center;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@media screen and (min-width: 320px) {
+    .Player {
+        font-size: .75rem;
+        width: 75%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .Player {
+        width:22rem;
+    }
+  }
+@media screen and (min-width: 1200px) {
+.Player {
+    width:25rem;
+    }
+}
+
+.icon{
+    margin: 0 2%;
+    width:50px;
+    height:50px;
+}

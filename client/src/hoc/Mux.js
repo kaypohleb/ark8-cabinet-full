@@ -1,3 +1,3 @@
-const mux = (props) => props.children;
+const Mux = (props) => props.children;
 
-export default mux;
+export default Mux;

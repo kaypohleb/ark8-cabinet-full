@@ -8,6 +8,8 @@ import HomeTablet from './HomeTablet/HomeTablet';
 import styles from './Home.module.css';
 import { userStateChanged,idTokenChanged } from '../../store/actions/index';
 import { Media } from 'react-breakpoints';
+import Mux from '../../hoc/Mux';
+
 
 firebase.initializeApp({
   apiKey:"AIzaSyDAqWHBVCQhSMXGopU-U_IAKwjO7lt-LFs",
@@ -126,9 +128,9 @@ class Home extends Component{
         
         return(
             
-            <div>
+            <Mux>
               {loader}
-            </div>
+            </Mux>
         );
     }
 }
