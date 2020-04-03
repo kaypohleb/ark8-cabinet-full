@@ -9,12 +9,12 @@ class HistoryRoundActions extends Component{
             roundActions = <div>{this.props.round.map((action)=>{
                 let playername="";
                 this.props.players.forEach(player => {
-                    if(player.id===action.playedId){
+                    if(player.id===action.playerId){
                         playername=player.name;
                         console.log(playername);
                     }
                 });
-                return(<HistoryAction key={action.playedId} playerName={playername} selection={action.selection}/>);
+                return(<HistoryAction key={action.playerId} playerName={playername} selection={action.selection}/>);
             })}</div>
         }
         

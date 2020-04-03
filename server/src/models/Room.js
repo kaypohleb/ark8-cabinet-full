@@ -94,7 +94,7 @@ class Room {
                 throw new Error("Cannot unready when game has already started");
             }
 
-            player.unready = truel
+            player.ready = false;
         }   
         else if ( actionType == 'ADD_GAME'){
             if (!games[action.gameId]) {
@@ -106,7 +106,7 @@ class Room {
         else if ( actionType == 'START_GAME'){
             this.startGame();
         }
-
+        console.log("sent room_state_update")
         this.roomStateUpdateCallback( this.printRoomState() );
         if (this.game){
             const {game, players} = this.game.printState();
@@ -118,7 +118,7 @@ class Room {
         if (!this.game){
             throw new Error("Game cannot be started as game has not been set");
         }
-
+        this.gameStarted = true;
         this.game.start();
 
         this.roomStateUpdateCallback( this.printRoomState() );

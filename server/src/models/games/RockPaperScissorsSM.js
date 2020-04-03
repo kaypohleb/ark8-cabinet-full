@@ -1,7 +1,7 @@
 class RockPaperScissorsSM {
     step(userId, action, gameState, playerStates){
-        const updatedGameState = {...gameState};
-        const updatedPlayerStates = {};
+        let updatedGameState = {...gameState};
+        let updatedPlayerStates = {...playerStates};
 
         if (action.actionType == 'MAKE_SELECTION'){
             updatedPlayerStates[userId] = { selection: action.selection };
@@ -16,14 +16,14 @@ class RockPaperScissorsSM {
             let hasPaper = false;
             let winningSelection = null;
 
-            for (const playerState in playerStates){
-                if (playerState.selection == "rock") {
+            for (const playerId in playerStates){
+                if (playerStates[playerId].selection == "rock") {
                     hasRock = true;
                 } 
-                if (playerState.selection == "paper") {
+                if (playerStates[playerId].selection == "paper") {
                     hasPaper = true;
                 } 
-                if (playerState.selection == "scissors") {
+                if (playerStates[playerId].selection == "scissors") {
                     hasScissors = true;
                 } 
             }
@@ -41,22 +41,26 @@ class RockPaperScissorsSM {
             const prevTurn = Object.keys(playerStates).map( playerId => ({playerId, selection: playerStates[playerId].selection}) )
             updatedGameState.history.push(prevTurn);
 
-            Object.keys(playerStates).forEach(playerId => {
-                if (playerStates[playerId].selection == winningSelection){
+            for (const playerId in playerStates){
+                if (winningSelection && playerStates[playerId].selection == winningSelection){
                     const player = updatedGameState.players.find(player => player.id == playerId);
-                    if (player.selection == winningSelection){
-                        player.gameData.score++;
-                    }
+                    player.gameData.score++;
                 }
-            })
+            }
             
-            console.log("hello there", updatedGameState);
-            console.log("general kenboni", updatedGameState.currentRound);
+            if (updatedGameState.currentRound < updatedGameState.totalRounds){
+                updatedGameState.currentRound++;
+            }
 
-            updatedGameState.currentRound++;
             updatedGameState.timerStart = action.timerStart;
+
+            for (const playerId in updatedPlayerStates){
+                updatedPlayerStates[playerId] = {};
+            }
+            
         }
-        console.log("before return from step");
+        console.log("NEXT STATE", {game: updatedGameState, players: updatedPlayerStates})
+
 
         return {game: updatedGameState, players: updatedPlayerStates}
     }

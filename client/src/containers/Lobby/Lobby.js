@@ -26,13 +26,12 @@ class Lobby extends Component{
     state={
         gameChosenCnfrm: false,
         join: this.props.location.state.join,
-        createdBy:{},
+        createdBy:"",
         userID:'',
         players:[],
         id:'',
         getInfo:false,
-        value:"",
-        game:{},
+        game:"",
         gameStarted:false,
         isSignedIn:true,
         ready:false,
@@ -43,12 +42,13 @@ class Lobby extends Component{
     componentWillReceiveProps(newProps){
         this.setState({
             id: newProps.id,
-            userID: newProps.userID,
             createdBy: newProps.createdBy,
+            admin: newProps.admin,
+            game: newProps.game,
             players: newProps.players,
+            userID:newProps.userID,
             getInfo: newProps.getInfo,
             gameStarted: newProps.gameStarted,
-            game: newProps.game,
             isSignedIn: newProps.isSignedIn,
         });
     
@@ -59,10 +59,10 @@ class Lobby extends Component{
         console.log(event);
         
         this.setState({
-            value: event.target.value,
+            game: event.target.value,
             gameChosenCnfrm: true,
         });
-        this.props.setGame(event.target.value);
+        this.props.setGame(this.state.id,event.target.value);
         
     }
     gameScreenHandler(){
@@ -74,7 +74,7 @@ class Lobby extends Component{
         console.log(this.state);
         if(this.state.game!=null){
             console.log("pushing to game")
-            this.props.startGame();
+            this.props.startGame(this.state.id,this.state.game);
             // console.log(this.state);
         }
     }
@@ -82,13 +82,13 @@ class Lobby extends Component{
         this.setState({
             ready: !this.state.ready
         })
-        this.props.ready();
+        this.props.ready(this.state.id);
     }
     unreadyHandler(){
         this.setState({
             ready: !this.state.ready
         })
-        this.props.unready();
+        this.props.unready(this.state.id);
     }
     goBackHandler(){
         this.props.history.push('/profile');
@@ -102,15 +102,15 @@ class Lobby extends Component{
         {
           if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
             console.log("desktop");
-            return <LobbyDesktop gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} createdBy={this.state.createdBy} id = {this.props.id} gameStarted={this.state.gameStarted} game={this.state.game} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
+            return <LobbyDesktop gameID={this.state.game} gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} creatdBy={this.state.admin} id = {this.props.id} gameStarted={this.state.gameStarted} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
             console.log("tablet");
-            return <LobbyTablet gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} createdBy={this.state.createdBy} id = {this.props.id} gameStarted={this.state.gameStarted} game={this.state.game} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
+            return <LobbyTablet gameID={this.state.game} gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} createdBy={this.state.admin} id = {this.props.id} gameStarted={this.state.gameStarted}  startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
             console.log("mobile");
-            return <LobbyMobile gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} createdBy={this.state.createdBy} id = {this.props.id} gameStarted={this.state.gameStarted} game={this.state.game} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
+            return <LobbyMobile gameID={this.state.game} gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} createdBy={this.state.admin} id = {this.props.id} gameStarted={this.state.gameStarted} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= 0){
             return <div className={styles.Lobby}>Unable to display: use a bigger screen</div>
@@ -133,11 +133,12 @@ const mapStateToProps = (state) => {
     return{
         id: state.fetchLobbyDataReducer.id,
         createdBy: state.fetchLobbyDataReducer.createdBy,
-        players: state.fetchLobbyDataReducer.players,
+        admin:state.fetchLobbyDataReducer.admin,
+        game: state.fetchLobbyDataReducer.game,
         userID:state.fetchUserDataReducer.id,
+        players: state.fetchLobbyDataReducer.players,
         getInfo: true,
         gameStarted: state.fetchLobbyDataReducer.gameStarted,
-        game:state.fetchLobbyDataReducer.game,
         isSignedIn:state.fetchLobbyDataReducer.isSignedIn,
     }
 }
@@ -145,10 +146,10 @@ const mapStateToProps = (state) => {
 const mapDispatchtoProps = (dispatch) =>{
 
    return {
-       ready: () => dispatch(readyPlayer()),
-       unready: ()=> dispatch(unreadyPlayer()),
-       setGame: (gameTitle) => dispatch(setGameTitle(gameTitle)),
-       startGame: () => dispatch(startGame()),
+       ready: (roomID,gameID) => dispatch(readyPlayer(roomID,gameID)),
+       unready: (roomID,gameID)=> dispatch(unreadyPlayer(roomID,gameID)),
+       setGame: (roomID,gameID) => dispatch(setGameTitle(roomID,gameID)),
+       startGame: (roomID,gameID) => dispatch(startGame(roomID,gameID)),
        createRoom: ()=> dispatch(createRoom()),
        enterRoom: (roomid)=>dispatch(enterRoom(roomid)),
        closeRoom: ()=>dispatch(closeRoom()),

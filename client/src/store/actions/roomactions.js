@@ -58,34 +58,34 @@ export const closeRoom = () =>{
   
 }
 
-export const setGameTitle = (value)=>{
+export const setGameTitle = (roomID,gameID)=>{
   console.log(socket);
   return () => {
     
-      socket.emit('room_action',{actionType:"ADD_GAME",gameId:value});
+    socket.emit('room_action',{roomId:roomID, gameId:gameID, actionType:"ADD_GAME"});
     
   }
 }
 
-export const readyPlayer = () => {
+export const readyPlayer = (roomID,gameID) => {
   return () => {
     
-      socket.emit('room_action',{actionType:"SET_READY"});
+      socket.emit('room_action',{roomId:roomID, gameId:gameID, actionType:"SET_READY"});
     
   }
 }
 
-export const unreadyPlayer = () => {
+export const unreadyPlayer = (roomID,gameID) => {
   return () => {
    
-      socket.emit('room_action',{actionType:"SET_UNREADY"});
+    socket.emit('room_action',{roomId:roomID, gameId:gameID, actionType:"SET_UNREADY"});
     
   }
 }
 
-export const startGame = () => {
+export const startGame = (roomID,gameID) => {
   return () => {
-      socket.emit('room_action',{actionType:"START_GAME"});
+      socket.emit('room_action',{roomId:roomID, gameId:gameID,actionType:"START_GAME"});
   }
 }
 export const setRefreshGameState = () =>{
@@ -96,9 +96,9 @@ export const setRefreshGameState = () =>{
         })
     }
 }
-export const publishGameAction = (selection) =>{
+export const publishGameAction = (selection, actionType) => {
     return()=>{
-        socket.emit('game_action',{selection});
+        socket.emit('game_action', {selection, actionType});
     }
 }
 

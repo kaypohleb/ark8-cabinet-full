@@ -2,12 +2,12 @@ const roomActionConstants = {
     ACTIONS : {
         'SET_READY' : {
             roomId: "string",
-            gameId: "string"
+            // gameId: "string"
         },
 
         'SET_UNREADY' : {
             roomId: "string",
-            gameId: "string"
+            // gameId: "string"
         },
 
         'ADD_GAME' : {

@@ -26,6 +26,7 @@ class RockPaperScissorsGame {
     initializePlayerStates(){
         this.gameState.players.forEach( player => {
             this.playerStates[player.id] = {};
+            player.gameData.score = 0;
         })
     }
 
@@ -44,8 +45,7 @@ class RockPaperScissorsGame {
                 timerStart: new Date().getTime()
             }
             makeAction(null, action);
-            console.log("what is this", this);
-            if (this.gameState.currentRound <= this.gameState.totalRounds){
+            if (this.gameState.currentRound < this.gameState.totalRounds){
                 console.log(`setting timer for next turn to ${this.gameState.timerLength}`);
                 this.timer = setTimeout(turn, this.gameState.timerLength);
             }
@@ -56,8 +56,11 @@ class RockPaperScissorsGame {
     }
 
     validateAction(userId, action){
+        console.log(action);
+        console.log(validActions);
+        console.log(validActions[action.actionType]);
         if (validActions[action.actionType]){
-            return true;
+            return;
         }
         throw new Error('Not a valid action type for this game');
     }

@@ -14,8 +14,8 @@ class LobbyMobile extends Component{
 
     render(){
         
-        let players,createdBy,options,startGameButton,chooseGame,ready,pickGame = null;
-        if(this.props.userID === this.props.createdBy.id){
+        let players,options,startGameButton,chooseGame,ready,pickGame = null;
+        if(this.props.userID === this.props.createdBy){
             //console.log("creator");
             if(this.props.gameChosenCnfrm){
                 startGameButton = (
@@ -28,6 +28,7 @@ class LobbyMobile extends Component{
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
                 <StyledSelect onChange={(e)=>this.props.selectChange(e)}>
+                    <option disabled selected value>--pick-a-game--</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
                     <option value="DRAWFUL">drawful</option>
                     <option value="WEREWOLF">werewolf</option>
@@ -42,20 +43,22 @@ class LobbyMobile extends Component{
             </StyledMobileButton>)
 
         }
-        if(this.props.readyState){
-            ready = (<StyledMobileButton
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}} 
-                onClick={()=>this.props.unready()}>UNREADY</StyledMobileButton>)
-        }else{
-            ready = (<StyledMobileButton
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}} 
-                onClick={()=>this.props.ready()}>READY</StyledMobileButton>)
+        if(this.props.gameID){
+            if(this.props.readyState){
+                ready = (<StyledMobileButton
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.8}} 
+                    onClick={()=>this.props.unready()}>UNREADY</StyledMobileButton>)
+            }else{
+                ready = (<StyledMobileButton
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.8}} 
+                    onClick={()=>this.props.ready()}>READY</StyledMobileButton>)
+            }
         }
 
         if(this.props.gameStarted){
-            return <GameRoom game={this.props.game}></GameRoom>
+            return <GameRoom game={this.props.gameID}></GameRoom>
         }
 
         if(!this.props.id){
@@ -67,16 +70,14 @@ class LobbyMobile extends Component{
         
         if(this.props.getInfo){
             players = (<div style={{overflowY:"auto"}}>{this.props.players.map((player)=>{
-                if(player.id == this.props.createdBy.id){
+                if(player.id == this.props.createdBy){
                     return <CreatedPlayer key={player.id}name={player.name} id={player.id} ready={player.ready}/>
                 }
                 else{
                     return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
                 }
             })}</div>) ;
-            createdBy = (<div>
-                Created by: {this.props.createdBy.name}
-            </div>);
+            
         }
         options = (<div className={styles.LobbyOptions}>
             {pickGame}
@@ -97,7 +98,7 @@ class LobbyMobile extends Component{
                     Room ID: {this.props.id}
                     </div>     
                 </div>
-                {createdBy}
+                
                              
                 {players}
                 </div>

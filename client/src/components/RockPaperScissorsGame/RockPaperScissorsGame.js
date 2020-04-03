@@ -14,43 +14,34 @@ class RockPaperScissorsGame extends Component {
     constructor(props){
         super(props);
         this.props.refreshGame();
-        this.state= ({
-            ...mainstore.getState().fetchLobbyDataReducer.game,
-        });
         
+    }
+    state={
+        currentRound:0,
+        players:[],
+        history:[],
     }
   
     componentWillReceiveProps(newProps){
-       if(this.state!==newProps.game){
+        console.log(newProps);
         this.setState({
-           turnStart:newProps.game.turnStart,
-           remainingRounds:newProps.game.remainingRounds,
+           currentRound:newProps.game.currentRound,
            players:newProps.game.players,
-           history: newProps.game.history,
-           scores: newProps.game.scores,
-           prevWinner: newProps.game.prevWinner,
-           currentTurn: newProps.game.currentTurn,
+           history: newProps.game.history
         })
+        
     }
-}
+
        
     
 
     render(){
         
         let gameScores,history= null;
-        if(this.state.scores){
-            gameScores = (<div className={styles.Scores}>{Object.keys(this.state.scores)
-                .sort((a,b)=>this.state.scores.b - this.state.scores.a)
-                .map((playerId) =>{ 
-                    let playername="";
-                    this.state.players.forEach(player => {
-                        if(player.id===playerId){
-                            playername=player.name;
-                            console.log(playername);
-                        }
-                    });
-                    return (<Score key={playerId} playerName={playername} score={this.state.scores[playerId]} playerId = {this.state.playerId}/>
+        if(this.state.players){
+            gameScores = (<div className={styles.Scores}>{
+                this.state.players.map((player) =>{ 
+                    return (<Score key={player.id} playerName={player.name} score={player.gameData.score} playerId = {player.id}/>
                     )}
                 )}</div>);
         }
@@ -58,8 +49,8 @@ class RockPaperScissorsGame extends Component {
         if(this.state.history){
             history = <div>
                 {this.state.history.map((historyround,index)=>{
-                    return (<HistoryRoundActions key={index} players={this.state.players} round={historyround}/>)
-                    }
+                    return (<HistoryRoundActions key={index} players={this.state.players} round={historyround}/>
+                    )}
                 )}
             </div>
         }
@@ -70,7 +61,7 @@ class RockPaperScissorsGame extends Component {
                     {gameScores} 
                 </div>
                 <div class={styles.RoundBoard}>
-                <h2>Remaining Rounds: {this.state.remainingRounds}</h2></div>  
+                <h2>Current Round: {this.state.currentRound}</h2></div>  
                 <div className={styles.State}>
                     {history}
                  {/* {JSON.stringify(this.state)} */}
@@ -80,17 +71,17 @@ class RockPaperScissorsGame extends Component {
                     whileHover={{scale:1.2}}
                     whileTap={{scale:0.8}}
                     src={Rock} alt="rock" 
-                    onClick={()=>this.props.gameAction("rock")}/>
+                    onClick={()=>this.props.gameAction("rock","MAKE_SELECTION")}/>
                     <motion.img 
                     whileHover={{scale:1.2}}
                     whileTap={{scale:0.8}}
                     src={Paper} alt="paper" 
-                    onClick={()=>this.props.gameAction("paper")}/>
+                    onClick={()=>this.props.gameAction("paper","MAKE_SELECTION")}/>
                     <motion.img 
                     whileHover={{scale:1.2}}
                     whileTap={{scale:0.8}}
                     src={Scissors} alt="scissors" 
-                    onClick={()=>this.props.gameAction("scissors")}/>
+                    onClick={()=>this.props.gameAction("scissors","MAKE_SELECTION")}/>
                 </div>
             </div>
         )
@@ -101,7 +92,7 @@ class RockPaperScissorsGame extends Component {
 const mapStateToProps = (state) =>{
     console.log(state);
     return{
-        game:state.fetchGameDataReducer,
+        game:state.fetchGameDataReducer.game,
     }
 }
 
@@ -109,7 +100,7 @@ const mapStateToProps = (state) =>{
 const mapDispatchtoProps = (dispatch) =>{
     
     return {
-        gameAction: (selection) => dispatch(publishGameAction(selection)),
+        gameAction: (selection,actionType) => dispatch(publishGameAction(selection,actionType)),
         refreshGame: ()=> dispatch(setRefreshGameState()),
     }
  }

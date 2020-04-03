@@ -9,10 +9,10 @@ class GameRoom extends Component{
             game = <p>loading...</p>;
         }
         else{
-            if(this.props.game.id==="ROCK_PAPER_SCISSORS"){
+            if(this.props.game==="ROCK_PAPER_SCISSORS"){
                 game =  <RockPaperScissorsGame/>
             }
-            if(this.props.game.id==="DRAWFUL"){
+            if(this.props.game==="DRAWFUL"){
                 game = <Drawful/>
             }
         }

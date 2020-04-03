@@ -53,7 +53,6 @@ class SocketRouter {
 
         this.room.roomStateUpdateCallback = (state) => {nsp.emit('room_state_update', state)} ;
         this.room.gameStateUpdateCallback = (gameState, playerStates) => {
-            console.log(nsp.connected);
             for (const socketId in nsp.connected){
                 const socket = nsp.connected[socketId];
                 socket.emit('game_state_update', {
@@ -121,13 +120,14 @@ class SocketRouter {
             const validateRoomAction = this.room.validateRoomAction.bind(this.room);
             const makeRoomAction = this.room.makeRoomAction.bind(this.room);
             console.log('received room_action: ',data);
-            try {
+            // try {
                 validateRoomAction(socket.userId, data);
                 makeRoomAction(socket.userId, data);
-            }
-            catch (e) {
-                return socket.emit('room_action_error', { message: e.message});
-            }
+            // }
+            // catch (e) {
+            //     console.log('room_action_error:', e.message);
+            //     return socket.emit('room_action_error', { message: e.message});
+            // }
         })
     }
 
