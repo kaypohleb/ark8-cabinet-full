@@ -39,7 +39,7 @@ class RoomController {
 
     removeRoom(roomId){
         const nsp = io.of(`/${roomId}`);
-        for (socketId in nsp.connected){
+        for (const socketId in nsp.connected){
             nsp.connected[socketId].disconnect();
         }
         nsp.removeAllListeners();

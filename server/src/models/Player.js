@@ -6,25 +6,10 @@ class Player {
         this.gameData = {};
     }
 
-    ready(){
-        this.ready = true;
-    }
-
-    unready(){
-        this.ready = false;
-    }
-
     printGameData(){
         return {...this.gameData};
     }
 
-    ready(){
-        this.ready = true;
-    }
-
-    unready(){
-        this.ready = false;
-    }
 
 }
 

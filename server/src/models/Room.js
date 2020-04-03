@@ -27,8 +27,12 @@ class Room {
     }
 
     addPlayer(userId, name){
-        const player = new Player(userId, name);
-        this.players.push(player);
+        const playerPresent = this.players.find(player => player.id == userId);
+        if (!playerPresent){
+            const player = new Player(userId, name);
+            this.players.push(player);
+        }
+        
 
         this.roomStateUpdateCallback( this.printRoomState() );
         if (this.game){
@@ -71,7 +75,8 @@ class Room {
                 throw new Error("User not found in room");
             }
 
-            player.ready();
+            player.ready = true;
+
             const allPlayersReady = this.players.reduce((prev, player) => (prev && player.ready), true);
 
             if (allPlayersReady){
@@ -89,14 +94,13 @@ class Room {
                 throw new Error("Cannot unready when game has already started");
             }
 
-            player.unready();
+            player.unready = truel
         }   
         else if ( actionType == 'ADD_GAME'){
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            console.log("ADDING GAME!")
-            this.game = new games[action.gameId]();
+            this.game = new games[action.gameId](this.players);
             this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
         }
         else if ( actionType == 'START_GAME'){
@@ -132,7 +136,7 @@ class Room {
         if (!this.game){
             throw new Error("Game cannot be started as game has not been set");
         }
-
+        
         this.game.makeAction(userId, action);
         this.roomStateUpdateCallback( this.printRoomState() );
     }

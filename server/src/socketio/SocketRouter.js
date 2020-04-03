@@ -41,7 +41,8 @@ class SocketRouter {
         const roomActionHandler = this.roomActionHandler.bind(this);
         const gameActionHandler = this.gameActionHandler.bind(this);
 
-        nsp.on('connection', (socket) => { 
+        nsp.on('connection', (socket) => {
+            console.log(`${socket.id} connected`) 
             socket.use( (packet, next) => {authMiddleware(packet, next, socket)});
             
             disconnectHandler(nsp, socket);
@@ -52,7 +53,8 @@ class SocketRouter {
 
         this.room.roomStateUpdateCallback = (state) => {nsp.emit('room_state_update', state)} ;
         this.room.gameStateUpdateCallback = (gameState, playerStates) => {
-            for (socketId in nsp.connected){
+            console.log(nsp.connected);
+            for (const socketId in nsp.connected){
                 const socket = nsp.connected[socketId];
                 socket.emit('game_state_update', {
                     game: gameState,
@@ -118,7 +120,7 @@ class SocketRouter {
         socket.on('room_action', (data) => {
             const validateRoomAction = this.room.validateRoomAction.bind(this.room);
             const makeRoomAction = this.room.makeRoomAction.bind(this.room);
-
+            console.log('received room_action: ',data);
             try {
                 validateRoomAction(socket.userId, data);
                 makeRoomAction(socket.userId, data);
@@ -144,6 +146,7 @@ class SocketRouter {
                 makeGameAction(socket.userId, data);
             }
             catch (e) {
+                console.log('game_action_error', e.message);
                 return socket.emit('game_action_error', {message: e.message});
             }
         })

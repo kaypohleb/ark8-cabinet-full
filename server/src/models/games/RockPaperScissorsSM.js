@@ -16,7 +16,7 @@ class RockPaperScissorsSM {
             let hasPaper = false;
             let winningSelection = null;
 
-            for (playerState in playerStates){
+            for (const playerState in playerStates){
                 if (playerState.selection == "rock") {
                     hasRock = true;
                 } 
@@ -50,12 +50,15 @@ class RockPaperScissorsSM {
                 }
             })
             
+            console.log("hello there", updatedGameState);
+            console.log("general kenboni", updatedGameState.currentRound);
+
             updatedGameState.currentRound++;
             updatedGameState.timerStart = action.timerStart;
         }
+        console.log("before return from step");
 
-
-        return {updatedGameState, updatedPlayerStates}
+        return {game: updatedGameState, players: updatedPlayerStates}
     }
 }
 

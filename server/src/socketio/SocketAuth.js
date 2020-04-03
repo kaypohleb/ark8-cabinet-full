@@ -33,12 +33,11 @@ class SocketAuth {
         if (packet[0] == 'authentication'){
             return next()
         }
-        const authenticatedUser = this.getAuthenticatedUser(socket.id);
+        const authenticatedUser = this.getAuthenticatedUser(socket.userId);
+
 
         if (authenticatedUser){
-            console.log("adding userId");
             socket.userId = authenticatedUser.userId;
-            console.log(socket);
             return next();
         }
 

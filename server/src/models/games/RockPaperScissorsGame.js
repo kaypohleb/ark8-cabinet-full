@@ -2,6 +2,7 @@ const RockPaperScissorsSM = require('./RockPaperScissorsSM');
 
 class RockPaperScissorsGame {
     constructor(players){
+        console.log('rps game constructor', players);
         this.id = 'ROCK_PAPER_SCISSORS';
         this.timer = null;
         this.gameState = {
@@ -23,7 +24,7 @@ class RockPaperScissorsGame {
     }
 
     initializePlayerStates(){
-        players.forEach( player => {
+        this.gameState.players.forEach( player => {
             this.playerStates[player.id] = {};
         })
     }
@@ -43,8 +44,10 @@ class RockPaperScissorsGame {
                 timerStart: new Date().getTime()
             }
             makeAction(null, action);
+            console.log("what is this", this);
             if (this.gameState.currentRound <= this.gameState.totalRounds){
-                this.timer = setTimeout(turn, this.timerLength);
+                console.log(`setting timer for next turn to ${this.gameState.timerLength}`);
+                this.timer = setTimeout(turn, this.gameState.timerLength);
             }
 
         }).bind(this);
@@ -56,13 +59,16 @@ class RockPaperScissorsGame {
         if (validActions[action.actionType]){
             return true;
         }
+        throw new Error('Not a valid action type for this game');
     }
 
     makeAction(userId, action){
         this.history.push({gameState: {...this.gameState}, playerStates: {...this.playerStates}});
-        const {gameState, playerStates} = this.gameStateMachine.step(userId, action, this.gameState, this.playerStates);
-        this.gameState = gameState;
-        this.playerStates = playerStates;
+        const {game, players} = this.gameStateMachine.step(userId, action, {...this.gameState}, {...this.playerStates});
+        this.gameState = game;
+        this.playerStates = players;
+
+        this.gameStateUpdateCallback(game, players);
     }
 
 

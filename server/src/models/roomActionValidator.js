@@ -29,12 +29,13 @@ const roomActionValidator = (action) => {
     }
 
     for (const property in roomActionConstants.ACTIONS[action.actionType]){
-        if (!action.actionType[property]){
-            throw new Error('Invalid room action')
+        if (!action[property]){
+            throw new Error(`Invalid room action: missing field ${property}`)
         }
 
-        if (typeof action.actionType[property] != roomActionConstants.ACTIONS[action.actionType][property]){
-            throw new Error('Invalid room action')
+        if ((typeof action[property]) != roomActionConstants.ACTIONS[action.actionType][property]){
+            throw new Error(`Invalid room action: typeof of ${action[property]} should be 
+            ${roomActionConstants.ACTIONS[action.actionType][property]}`)
         }
     }
 
