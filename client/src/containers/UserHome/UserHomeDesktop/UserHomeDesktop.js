@@ -3,8 +3,8 @@ import styles from './UserHomeDesktop.module.css';
 import LoadingLottie from '../../../components/Lotties/LoadingLottie';
 import Modal from '../../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
-import {StyledTransparentButton} from '../../../components/StyledComponents/StyledButton';
-
+import {StyledButton} from '../../../components/StyledComponents/StyledButton';
+import createRoomIcon from '../../../assets/svg/icon/createRoomIcon.svg';
 const pinStyle = {
   color:'white',
   padding:'0 !important',
@@ -30,8 +30,8 @@ class UserHomeDesktop extends Component{
                 focus
                 ref={p => (this.pin = p)}
                 type="custom"
-                onChange={()=>this.props.roomIDChange()}
-                onComplete={()=>this.props.roomIDComplete()}
+                onChange={(val)=>this.props.roomIDChange(val)}
+                onComplete={(val)=>this.props.roomIDComplete(val)}
               />)
         }
         if(this.props.joinIdComplete){
@@ -58,18 +58,37 @@ class UserHomeDesktop extends Component{
             <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
             <p className={styles.uid}>User ID: {this.props.userID}</p>
             <div className={styles.options}>
-                <StyledTransparentButton
+            <StyledButton
+                style ={{backgroundColor: "#12CCB1", height: "auto",width:"auto", display:"flex", flexDirection:"column"}}
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={()=>this.props.createRoom()}>Create Room</StyledTransparentButton>
-                <StyledTransparentButton 
+                onClick={()=>this.props.createRoom()}>
+                    <img src={createRoomIcon}/>
+                    CREATE ROOM</StyledButton>
+            <StyledButton 
+                style ={{backgroundColor: "#E51749", height: "auto", width:"auto", textAlign:"center", display:"flex",flexDirection:"column"}}
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
-                onClick={()=>this.props.enterJoinScreen()}>Join Room</StyledTransparentButton>
-                <StyledTransparentButton 
-                whileHover={{scale:1.2}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.signOut()}>SignOut</StyledTransparentButton>
+                onClick={()=>this.props.enterJoinScreen()}>
+                    <img src={createRoomIcon}/>
+                    JOIN ROOM</StyledButton>
+            <div className={styles.rightButtons}>
+                <StyledButton 
+                    style ={{backgroundColor: "#FF8DC6", width:"100%", textAlign:"center"}}
+                    whileHover={{scale:1.2}}
+                    whileTap={{scale:0.8}}
+                    >GAME HISTORY</StyledButton>
+                <StyledButton 
+                    style ={{backgroundColor: "#EBFF05", width:"100%", textAlign:"center"}}
+                    whileHover={{scale:1.2}}
+                    whileTap={{scale:0.8}}
+                   >SETTINGS</StyledButton>
+                <StyledButton 
+                    style ={{backgroundColor: "#8B940C", width:"100%", textAlign:"center"}}
+                    whileHover={{scale:1.2}}
+                    whileTap={{scale:0.8}}
+                    onClick={()=>this.props.signOut()}>SIGN OUT</StyledButton>
+            </div>
             </div>
             </div>
         );

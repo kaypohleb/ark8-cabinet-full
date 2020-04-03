@@ -5,6 +5,7 @@ import styles from './LobbyTablet.module.css';
 import LoadingLottie from '../../../components/Lotties/LoadingLottie';
 import {StyledTransparentButton} from '../../../components/StyledComponents/StyledButton';
 import {StyledSelect} from '../../../components/StyledComponents/StyledSelect';
+import CreatedPlayer from '../../../components/Player/CreatedPlayer/CreatedPlayer';
 
 class LobbyTablet extends Component{
 
@@ -53,7 +54,12 @@ class LobbyTablet extends Component{
         
         if(this.props.getInfo){
             players = (<div>{this.props.players.map((player)=>{
-                return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                if(player.id == this.props.createdBy.id){
+                    return <CreatedPlayer key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                }
+                else{
+                    return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                }
             })}</div>) ;
             createdBy = (<div>
                 Created by: {this.props.createdBy.name}

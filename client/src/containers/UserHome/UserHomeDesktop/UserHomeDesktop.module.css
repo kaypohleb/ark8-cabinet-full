@@ -6,8 +6,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
   }
   
 .card{
@@ -20,9 +20,9 @@
   font-family: 'Abduction';
   font-weight: 400;
   color:rgb(223, 238, 12);
-  font-size: 10vw;
+  font-size: 6vw;
   padding:0.5rem;
-  margin-left: 20px;
+  margin: 0 auto;
 }
 
 .uid{
@@ -32,9 +32,18 @@
 
 .options{
   display: flex;
-  margin:0 auto;
+  margin: 0 auto;
   flex-wrap: wrap;
   flex-direction: row;
+  justify-content: center;
+  
+}
+.rightButtons{
+  width: auto;
+  display: flex;
+  margin:0 auto;
+  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: center;
 }
 .joinTitle{

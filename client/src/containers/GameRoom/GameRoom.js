@@ -5,7 +5,6 @@ import Drawful from '../../components/Drawful/Drawful';
 class GameRoom extends Component{
     render(){
         let game=null;
-        
         if(this.props.game==null){
             game = <p>loading...</p>;
         }

@@ -5,7 +5,7 @@ import styles from './LobbyDesktop.module.css';
 import LoadingLottie from '../../../components/Lotties/LoadingLottie';
 import {StyledTransparentButton} from '../../../components/StyledComponents/StyledButton';
 import {StyledSelect} from '../../../components/StyledComponents/StyledSelect';
-
+import CreatedPlayer from '../../../components/Player/CreatedPlayer/CreatedPlayer';
 class LobbyDesktop extends Component{
 
     render(){
@@ -28,7 +28,7 @@ class LobbyDesktop extends Component{
                 </StyledSelect>
                 </div>);
         }
-        if(this.props.ready){
+        if(this.props.readyState){
             ready = (<StyledTransparentButton
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}} 
@@ -53,7 +53,12 @@ class LobbyDesktop extends Component{
         
         if(this.props.getInfo){
             players = (<div>{this.props.players.map((player)=>{
-                return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                if(player.id == this.props.createdBy.id){
+                    return <CreatedPlayer key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                }
+                else{
+                    return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                }
             })}</div>) ;
             createdBy = (<div>
                 Created by: {this.props.createdBy.name}
@@ -65,9 +70,10 @@ class LobbyDesktop extends Component{
             <div className={styles.LobbyDesktop}>
                 <div className={styles.LobbyHeader}>
                     <h1 className={styles.LobbyTitle}>Lobby</h1>
-                    <div className={styles.LobbyRoomID}>
-                    <p>Room ID: </p>
-                    <p>{this.props.id}</p> 
+                    <div className={styles.IDSpacer}>
+                        <div className={styles.LobbyRoomID}>
+                        ROOM ID: {this.props.id}
+                        </div>
                     </div>     
                 </div>
                 {createdBy}
@@ -78,7 +84,7 @@ class LobbyDesktop extends Component{
                 whileHover={{scale:1.2}}
                 whileTap={{scale:0.8}}
                 
-                onClick={ ()=>this.goBack()}>Back</StyledTransparentButton>
+                onClick={ ()=>this.props.goBack()}>Back</StyledTransparentButton>
                 {ready}
                 
                 
