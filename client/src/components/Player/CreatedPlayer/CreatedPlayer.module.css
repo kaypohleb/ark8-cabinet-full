@@ -24,7 +24,7 @@
         width:22rem;
     }
   }
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1024px) {
 .Player {
     width:25rem;
     }

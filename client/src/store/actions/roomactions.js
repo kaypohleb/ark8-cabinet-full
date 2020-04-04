@@ -10,7 +10,7 @@ const BASE_URL = 'http://localhost:3001';
 
 export const createRoom = () =>{
   return async(dispatch,getState) =>{
-      console.log("creating Room");
+    
       let requestURL = `${BASE_URL}/createRoom`;
       await axios.post(
         requestURL,
@@ -20,7 +20,7 @@ export const createRoom = () =>{
           Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
         }
         }).then(response=>{
-          console.log(response);
+         
           dispatch(enterRoom(response.data.id));
         }).catch(error => {
           dispatch({
@@ -33,10 +33,9 @@ export const createRoom = () =>{
 
 export let socket;
 export const enterRoom = (roomID) =>{
-  console.log(roomID);
+ 
   return(dispatch,getState)=>{
-    // console.log(getState().idtokenReducer.idToken);
-    // console.log(BASE_URL+"/"+roomID);
+ 
     socket = socketIOClient(BASE_URL+"/"+roomID);
     socket.open();
     socket.emit('authentication', getState().idtokenReducer.idToken);
@@ -50,7 +49,7 @@ export const enterRoom = (roomID) =>{
 
 export const closeRoom = () =>{
   return () =>{
-    console.log("closingRoom")
+
    
       //socket.close();
     
@@ -59,7 +58,7 @@ export const closeRoom = () =>{
 }
 
 export const setGameTitle = (roomID,gameID)=>{
-  console.log(socket);
+ 
   return () => {
     
     socket.emit('room_action',{roomId:roomID, gameId:gameID, actionType:"ADD_GAME"});
@@ -91,7 +90,7 @@ export const startGame = (roomID,gameID) => {
 export const setRefreshGameState = () =>{
     return (dispatch) =>{
         socket.on('game_state_update', (data) => {
-            //console.log({...data});
+       
             dispatch(updateGameStateSuccess(data));
         })
     }

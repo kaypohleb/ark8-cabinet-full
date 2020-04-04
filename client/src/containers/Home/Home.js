@@ -19,7 +19,7 @@ firebase.initializeApp({
 class Home extends Component{
     constructor(props) {
         super(props);
-        console.log(this.state);
+        
         this.signoutHandler = this.signoutHandler.bind(this);
         this.enterSignInHandler = this.enterSignInHandler.bind(this);
         this.exitSignInHandler = this.exitSignInHandler.bind(this);
@@ -73,7 +73,7 @@ class Home extends Component{
         this.setState({
           signing:true,
         })
-        console.log(this.state);
+      
         firebase.auth().onAuthStateChanged(user=>{
           if(user!==null){
           this.props.dispatch(userStateChanged(user));
@@ -96,7 +96,7 @@ class Home extends Component{
       this.setState({
         isSignedIn:false
       })
-      //console.log("trying to sign out");
+      //("trying to sign out");
       firebase.auth().signOut();
     }
   
@@ -107,15 +107,15 @@ class Home extends Component{
         {({ breakpoints, currentBreakpoint }) =>
         {
           if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
-            console.log("desktop");
+          
             return <HomeDesktop isSignedIn={this.state.isSignedIn} width={this.state.width} height={this.state.height} uiConfig={this.uiConfig} show={this.state.signing} entersignIn={this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut={this.signoutHandler} gotoTest={this.enterTestHandler} loginClick={()=> firebase.auth()}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
-            console.log("tablet");
+           
             return <HomeTablet isSignedIn={this.state.isSignedIn} width={this.state.width} height={this.state.height} uiConfig={this.uiConfig} show={this.state.signing} entersignIn={this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut={this.signoutHandler} gotoTest={this.enterTestHandler} loginClick={()=> firebase.auth()}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
-            console.log("mobile");
+          
             return <HomeMobile isSignedIn={this.state.isSignedIn} width={this.state.width} height={this.state.height} uiConfig={this.uiConfig} show={this.state.signing} entersignIn={this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut={this.signoutHandler} gotoTest={this.enterTestHandler} loginClick={()=> firebase.auth()}/>
           }
           else if (breakpoints[currentBreakpoint] >= 0){

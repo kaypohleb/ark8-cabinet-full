@@ -1,5 +1,5 @@
 .UserHomeDesktop{
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #1d1d1d;
     position: absolute;
     height: 100%;
@@ -52,6 +52,8 @@
 }
 
 .joinCard{
+  display: flex;
+  flex-direction: column;
   margin: 40px;
-  
+  align-items: center;
 }

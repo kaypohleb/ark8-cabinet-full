@@ -8,9 +8,9 @@ import styles from './Player.module.css'
 
 class Player extends Component{
     render(){
-        let ready = <img className={styles.icon} src={Stop} height="100px"/>;
+        let ready = <img className={styles.icon} alt="unready" src={Stop} height="100px"/>;
         if(this.props.ready){
-            ready=<img className={styles.icon} src={Tick}/>;
+            ready=<img className={styles.icon} alt="ready" rc={Tick}/>;
         }
         return (
             <div className={styles.Player}>

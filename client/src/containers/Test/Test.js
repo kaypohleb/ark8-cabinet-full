@@ -10,7 +10,7 @@ class Test extends Component{
         let game = {
             id: "DRAWFUL",
         }
-        console.log(this.state);
+       
         return(
             <div className={styles.Canvas}>
             <GameRoom game = {game} />

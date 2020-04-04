@@ -5,6 +5,7 @@ import Modal from '../../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
 import {StyledButton} from '../../../components/StyledComponents/StyledButton';
 import createRoomIcon from '../../../assets/svg/icon/createRoomIcon.svg';
+import joinRoomIcon from '../../../assets/svg/icon/joinRoomIcon.svg';
 const pinStyle = {
   color:'white',
   padding:'0 !important',
@@ -14,6 +15,7 @@ const pinStyle = {
   background: 'transparent',
   width: '50px',
   height: '50px',
+  
 }
 
   
@@ -35,7 +37,11 @@ class UserHomeDesktop extends Component{
               />)
         }
         if(this.props.joinIdComplete){
-            joinButton = (<button onClick={()=>this.props.joinRoom()}>JOIN ROOM</button>)
+            joinButton =  (<StyledButton 
+            whileHover={{scale:1.1}}
+            whileTap={{scale:0.8}}
+            onClick={()=>{this.props.joinRoom()}}>
+            JOIN ROOM</StyledButton>);
         }
         
         if(!this.props.name){
@@ -56,36 +62,35 @@ class UserHomeDesktop extends Component{
                 </div>
                </Modal>   
             <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
-            <p className={styles.uid}>User ID: {this.props.userID}</p>
             <div className={styles.options}>
             <StyledButton
                 style ={{backgroundColor: "#12CCB1", height: "auto",width:"auto", display:"flex", flexDirection:"column"}}
-                whileHover={{scale:1.2}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.createRoom()}>
-                    <img src={createRoomIcon}/>
+                    <img src={createRoomIcon} alt="createRoomIcon"/>
                     CREATE ROOM</StyledButton>
             <StyledButton 
                 style ={{backgroundColor: "#E51749", height: "auto", width:"auto", textAlign:"center", display:"flex",flexDirection:"column"}}
-                whileHover={{scale:1.2}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.enterJoinScreen()}>
-                    <img src={createRoomIcon}/>
+                    <img src={joinRoomIcon} alt="joinRoomIcon"/>
                     JOIN ROOM</StyledButton>
             <div className={styles.rightButtons}>
                 <StyledButton 
                     style ={{backgroundColor: "#FF8DC6", width:"100%", textAlign:"center"}}
-                    whileHover={{scale:1.2}}
+                    whileHover={{scale:1.1}}
                     whileTap={{scale:0.8}}
                     >GAME HISTORY</StyledButton>
                 <StyledButton 
                     style ={{backgroundColor: "#EBFF05", width:"100%", textAlign:"center"}}
-                    whileHover={{scale:1.2}}
+                    whileHover={{scale:1.1}}
                     whileTap={{scale:0.8}}
                    >SETTINGS</StyledButton>
                 <StyledButton 
                     style ={{backgroundColor: "#8B940C", width:"100%", textAlign:"center"}}
-                    whileHover={{scale:1.2}}
+                    whileHover={{scale:1.1}}
                     whileTap={{scale:0.8}}
                     onClick={()=>this.props.signOut()}>SIGN OUT</StyledButton>
             </div>

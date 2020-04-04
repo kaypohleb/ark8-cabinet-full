@@ -47,7 +47,7 @@ class UserHome extends Component{
     }
 
     signoutHander(){
-        console.log("trying to sign out");
+       
         firebase.auth().signOut();
         this.props.history.push('/');
     }
@@ -111,15 +111,15 @@ class UserHome extends Component{
             if(!this.state.isSignedIn){
                 return <Redirect to="/"/>
             }else if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
-             console.log("desktop");
+            
              return <UserHomeDesktop name={this.state.name} joining = {this.state.joining} userID={this.props.id} joinIdComplete ={this.state.joinIdComplete} isSignedIn ={this.state.isSignedIn} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen={this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange={this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
-             console.log("tablet");
+         
              return <UserHomeTablet name={this.state.name} joining = {this.state.joining} userID={this.props.id} joinIdComplete ={this.state.joinIdComplete} isSignedIn ={this.state.isSignedIn} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen={this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange={this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
-             console.log("mobile");
+          
              return <UserHomeMobile name={this.state.name} joining = {this.state.joining} userID={this.props.id} joinIdComplete ={this.state.joinIdComplete} isSignedIn ={this.state.isSignedIn} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen={this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange={this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= 0){
@@ -140,7 +140,7 @@ class UserHome extends Component{
 }
 
 const mapStateToProps = (state) => {
-    console.log(state);
+    
     return{
         name: state.fetchUserDataReducer.name,
         id: state.fetchUserDataReducer.id,

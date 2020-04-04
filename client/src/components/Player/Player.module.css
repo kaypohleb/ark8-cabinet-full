@@ -1,5 +1,5 @@
 .Player{
-    margin:auto;
+    margin:2%;
     background-color:#FF8DC6;
     border-radius: 100px;
     box-shadow: 0 2px 3px #ccc;
@@ -24,7 +24,7 @@
         width:22rem;
     }
   }
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1024px) {
 .Player {
     width:25rem;
     }

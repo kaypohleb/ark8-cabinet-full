@@ -24,7 +24,7 @@ class HistoryAction extends Component{
                 icon = <StyledIcon src={ScissorsIcon} alt="scissorsicon" />
                 break;
             default:
-                icon = <p>nothing</p>
+                icon = <p> nothing</p>
         }
         return(
             <div className={styles.HistoryAction}>

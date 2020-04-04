@@ -10,7 +10,7 @@ import ReactBreakpoints from 'react-breakpoints';
 const breakpoints = {
     mobile: 320,
     tablet: 768,
-    desktop: 1200,
+    desktop: 1024,
 }
 
 ReactDOM.render(

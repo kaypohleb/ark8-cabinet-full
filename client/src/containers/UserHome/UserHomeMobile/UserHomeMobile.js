@@ -12,8 +12,8 @@ const pinStyle = {
   textAlign:'center',
   border: '1px solid white',
   background: 'transparent',
-  width: '50px',
-  height: '50px',
+  width: '35px',
+  height: '35px',
 }
 
   
@@ -35,8 +35,13 @@ class UserHomeMobile extends Component{
               />)
         }
         if(this.props.joinIdComplete){
-            joinButton = (<button onClick={()=>this.props.joinRoom()}>JOIN ROOM</button>)
+            joinButton =  (<StyledMobileButton 
+            whileHover={{scale:1.1}}
+            whileTap={{scale:0.8}}
+            onClick={()=>{this.props.joinRoom()}}>
+            JOIN ROOM</StyledMobileButton>);
         }
+        
         
         if(!this.props.name){
             return(
@@ -56,31 +61,30 @@ class UserHomeMobile extends Component{
                 </div>
                </Modal>   
             <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
-            <p className={styles.uid}>User ID: {this.props.userID}</p>
             <div className={styles.options}>
                 <StyledMobileButton
-                style ={{backgroundColor: "#12CCB1", width:"70%"}}
-                whileHover={{scale:1.2}}
+                style ={{backgroundColor: "#12CCB1", width:"70%", height:"5vh",textAlign:"center"}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.createRoom()}>CREATE ROOM</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#E51749", width:"70%", textAlign:"center"}}
-                whileHover={{scale:1.2}}
+                style ={{backgroundColor: "#E51749", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.enterJoinScreen()}>JOIN ROOM</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#FF8DC6", width:"70%", textAlign:"center"}}
-                whileHover={{scale:1.2}}
+                style ={{backgroundColor: "#FF8DC6", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.signOut()}>GAME HISTORY</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#EBFF05", width:"70%", textAlign:"center"}}
-                whileHover={{scale:1.2}}
+                style ={{backgroundColor: "#EBFF05", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.signOut()}>SETTINGS</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#8B940C", width:"70%", textAlign9:"center"}}
-                whileHover={{scale:1.2}}
+                style ={{backgroundColor: "#8B940C", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover={{scale:1.1}}
                 whileTap={{scale:0.8}}
                 onClick={()=>this.props.signOut()}>SIGN OUT</StyledMobileButton>
             </div>

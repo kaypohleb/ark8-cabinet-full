@@ -1,5 +1,5 @@
 .UserHomeMobile{
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #1d1d1d;
     position: absolute;
     height: 100%;
@@ -36,6 +36,7 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 }
 .joinTitle{
   color:white;

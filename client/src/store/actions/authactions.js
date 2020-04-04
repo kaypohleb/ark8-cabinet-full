@@ -33,7 +33,7 @@ export const fetchUserData = () => {
           Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
         }
       }).then(response=>{
-            console.log(response);
+         
             dispatch(fetchUserDataSuccess(response.data));
         }).catch(error => {
          

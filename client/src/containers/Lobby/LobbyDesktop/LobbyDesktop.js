@@ -15,8 +15,8 @@ class LobbyDesktop extends Component{
     render(){
         
         let players,options,startGameButton,chooseGame,ready,pickGame = null;
-        if(this.props.userID === this.props.createdBy){
-            //console.log("creator");
+        if(this.props.userID === this.props.admin){
+         
             if(this.props.gameChosenCnfrm){
                 startGameButton = (
                     <StyledMobileButton 
@@ -27,8 +27,8 @@ class LobbyDesktop extends Component{
             }
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
-                <StyledSelect onChange={(e)=>this.props.selectChange(e)}>
-                    <option disabled selected value>--pick-a-game--</option>
+                <StyledSelect defaultValue="" onChange={(e)=>this.props.selectChange(e)}>
+                    <option disabled value="">--pick-a-game--</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
                     <option value="DRAWFUL">drawful</option>
                     <option value="WEREWOLF">werewolf</option>
@@ -67,14 +67,14 @@ class LobbyDesktop extends Component{
         }
         
         if(this.props.getInfo){
-            players = (<div style={{overflowY:"auto"}}>{this.props.players.map((player)=>{
-                if(player.id == this.props.createdBy){
+            players = (<Mux>{this.props.players.map((player)=>{
+                if(player.id === this.props.admin){
                     return <CreatedPlayer key={player.id}name={player.name} id={player.id} ready={player.ready}/>
                 }
                 else{
                     return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
                 }
-            })}</div>) ;
+            })}</Mux>) ;
             
         }
         options = (<div className={styles.LobbyOptions}>
@@ -97,8 +97,9 @@ class LobbyDesktop extends Component{
                     </div>     
                 </div>
                 
-                             
+                <div className={styles.Players}>           
                 {players}
+                </div>
                 </div>
                 {options}
                

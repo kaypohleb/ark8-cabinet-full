@@ -37,7 +37,7 @@ class DrawableCanvas extends Component {
         if(event.button!==0){
           return;
         }
-        console.log(event.nativeEvent);
+       
 
         if(!this.state.disableDraw){
           const point = this.relativeCoordinatesForEvent(event,'mouse');
@@ -51,7 +51,7 @@ class DrawableCanvas extends Component {
 
       handleTouchStart(event) {
         
-        console.log(event.nativeEvent);
+        
         
         if(!this.state.disableDraw){
           const point = this.relativeCoordinatesForEvent(event,'touch');
@@ -96,13 +96,13 @@ class DrawableCanvas extends Component {
       handleMouseUp() {
         if(!this.state.disableDraw){
           this.setState({ isDrawing: false });
-          //console.log(this.state);
+          
           this.props.updateDraw(this.state);
         }
       }
     
       relativeCoordinatesForEvent(event,type) {
-        console.log(type);
+        
         const boundingRect = this.refs.drawArea.getBoundingClientRect();
         
         if(type==="touch"){
@@ -155,7 +155,7 @@ const mapDispatchtoProps = (dispatch) =>{
 }
 
 const mapStateToProps = (state) => {
-    //console.log(state);
+   
     return{
       newlines: state.fetchDrawingStateReducer.lines,
     }
