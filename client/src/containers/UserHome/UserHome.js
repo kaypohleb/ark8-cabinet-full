@@ -22,28 +22,32 @@ class UserHome extends Component{
         this.roomIDChange = this.roomIDChange.bind(this);
         this.roomIDComplete = this.roomIDComplete.bind(this);
     }
+    
     state={
-        name:'',
-        id:'',
         joining: false,
         joinIdComplete:false,
+        name:'',
+        id:'',
         isSignedIn:true,
     }
 
-    componentWillReceiveProps(newProps){
-        this.setState({
-            name: newProps.name,
-            id: newProps.id,
-            isSignedIn:newProps.isSignedIn,       
-        })
-     }
+    static getDerivedStateFromProps(nextProps, prevState){
+          return { 
+                name: nextProps.name,
+                id: nextProps.id,
+                isSignedIn:nextProps.isSignedIn,          
+          };
+    }
+    
 
-    componentDidMount(){
-        this.setState({
-            name: this.props.name,
-            id: this.props.id,   
-            
-        });      
+    componentDidUpdate(prevProps, prevState){
+       if(prevProps!==this.props){
+            this.setState({
+                name: this.props.name,
+                id: this.props.id,
+                isSignedIn:this.props.isSignedIn,      
+            });
+        }
     }
 
     signoutHander(){

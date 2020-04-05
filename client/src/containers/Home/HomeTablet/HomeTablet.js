@@ -36,13 +36,6 @@ class HomeTablet extends Component{
                  join the party!
               </StyledButton>
 
-              {/* <StyledButton
-             whileHover={{scale:1.1}}
-             whileTap={{scale:0.8}}
-             onClick = {()=>this.props.gotoTest()}>
-               TEST
-            </StyledButton> */}
-
             </div>
             </div>
 

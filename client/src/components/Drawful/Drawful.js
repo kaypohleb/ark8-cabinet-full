@@ -1,71 +1,128 @@
 import React,{ Component } from "react";
 import Score from '../Score/Score';
+import { connect  } from 'react-redux';
 import DrawableCanvas from './DrawableCanvas/DrawableCanvas';
+import {publishGameAction,setRefreshGameState,exitGame} from '../../store/actions/index';
+import Modal from '../../components/UI/Modal/Modal';
 import styles from './Drawful.module.css'
 class Drawful extends Component{
-    state = {
-        gameId: 'DRAWFUL',
-        players: [ 
-            {   
-                id: "29An8zQb2Sff34yDXcZnOKKGh5v2",
-                name:"Caleb Wan",
-                score: 100,
-            },
-            {
-                id: "dXvIR7Ua6wazjtWBKpklSAXvtsr2",
-                name:"Caleb Tu",
-                score: 1000,
-            }
-        ],
-        currentPhase: "DRAWING", //we can change this at will to check if actions sending
-        currentRound: 1,
-        totalRounds: 3,
-        timerStart: 0,
-        timerLength: 30,
-        history: [
-            {
-                playedId: "29An8zQb2Sff34yDXcZnOKKGh5v2",
-                drawing: ""
-            },
-            {
-                playedId: "dXvIR7Ua6wazjtWBKpklSAXvtsr2",
-                drawing:""
-            }
-        ],
+    constructor(props){
+        super(props);
+        this.props.refreshGame();
+        this.scoreScreenHandler = this.scoreScreenHandler.bind(this);
 
     }
+    state = {
+        roomId: "",
+        gameId: "",
+        players: [],
+        currentPhase: "INITIAL",
+        currentDrawing:{},
+        timerStart: null,
+        timerLength: null,
+        history: null,
+        currentRound: 0,
+        totalRounds: 3,
+        showScore:false,
+        
+    }
 
+    static getDerivedStateFromProps(nextProps, prevState){
+        // console.log(nextProps);
+        if(nextProps.game){
+            return { 
+            timerStart: nextProps.game.timerStart,
+            timerLength: nextProps.game.timerLength,
+            currentPhase: nextProps.game.currentPhase,
+            currentDrawing:nextProps.game.currentDrawing,
+            totalRounds: nextProps.game.totalRounds,
+            currentRound:nextProps.game.currentRound,
+            players:nextProps.game.players,
+            history: nextProps.game.history,
+            roomId: nextProps.roomId,
+            gameId: nextProps.gameId,
+         };
+        }
+     }
+
+    componentDidUpdate(prevProps, prevState){
+       if(prevProps!==this.props){
+            this.setState({
+                currentRound:this.props.game.currentRound,
+                players:this.props.game.players,
+                history: this.props.game.history,
+                roomId: this.props.roomIvd,
+                gameId: this.props.gameId,
+            })
+        }
+    }
+    scoreScreenHandler(){
+        this.setState({
+            showScore: !this.state.showScore,
+        });
+    }
 
     render(){
         let phase,gameScores = null;
-    
-        gameScores = (<div className={styles.Scores}>{this.state.players.map((player)=> 
-            <Score key={player.playerId} playerName={player.name} score={player.score} playerId = {player.playerId}/>
-            )}
-        )}
-        </div>);
-        
-        if(this.state.currentPhase==="DRAWING"){
-            phase = <DrawableCanvas/>;
+        if(this.state.players){
+            gameScores = (<div className={styles.Scores}>{
+                this.state.players.map((player) =>{ 
+                    return (<Score key={player.id} playerName={player.name} score={player.gameData.score} playerId = {player.id}/>
+                    )}
+                )}</div>);
         }
-        if(this.state.currentPhase==="FakeAnswer"){
-            phase = <div>
-                Please give your answers
-                <input></input>
-                <button>SUBMIT</button>
-            </div>
+        switch(this.state.currentPhase){
+            case "INITIAL":
+                phase = <div><button onClick={()=>this.gameAction(null,"NEXT_PHASE")}>to next phase</button></div>;
+                break;
+            case "DRAWING":
+                phase = <DrawableCanvas/>;
+                break;
+            case "FAKE_ANSWER":
+                phase = <div>
+                    Please give your answers
+                    <input></input>
+                    <button>SUBMIT</button>
+                </div>
+                break;
+            case "PICK_ANSWER":
+                phase = <div>PickAnswers</div>;
+                break;
+            case "REVEAL":
+                phase = <div>REVEAL</div>;
+                break;
+            default:
+                phase =null;
         }
-        if(this.state.currentPhase==="PickAnswers"){
-            //dispatch getAnswers and display mapped buttons for selections
-            //
-        }
+       
         return(
             <div className={styles.Drawful}>
-                {gameScores}
+                <Modal show={this.state.showScore}  modalClosed={this.scoreScreenHandler}>
+                    {gameScores} 
+                </Modal> 
                 {phase}
            </div>
         )
     }
 }
 
-export default Drawful;
+const mapStateToProps = (state) =>{
+    console.log(state);
+    return{
+        game:state.fetchGameDataReducer.game,
+        roomId:state.fetchLobbyDataReducer.id,
+        gameId:state.fetchLobbyDataReducer.game,
+    }
+}
+
+const mapDispatchtoProps = (dispatch) =>{
+    
+    return {
+        gameAction: (selection,actionType) => dispatch(publishGameAction(selection,actionType)),
+        refreshGame: ()=> dispatch(setRefreshGameState()),
+        exitGame: ()=>dispatch(exitGame()),
+    }
+ }
+
+
+export default connect(mapStateToProps,mapDispatchtoProps)(Drawful);

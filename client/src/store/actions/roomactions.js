@@ -95,6 +95,12 @@ export const setRefreshGameState = () =>{
         })
     }
 }
+export const exitGame =  ()=>{
+  return()=>{
+    console.log("exiting game");
+    socket.removeAllListeners('game_state_update');
+  }
+}
 export const publishGameAction = (selection, actionType) => {
     return()=>{
         socket.emit('game_action', {selection, actionType});

@@ -23,6 +23,7 @@ class Lobby extends Component{
         this.goBackHandler = this.goBackHandler.bind(this);
         this.gameScreenHandler = this.gameScreenHandler.bind(this);
     }
+
     state={
         gameChosenCnfrm: false,
         join: this.props.location.state.join,
@@ -35,25 +36,40 @@ class Lobby extends Component{
         gameStarted:false,
         isSignedIn:true,
         ready:false,
-        gameScreen: false,
+        gameScreen: false,  
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+        return { 
+              id: nextProps.id,
+              createdBy: nextProps.createdBy,
+              admin: nextProps.admin,
+              game: nextProps.game,
+              players: nextProps.players,
+              userID:nextProps.userID,
+              getInfo: nextProps.getInfo,
+              gameStarted: nextProps.gameStarted,
+              isSignedIn: nextProps.isSignedIn,
+        };
         
     }
-    
-    componentWillReceiveProps(newProps){
-        this.setState({
-            id: newProps.id,
-            createdBy: newProps.createdBy,
-            admin: newProps.admin,
-            game: newProps.game,
-            players: newProps.players,
-            userID:newProps.userID,
-            getInfo: newProps.getInfo,
-            gameStarted: newProps.gameStarted,
-            isSignedIn: newProps.isSignedIn,
-        });
-    
-        
-     }
+
+    componentDidUpdate(prevProps, prevState){
+       if(prevProps!==this.props){
+            this.setState({
+                id: this.props.id,
+                createdBy: this.props.createdBy,
+                admin: this.props.admin,
+                game: this.props.game,
+                players: this.props.players,
+                userID:this.props.userID,
+                getInfo: this.props.getInfo,
+                gameStarted: this.props.gameStarted,
+                isSignedIn: this.props.isSignedIn,
+            });
+        }
+    }
+
     
     selectChangeHandler(event){     
         this.setState({

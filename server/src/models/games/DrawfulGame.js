@@ -55,7 +55,7 @@ class DrawfulGame{
 
     start(){
         const makeAction = this.makeAction.bind(this);
-        this.game.timerLength = 1000;
+        this.gameState.timerLength = 10000;
         const turn = (function(){
             const action = {
                 actionType: 'NEXTPHASE',

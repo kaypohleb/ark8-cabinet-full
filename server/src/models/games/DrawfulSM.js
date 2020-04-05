@@ -17,8 +17,8 @@ class DrawfulSM {
                 
                 for (const userId in updatedPlayerStates){
                     // TODO: figure out how to put prompts in. maybe have array of prompts in hiddenState?
-                    updatedPlayerStates[userId].prompt = 'PROMPT HERE';
-                    updatedHiddenState.drawingPrompts[playerId] = 'PROMPT HERE';
+                    updatedPlayerStates[userId].prompt = 'DRAW A CARROT';
+                    updatedHiddenState.drawingPrompts[playerId] = 'DRAW A CARROT';
                 }
 
             }

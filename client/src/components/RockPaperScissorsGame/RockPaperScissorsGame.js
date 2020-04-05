@@ -5,7 +5,7 @@ import styles from './RockPaperScissorsGame.module.css'
 import Rock from '../../assets/svg/rock.svg';
 import Paper from '../../assets/svg/paper.svg';
 import Scissors from '../../assets/svg/scissors.svg';
-import {publishGameAction,setRefreshGameState} from '../../store/actions/roomactions';
+import {publishGameAction,setRefreshGameState,exitGame} from '../../store/actions/index';
 import {motion} from 'framer-motion';
 import HistoryRoundActions from './HistoryAction/HistoryRoundActions';
 import Modal from '../../components/UI/Modal/Modal';
@@ -16,25 +16,39 @@ class RockPaperScissorsGame extends Component {
         this.props.refreshGame();
         this.scoreScreenHandler = this.scoreScreenHandler.bind(this);
     }
+
     state={
         currentRound:0,
         players:[],
         history:[],
         showScore:false,
-        roomID:"",
-        gameID:"",
+        roomId:"",
+        gameId:"",
     }
-  
-    componentWillReceiveProps(newProps){
-       
-        this.setState({
-           currentRound:newProps.game.currentRound,
-           players:newProps.game.players,
-           history: newProps.game.history,
-           roomID: newProps.roomID,
-           gameID: newProps.gameID,
-        })
     
+    static getDerivedStateFromProps(nextProps, prevState){
+        // console.log(nextProps);
+        if(nextProps.game){
+            return { 
+            currentRound:nextProps.game.currentRound,
+            players:nextProps.game.players,
+            history: nextProps.game.history,
+            roomId: nextProps.roomId,
+            gameId: nextProps.gameId,
+         };
+        }
+     }
+
+    componentDidUpdate(prevProps, prevState){
+       if(prevProps!==this.props){
+            this.setState({
+                currentRound:this.props.game.currentRound,
+                players:this.props.game.players,
+                history: this.props.game.history,
+                roomId: this.props.roomIvd,
+                gameId: this.props.gameId,
+            })
+        }
     }
 
     scoreScreenHandler(){
@@ -44,7 +58,9 @@ class RockPaperScissorsGame extends Component {
     }
 
        
-    
+    componentWillUnmount(){
+        this.props.exitGame();
+    }
 
     render(){
         
@@ -123,8 +139,8 @@ const mapStateToProps = (state) =>{
     console.log(state)
     return{
         game:state.fetchGameDataReducer.game,
-        roomID:state.fetchLobbyDataReducer.id,
-        gameID:state.fetchLobbyDataReducer.game,
+        roomId:state.fetchLobbyDataReducer.id,
+        gameId:state.fetchLobbyDataReducer.game,
     }
 }
 
@@ -134,6 +150,7 @@ const mapDispatchtoProps = (dispatch) =>{
     return {
         gameAction: (selection,actionType) => dispatch(publishGameAction(selection,actionType)),
         refreshGame: ()=> dispatch(setRefreshGameState()),
+        exitGame: ()=>dispatch(exitGame()),
     }
  }
 
