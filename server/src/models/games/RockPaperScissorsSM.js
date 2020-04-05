@@ -47,7 +47,12 @@ class RockPaperScissorsSM {
                     player.gameData.score++;
                 }
             }
+<<<<<<< HEAD
             
+=======
+
+
+>>>>>>> origin/lowen_socket_refactor
             if (updatedGameState.currentRound < updatedGameState.totalRounds){
                 updatedGameState.currentRound++;
             }
@@ -57,10 +62,14 @@ class RockPaperScissorsSM {
             for (const playerId in updatedPlayerStates){
                 updatedPlayerStates[playerId] = {};
             }
+<<<<<<< HEAD
             
         }
         console.log("NEXT STATE", {game: updatedGameState, players: updatedPlayerStates})
 
+=======
+        }
+>>>>>>> origin/lowen_socket_refactor
 
         return {game: updatedGameState, players: updatedPlayerStates}
     }
