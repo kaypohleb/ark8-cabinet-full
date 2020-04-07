@@ -101,9 +101,10 @@ export const exitGame =  ()=>{
     socket.removeAllListeners('game_state_update');
   }
 }
-export const publishGameAction = (selection, actionType) => {
+export const publishGameAction = (data, actionType) => {
+    console.log({data,actionType});
     return()=>{
-        socket.emit('game_action', {selection, actionType});
+        socket.emit('game_action', {data, actionType});
     }
 }
 

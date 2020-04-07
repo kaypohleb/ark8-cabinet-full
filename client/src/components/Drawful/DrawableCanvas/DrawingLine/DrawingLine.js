@@ -1,10 +1,15 @@
 import React from 'react';
 import styles from './DrawingLine.module.css';
 function DrawingLine({ line }) {
-  const pathData = "M " +
+  let pathData = "M " +
     line
       .map(p => {
-        return `${p.get('x')} ${p.get('y')}`;
+        if('get' in p){
+          return  `${p.get('x')} ${p.get('y')}`;
+        }else{
+          return p.x + " " + p.y;
+        }
+        
       })
       .join(" L ");
 

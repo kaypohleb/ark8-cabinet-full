@@ -1,28 +1,24 @@
 import React,{Component} from 'react';
-import { connect  } from 'react-redux';
 import Drawing from './Drawing/Drawing';
-import {updateDrawing} from '../../../store/actions/index';
-import { withRouter } from 'react-router-dom';
 import Immutable from 'immutable';
 import styles from './DrawableCanvas.module.css';
 import Mux from '../../../hoc/Mux';
-import { StyledButton } from '../../StyledComponents/StyledButton';
+import { StyledMobileButton } from '../../StyledComponents/StyledButton';
 class DrawableCanvas extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     
         this.state = {
           lines: new Immutable.List(),
           isDrawing: false,
-          isShow: false,
-          disableDraw: false,
         };
         this.handleTouchMove = this.handleTouchMove.bind(this);
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleTouchStart = this.handleTouchStart.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
+      
       }
     
       componentDidMount() {
@@ -51,9 +47,9 @@ class DrawableCanvas extends Component {
 
       handleTouchStart(event) {
         
+        console.log("first");
         
-        
-        if(!this.state.disableDraw){
+        if(!this.props.disableDraw){
           const point = this.relativeCoordinatesForEvent(event,'touch');
     
           this.setState(prevState => ({
@@ -71,20 +67,13 @@ class DrawableCanvas extends Component {
         
         const point = this.relativeCoordinatesForEvent(event,'mouse');
         
-        if(!this.state.disableDraw){
+        if(!this.props.disableDraw){
           this.setState(prevState =>  ({
             lines: prevState.lines.updateIn([prevState.lines.size - 1], line => line.push(point))
           }));
         }
       }
       handleTouchMove(event) {
-        if (!this.state.isDrawing) {
-          return;
-        }
-        // //event.preventDefault();
-        // if (event.cancelable){
-        //   event.preventDefault();
-        // }
         const point = this.relativeCoordinatesForEvent(event,'touch');
         if(!this.state.disableDraw){
           this.setState(prevState =>  ({
@@ -94,10 +83,8 @@ class DrawableCanvas extends Component {
       }
     
       handleMouseUp() {
-        if(!this.state.disableDraw){
+        if(!this.props.disableDraw){
           this.setState({ isDrawing: false });
-          
-          this.props.updateDraw(this.state);
         }
       }
     
@@ -114,51 +101,48 @@ class DrawableCanvas extends Component {
         });
       }
       
-      showDrawingHandler = () =>{
-        this.setState({
-          isShow:!this.state.isShow,
-          newlines: this.props.newlines,
-        });
-      }
     
       render() {
-        let visual=null;
-        if(this.state.isShow){
-          visual = <Drawing lines={this.state.newlines}/>  
-        }
-        return (
-          <Mux>
-          <div
-            className={styles.drawArea}
-            ref="drawArea"
-            onMouseDown={this.handleMouseDown}
+        let prompt,submitButton,drawable = null;
+        if(!this.props.disableDraw){
+          
+          submitButton = <StyledMobileButton className={styles.Buttons} onClick={()=>this.props.gameAction({userId: this.props.userId, drawing:this.state.lines},"SEND_DRAWING")}>SUBMIT</StyledMobileButton>
+          prompt = <div className={styles.Prompt}>{this.props.prompt}</div>
+          drawable = <div
+          className={styles.drawArea}
+          ref="drawArea"
+          onMouseDown={this.handleMouseDown}
+          onMouseMove={this.handleMouseMove}
+          onTouchStart={this.handleTouchStart}
+          onTouchMove={this.handleTouchMove}
+          > 
+          <Drawing lines={this.state.lines} />
+          </div>;
+          
+        }else{
+          drawable = (<div
+          className={styles.drawArea}
+          ref="drawArea"
+          onMouseDown={this.handleMouseDown}
             onMouseMove={this.handleMouseMove}
             onTouchStart={this.handleTouchStart}
             onTouchMove={this.handleTouchMove}
-            onTouchEnd={e => e.preventDefault()}
-            
+                      
           >
-            <Drawing lines={this.state.lines} />
-
+          <Drawing lines={this.props.lines} />
+        </div>)
+        }
+        return (
+          <div className={styles.DrawableCanvas}>          
+            {prompt}
+            {drawable}
+            {submitButton}
           </div>
-          <StyledButton>SUBMIT</StyledButton>
-          </Mux>
+
           
         );
       }
 }
 
-const mapDispatchtoProps = (dispatch) =>{
-    return{
-        updateDraw: (state)=>dispatch(updateDrawing(state)),
-    }
-}
 
-const mapStateToProps = (state) => {
-   
-    return{
-      newlines: state.fetchDrawingStateReducer.lines,
-    }
-}
-
-export default connect(mapStateToProps,mapDispatchtoProps)(withRouter(DrawableCanvas));
+export default DrawableCanvas;
