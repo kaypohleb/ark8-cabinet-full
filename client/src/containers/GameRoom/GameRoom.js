@@ -2,6 +2,8 @@ import React,{ Component } from 'react';
 import styles from './GameRoom.module.css';
 import RockPaperScissorsGame from '../../components/RockPaperScissorsGame/RockPaperScissorsGame';
 import Drawful from '../../components/Drawful/Drawful';
+import RudeCards from '../../components/RudeCardsGame/RudeCards';
+
 class GameRoom extends Component{
     render(){
         let game=null;
@@ -14,6 +16,9 @@ class GameRoom extends Component{
             }
             if(this.props.game==="DRAWFUL"){
                 game = <Drawful/>
+            }
+            if(this.props.game==="RUDE_CARDS"){
+                game = <RudeCards userID={this.props.userID}/>
             }
         }
         return(

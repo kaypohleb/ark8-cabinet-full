@@ -46,7 +46,6 @@ class RockPaperScissorsGame {
             }
             makeAction(null, action);
             if (this.gameState.currentRound < this.gameState.totalRounds){
-                console.log(`setting timer for next turn to ${this.gameState.timerLength}`);
                 this.timer = setTimeout(turn, this.gameState.timerLength);
             }
 
@@ -56,9 +55,6 @@ class RockPaperScissorsGame {
     }
 
     validateAction(userId, action){
-        console.log(action);
-        console.log(validActions);
-        console.log(validActions[action.actionType]);
         if (validActions[action.actionType]){
             return;
         }

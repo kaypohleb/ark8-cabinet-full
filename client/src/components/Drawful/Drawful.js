@@ -51,7 +51,7 @@ class Drawful extends Component{
                 currentRound:this.props.game.currentRound,
                 players:this.props.game.players,
                 history: this.props.game.history,
-                roomId: this.props.roomIvd,
+                roomId: this.props.roomId,
                 gameId: this.props.gameId,
             })
         }

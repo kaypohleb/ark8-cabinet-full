@@ -1,4 +1,5 @@
 const RudeCardsSM = require('./RudeCardsSM');
+const {prompts, responses} = require('./RudeCardsData.json');
 
 class RudeCardsGame {
     constructor(players){
@@ -14,7 +15,8 @@ class RudeCardsGame {
             currentPhase: 'INITIAL',
             currentPrompt: {
                 prompt: null,
-                responses: []
+                responses: [],
+                revealedResponses: []
             },
             timerStart: null,
             timerLength: null,
@@ -32,6 +34,9 @@ class RudeCardsGame {
             availableResponses: [],
             currentResponses: []
         };
+
+        this.setPrompts(prompts);
+        this.setResponses(responses);
     }
 
 
@@ -44,7 +49,14 @@ class RudeCardsGame {
 
 
     start(){
+        // const turn = (function(){
+        //     if (this.gameState.currentPhase != 'GAME_END'){
+        //         this.makeAction(null, {actionType: 'NEXT_PHASE'});
+        //         setTimeout(turn, 5000);
+        //     }
+        // }).bind(this);
 
+        // turn();
     }
 
 
@@ -60,15 +72,17 @@ class RudeCardsGame {
         this.playerStates = players;
         this.hiddenState = hidden;
 
+
+        console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
         this.gameStateUpdateCallback(game, players);
     }
 
     setPrompts(prompts){
-        this.hiddenState.availablePrompts = prompts;
+        this.hiddenState.availablePrompts = [...prompts];
     }
 
     setResponses(responses){
-        this.hiddenState.availableResponses = responses;
+        this.hiddenState.availableResponses = [...responses];
     }
 
 }

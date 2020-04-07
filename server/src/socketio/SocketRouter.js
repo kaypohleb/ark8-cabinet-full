@@ -116,18 +116,19 @@ class SocketRouter {
      * @param {socket} socket 
      */
     roomActionHandler(nsp, socket){
+        const validateRoomAction = this.room.validateRoomAction.bind(this.room);
+        const makeRoomAction = this.room.makeRoomAction.bind(this.room);
+
         socket.on('room_action', (data) => {
-            const validateRoomAction = this.room.validateRoomAction.bind(this.room);
-            const makeRoomAction = this.room.makeRoomAction.bind(this.room);
-            console.log('received room_action: ',data);
-            // try {
-                validateRoomAction(socket.userId, data);
-                makeRoomAction(socket.userId, data);
-            // }
-            // catch (e) {
-            //     console.log('room_action_error:', e.message);
-            //     return socket.emit('room_action_error', { message: e.message});
-            // }
+            console.log(`received room_action from ${socket.id}`, data);
+            try {
+               validateRoomAction(socket.userId, data);
+               makeRoomAction(socket.userId, data);
+            }
+            catch (e) {
+                console.log('room_action_error:', e.message);
+                return socket.emit('room_action_error', { message: e.message});
+            }
         })
     }
 
@@ -141,6 +142,7 @@ class SocketRouter {
         const makeGameAction = this.room.makeGameAction.bind(this.room);
 
         socket.on('game_action', (data) => {
+            console.log(`received game_action from ${socket.id}`,data);
             try {
                 validateGameAction(socket.userId, data);
                 makeGameAction(socket.userId, data);
