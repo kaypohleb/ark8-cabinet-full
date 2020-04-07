@@ -88,9 +88,9 @@ class RockPaperScissorsGame extends Component {
                 </Modal> 
                 <div className ={styles.GameContent}>
                     <div className={styles.GameHeader}>
-                        <p className={styles.GameTitle}>{this.state.gameID}</p>
+                        <p className={styles.GameTitle}>{this.state.gameId}</p>
                         <div className={styles.RoomID}> 
-                        {this.state.roomID}
+                        {this.state.roomId}
                         </div>
                     </div>
                     <div className={styles.GameDirection}>

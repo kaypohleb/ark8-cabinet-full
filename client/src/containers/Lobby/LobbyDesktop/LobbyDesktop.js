@@ -31,7 +31,7 @@ class LobbyDesktop extends Component{
                     <option disabled value="">--pick-a-game--</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
                     <option value="DRAWFUL">drawful</option>
-                    <option value="WEREWOLF">werewolf</option>
+                    <option value="RUDE_CARDS">rude-cards</option>
                 </StyledSelect>
                 {startGameButton}
                 </Mux>); 
@@ -56,7 +56,7 @@ class LobbyDesktop extends Component{
         }
 
         if(this.props.gameStarted){
-            return <GameRoom game={this.props.gameID}></GameRoom>
+            return <GameRoom game={this.props.gameID} userID={this.props.userID}></GameRoom>
         }
 
         if(!this.props.id){

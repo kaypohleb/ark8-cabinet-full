@@ -102,9 +102,8 @@ export const exitGame =  ()=>{
   }
 }
 export const publishGameAction = (data, actionType) => {
-    console.log({data,actionType});
     return()=>{
-        socket.emit('game_action', {data, actionType});
+        socket.emit('game_action', {...data, actionType});
     }
 }
 
