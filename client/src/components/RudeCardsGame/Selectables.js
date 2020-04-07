@@ -8,7 +8,7 @@ const Hand = (props) => {
             <a>your hand</a>
             {props.availableResponses.reverse().map(response => {
                 if (response == props.currentResponse){
-                    return (<div class={styles.SelectedHandResponse}> {response} - selected</div>)
+                    return (<div class={styles.SelectedHandResponse}> {response}</div>)
                 }
                 else {
                     return (<div class={styles.HandResponse} onClick={props.playCard(response)}> {response} </div>)
@@ -26,7 +26,7 @@ const Votables = (props) => {
             <a>vote for a response</a>
             {props.votableResponses.map((response) => {
                 if (response == props.votedResponse){
-                    return (<div class={styles.SelectedVote}> {response} - voted </div>)
+                    return (<div class={styles.SelectedVote}> {response}</div>)
                 }
                 else {
                     return (<div class={styles.Vote} onClick={props.voteCard(response)}> {response} </div>)

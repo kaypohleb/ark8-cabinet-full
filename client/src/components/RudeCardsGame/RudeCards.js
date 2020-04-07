@@ -15,8 +15,8 @@ const RudeCards = (props) => {
     const game = props.game;
     const player = props.player;
     const playerData = props.game.players.find(p => p.id == props.userID);
-    let timer = ( props.timerLength - new Date().getTime() + props.timerStart ) / 1000;
-    timer = timer > 0 ? timer : 0;
+    const timer = game.timerLength + game.timerStart;
+
     
     let selectable;
     if (game.currentPhase == 'INITIAL'){
@@ -62,8 +62,6 @@ const RudeCards = (props) => {
 
                 {selectable}
             </div>
-
-            <button onClick={()=>{props.gameAction({}, 'NEXT_PHASE')}}> next phase </button>
         </div>
     )
 }

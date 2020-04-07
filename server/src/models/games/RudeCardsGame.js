@@ -1,4 +1,5 @@
 const RudeCardsSM = require('./RudeCardsSM');
+const shuffle = require('knuth-shuffle-seeded');
 const {prompts, responses} = require('./RudeCardsData.json');
 
 class RudeCardsGame {
@@ -19,7 +20,7 @@ class RudeCardsGame {
                 revealedResponses: []
             },
             timerStart: null,
-            timerLength: null,
+            timerLength: 10000,
             currentRound: 0,
             totalRounds: 5
         };
@@ -49,14 +50,40 @@ class RudeCardsGame {
 
 
     start(){
-        // const turn = (function(){
-        //     if (this.gameState.currentPhase != 'GAME_END'){
-        //         this.makeAction(null, {actionType: 'NEXT_PHASE'});
-        //         setTimeout(turn, 5000);
-        //     }
-        // }).bind(this);
+        const nextPhase = ((timerStart, timerLength) => {this.makeAction(null, {actionType: 'NEXT_PHASE', timerStart: timerStart, timerLength: timerLength})}).bind(this)
+        const turn = (function(){
+            const phase = this.gameState.currentPhase;
+            if (phase == 'INITIAL'){
+                nextPhase(Date.now(), 3000);
+                turn();
+            }
+            else if (phase == 'DRAW_CARDS'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                }, 3000)
+            }
+            else if (phase == 'PLACE_CARDS'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 5000)
+                    turn();
+                },10000)
+            }
+            else if (phase == 'VOTING'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 5000)
+                    turn();
+                },5000)
+            }
+            else if (phase == 'UPDATE_SCORES'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 3000)
+                    turn();
+                }, 5000)
+            }
+        }).bind(this);
 
-        // turn();
+        turn();
     }
 
 
@@ -79,10 +106,12 @@ class RudeCardsGame {
 
     setPrompts(prompts){
         this.hiddenState.availablePrompts = [...prompts];
+        shuffle(this.hiddenState.availablePrompts);
     }
 
     setResponses(responses){
         this.hiddenState.availableResponses = [...responses];
+        shuffle(this.hiddenState.availableResponses);
     }
 
 }

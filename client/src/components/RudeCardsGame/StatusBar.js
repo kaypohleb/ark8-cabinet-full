@@ -1,9 +1,15 @@
 import React from 'react';
+import Countdown from 'react-countdown';
 import styles from './StatusBar.module.css'
 
 
+const renderer = ({seconds, completed }) => {
+    return <span>{seconds}</span>
+}
+
 const StatusBar = (props) => {
     let phaseText;
+    
     switch (props.currentPhase){
         case 'INITIAL':
             phaseText = 'initial';
@@ -45,7 +51,9 @@ const StatusBar = (props) => {
                     <a>score</a> 
                     <div className={styles.DisplayBox}>{props.score}</div>
                     <a>timer</a> 
-                    <div className={styles.DisplayBox}>{props.timer}s</div>
+                    <div className={styles.DisplayBox}>
+                    <Countdown key={props.timer} date={props.timer} renderer={renderer}/>
+                    </div>
                 </div>
             </div>
         </div>

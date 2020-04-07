@@ -23,6 +23,8 @@ class RudeCardsSM{
                 gameState.currentRound = 1;
 
                 gameState.currentPhase = 'PLACE_CARDS';
+                gameState.timerStart = action.timerStart;
+                gameState.timerLength = action.timerLength;
             }
         }
         else if (gameState.currentPhase == 'DRAW_CARDS'){
@@ -40,6 +42,8 @@ class RudeCardsSM{
                 gameState.currentRound++;
     
                 gameState.currentPhase = 'PLACE_CARDS';
+                gameState.timerStart = action.timerStart;
+                gameState.timerLength = action.timerLength;
             }   
         }
         
@@ -68,6 +72,8 @@ class RudeCardsSM{
                 }
 
                 gameState.currentPhase = 'VOTING';
+                gameState.timerStart = action.timerStart;
+                gameState.timerLength = action.timerLength;
             }
         }
         else if (gameState.currentPhase == 'VOTING'){
@@ -88,11 +94,6 @@ class RudeCardsSM{
 
                 }
 
-                console.log(hiddenState.currentResponses);
-                console.log(gameState);
-                console.log(playerStates);
-                
-
                 gameState.currentPrompt.revealedResponses = [...hiddenState.currentResponses];
 
                 hiddenState.currentResponses.forEach(r => {
@@ -101,6 +102,8 @@ class RudeCardsSM{
                 })
 
                 gameState.currentPhase = 'UPDATE_SCORES';
+                gameState.timerStart = action.timerStart;
+                gameState.timerLength = action.timerLength;
             }
             
         }
@@ -126,8 +129,9 @@ class RudeCardsSM{
                     gameState.currentPhase = 'GAME_END';
                 }
                 else {
-                    
                     gameState.currentPhase = 'DRAW_CARDS';
+                    gameState.timerStart = action.timerStart;
+                    gameState.timerLength = action.timerLength;
                 }
             }
             
