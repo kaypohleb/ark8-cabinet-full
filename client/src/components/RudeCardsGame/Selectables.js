@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import styles from './Selectables.module.css'
 
 
 const Hand = (props) => {
     return (
         <div class={styles.HandContainer}>
-            <a>your hand</a>
+            <p>your hand</p>
             {props.availableResponses.reverse().map(response => {
-                if (response == props.currentResponse){
+                if (response === props.currentResponse){
                     return (<div class={styles.SelectedHandResponse}> {response}</div>)
                 }
                 else {
@@ -23,9 +23,9 @@ const Hand = (props) => {
 const Votables = (props) => {
     return (
         <div class={styles.VotablesContainer}>
-            <a>vote for a response</a>
+            <p>vote for p response</p>
             {props.votableResponses.map((response) => {
-                if (response == props.votedResponse){
+                if (response === props.votedResponse){
                     return (<div class={styles.SelectedVote}> {response}</div>)
                 }
                 else {
@@ -39,12 +39,12 @@ const Votables = (props) => {
 const RevealedResponses = (props) => {
     return (
         <div class={styles.RevealedResponsesContainer}>
-            <a>response scores</a>
+            <p>response scores</p>
             {props.revealedResponses.map((response) => (
                 <div class={styles.RevealedResponse}>
-                    <a>{response.playerName} played:</a>
+                    <p>{response.playerName} played:</p>
                     <strong>{response.response}</strong>
-                    <a>and got {response.votes} votes</a>
+                    <p>and got {response.votes} votes</p>
                 </div>
             ))}
         </div>

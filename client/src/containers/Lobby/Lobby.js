@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import { connect  } from 'react-redux';
-import {withRouter,Redirect} from  'react-router-dom';
+import {withRouter} from  'react-router-dom';
 import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame} from '../../store/actions/index';
 import styles from './Lobby.module.css';
 import LobbyMobile from './LobbyMobile/LobbyMobile';

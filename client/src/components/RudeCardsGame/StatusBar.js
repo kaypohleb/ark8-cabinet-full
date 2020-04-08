@@ -43,14 +43,14 @@ const StatusBar = (props) => {
             </div>
             <div className={styles.Displays}>
                 <div className={styles.PhaseDisplay}>
-                    <a>phase</a> 
+                    <p>phase</p> 
                     <div className={styles.DisplayBox}>{phaseText}</div>
                 </div>
 
                 <div className={styles.ScoreTimerDisplay}>
-                    <a>score</a> 
+                    <p>score</p> 
                     <div className={styles.DisplayBox}>{props.score}</div>
-                    <a>timer</a> 
+                    <p>timer</p> 
                     <div className={styles.DisplayBox}>
                     <Countdown key={props.timer} date={props.timer} renderer={renderer}/>
                     </div>

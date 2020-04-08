@@ -1,11 +1,4 @@
 
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 class DrawfulSM {
     constructor(props){
         this.selectedPrompt = null;
@@ -41,9 +34,9 @@ class DrawfulSM {
         }
         else if (gameState.currentPhase === 'DRAWING'){
             if (action.actionType === 'SEND_DRAWING'){
-                updatedHiddenState.submittedDrawings[action.data.userId] = action.data.drawing;
+                updatedHiddenState.submittedDrawings[action.userId] = action.drawing;
                 updatedGameState.players.forEach((player,index) => {
-                    if(player.id === action.data.userId){
+                    if(player.id === action.userId){
                         updatedGameState.players[index].ready = true;
                     }else{
                         if(!player.ready){
@@ -93,13 +86,12 @@ class DrawfulSM {
         }
         else if (gameState.currentPhase === 'FAKE_ANSWER'){
             if (action.actionType === 'SEND_FAKE_ANSWER'){
-                console.log(action);
-                updatedHiddenState.fakeAnswers[action.data.userId] = action.data.fakeAnswer;
+                updatedHiddenState.fakeAnswers[action.userId] = action.fakeAnswer;
                 updatedGameState.players.forEach((player,index) => {
                     if(player.id === updatedGameState.currentDrawing.userId){
                         updatedGameState.players[index].ready = true;
                     }
-                    if(player.id === action.data.userId){
+                    if(player.id === action.userId){
                         updatedGameState.players[index].ready = true;
                     }else if(!player.ready){
                             updatedGameState.waiting = true;
@@ -145,12 +137,12 @@ class DrawfulSM {
             
             if (action.actionType === 'PICK_ANSWER'){
                 console.log(action);
-                updatedPlayerStates[action.data.userId].pickedAnswer = action.data.pickedAnswer;
+                updatedPlayerStates[action.userId].pickedAnswer = action.pickedAnswer;
                 updatedGameState.players.forEach((player,index) => {
                     if(player.id === updatedGameState.currentDrawing.userId){
                         updatedGameState.players[index].ready = true;
                     }
-                    if(player.id === action.data.userId){
+                    if(player.id === action.userId){
                         updatedGameState.players[index].ready = true;
                     }else if(!player.ready){
                             updatedGameState.waiting = true;
@@ -159,14 +151,33 @@ class DrawfulSM {
             }
             if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
                 const newAnswers = {};
-                console.log(updatedGameState.currentDrawing)
                 updatedGameState.currentDrawing.answers.forEach((answer)=>{
                     if(!(answer in newAnswers)){
-                        newAnswers[answer] = [];
+                        let owner = this.selectedUserId;
+                        for(const playerId in updatedHiddenState.fakeAnswers){
+                            if(updatedHiddenState.fakeAnswers[playerId] == answer){
+                                owner = playerId;
+                            }
+                        }
+                        updatedGameState.players.forEach(player=>{
+                            if(player.id == owner){
+                                owner = player.name;
+                            }
+                        })
+                        newAnswers[answer] = {
+                            owner:owner,
+                            selected:[],
+                        }
                     }
                     for(const player in updatedPlayerStates){
-                        if(updatedPlayerStates[player].pickedAnswer===answer){
-                            newAnswers[answer].push(player);
+                        if(updatedPlayerStates[player].pickedAnswer==answer){
+                            let playername = null;
+                            updatedGameState.players.forEach(StatePlayer=>{
+                                if(StatePlayer.id == player){
+                                    playername = StatePlayer.name;
+                                }
+                            });
+                            newAnswers[answer].selected.push(playername);
                         }
                     }
                 })
@@ -183,13 +194,34 @@ class DrawfulSM {
                     currentDrawing:{
                         ...updatedGameState.currentDrawing,
                         answers: newAnswers,
+                        correctAnswer: this.selectedPrompt,
                     }
 
+                }
+                for (const userId in updatedPlayerStates){
+                    let fooled = false;
+                    if (updatedPlayerStates[userId].pickedAnswer !== this.selectedPrompt){
+                        fooled = true;
+                    }
+
+                    updatedPlayerStates[userId] = {
+                        ...updatedPlayerStates[userId],
+                        fooled: fooled,
+                    }
                 }
             }
 
         }
         else if (gameState.currentPhase === 'REVEAL'){
+            if (action.actionType === 'SEE_SCORE'){
+                updatedGameState.players.forEach((player,index) => {
+                    if(player.id == action.userId){
+                        updatedGameState.players[index].ready = true;
+                    }else if(!player.ready){
+                            updatedGameState.waiting = true;
+                        }    
+                });
+            }
             if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
                 updatedGameState = {
                     ...updatedGameState,
@@ -198,14 +230,21 @@ class DrawfulSM {
                     timerLength: action.timerLength,
                     currentDrawing: {
                         ...updatedGameState.currentDrawing,
-                        correctAnswer: updatedHiddenState.drawingPrompts[currentDrawing.userId]
                     }
                 }
-
+                
+                updatedGameState.players.forEach((player,index) => {
+                    updatedGameState.players[index].ready = false;
+                    
+                });
                 for (const userId in playerStates){
-                    if (playerStates[userId].pickedAnswer === updatedGameState.currentDrawing.correctAnswer){
-                        const player = players.find((player) => player.id = userId);
-                        player.score++;
+                    if (playerStates[userId].pickedAnswer === this.selectedPrompt){
+                        updatedGameState.players.forEach(player => {
+                            if(player.id == userId){
+                                player.score+=1000;
+                            }
+                        });
+                        
                     }
                 }
                 
@@ -213,9 +252,23 @@ class DrawfulSM {
             }
         }
         else if (gameState.currentPhase === 'DISPLAY_SCORE_RANKING'){
+            if(action.actionType==="ACKNOWLEDGE"){
+                updatedGameState.players.forEach((player,index) => {
+                    if(player.id == action.userId){
+                        updatedGameState.players[index].ready = true;
+                    }else if(!player.ready){
+                            updatedGameState.waiting = true;
+                        }    
+                });
+            }
             if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
                 const noMoreDrawings = (Object.keys(updatedHiddenState.submittedDrawings).length == 0);
+                updatedGameState.players.forEach((player,index) => {
+                    updatedGameState.players[index].ready = false;
+                    
+                });
                 if (noMoreDrawings){
+                    console.log("end of drawings");
                     //end game
                     // updatedGameState = {
                     //     ...updatedGameState,
@@ -262,13 +315,17 @@ class DrawfulSM {
                         timerStart: action.timerStart,
                         timerLength: action.timerLength
                     }
-
-                for (const userId in updatedPlayerStates){
-                    updatedPlayerStates[userId] = {
-                        ...updatedPlayerStates[userId],
-                        prompt: null
+                    for(const player in updatedHiddenState.fakeAnswers){
+                        updatedHiddenState.fakeAnswers[player] = null;
                     }
-                }
+                    for (const userId in updatedPlayerStates){
+                        updatedPlayerStates[userId] = {
+                            ...updatedPlayerStates[userId],
+                            pickedAnswer:null,
+                            prompt: null,
+                            fooled: null,
+                        }
+                    }
                 }
             }
             

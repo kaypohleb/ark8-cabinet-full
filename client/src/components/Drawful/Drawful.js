@@ -8,6 +8,8 @@ import Modal from '../../components/UI/Modal/Modal';
 import styles from './Drawful.module.css'
 import {StyledMobileButton} from '../StyledComponents/StyledButton';
 import Mux from "../../hoc/Mux";
+import SmallerPlayer from '../Player/SmallerPlayer/SmallerPlayer';
+import OwnerPlayer from '../Player/SmallerPlayer/OwnerPlayer/OwnerPlayer';
 class Drawful extends Component{
     constructor(props){
         super(props);
@@ -84,17 +86,19 @@ class Drawful extends Component{
         })
     }
     componentWillUnmount(){
-        this.props.exitGame();
+        //this.props.exitGame();
     }
 
     render(){
-        let phase,gameScores,waitingOn,answerList,fakeAnswer,reveal,revealPlayers = null;
+        let phase,waitingOn,answerList,fakeAnswer,reveal,gameScores = null;
         if(this.state.players){
-            gameScores = (<div className={styles.Scores}>
+            gameScores = <div className={styles.Scores}>
                 {this.state.players.map((player) =>{ 
                     return (<Score key={player.id} playerName={player.name} score={player.score} playerId = {player.id}/>
                     )}
-                )}</div>);
+                )}
+                <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId},"ACKNOWLEDGE")}>OKAY</StyledMobileButton>
+                </div>;
         }
         if(this.state.waiting){
             waitingOn = <div className={styles.Waiting}>
@@ -102,6 +106,8 @@ class Drawful extends Component{
                 {this.state.players.map((player)=>{
                     if(!player.ready){
                         return <p>{player.name}</p>
+                    }else{
+                        return null;
                     }
                 })}
             </div>
@@ -127,28 +133,56 @@ class Drawful extends Component{
             }
             if(this.state.player.shownAnswers ){
                 answerList = (<div className={styles.AnswerList}>
+                    <div className={styles.displayDrawing}>
                     <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                    </div>
+                    
                     {this.state.player.shownAnswers.map((answer)=>{
                         return <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
                     })}
                 </div>);
             }
             else{
-                answerList = (<div className={styles.FakeAnswer}>
+                answerList = (<div className={styles.AnswerList}>
                     <div className={styles.displayDrawing}>
                     <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
-                        </div>
-                        <div> its your drawing, enjoy it while others are making their answers</div>
+                    </div>
+                    <p> its your drawing, enjoy it while others are making their decision</p>
                     </div>);
             }
             
-            reveal = <div>REVEAL</div>
+            if(!(this.state.currentDrawing.answers instanceof Array) && this.state.currentDrawing.answers!=null){
+                reveal = <div className={styles.Reveal}>
+                    {
+                        Object.keys(this.state.currentDrawing.answers).map(answer=>{
+                            let answerType = "FAKE";
+                            if(answer === this.state.currentDrawing.correctAnswer){
+                                answerType = "ACTUAL"
+                                
+                            }
+                            return <div className = {styles.AnswerReveal}>
+                                <p>{answerType}</p>
+                                <p>{answer}</p>
+                                <p>Made by</p>
+                                <OwnerPlayer key = {this.state.currentDrawing.answers[answer].owner} name={this.state.currentDrawing.answers[answer].owner}/>
+                                <p>Fooled</p>
+                                {this.state.currentDrawing.answers[answer].selected.map(player=>{
+                                    return <SmallerPlayer key = {player} name={player}/>
+                                })}
+
+                                </div>
+
+                        })
+                    }
+                    <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId},"SEE_SCORE")}>SEE SCORES</StyledMobileButton>
+                </div>
+            }
             
         }
         
         switch(this.state.currentPhase){
             case "INITIAL":
-                phase = <div>TUTORIAL INSTRUCTIONS</div>;
+                phase = <div className={styles.Initial}>DRAW WELL AND GUESS WELL</div>;
                 break;
             case "DRAWING":
                 phase = <DrawableCanvas disableDraw={false} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
@@ -162,20 +196,33 @@ class Drawful extends Component{
             case "REVEAL":
                 phase = <Mux>{reveal}</Mux>;
                 break;
+            case "DISPLAY_SCORE_RANKING":
+                phase=<Mux>{gameScores}</Mux>;
+                break;
             default:
                 phase =null;
         }
        
         return(
-            <div className={styles.Drawful}>
+            <div className={styles.GameBG}>
+            <div className={styles.GameContent}>
                 <Modal show={this.state.waiting}  modalClosed={this.waitScreenHandler}>
                     {waitingOn} 
                 </Modal> 
-                <Modal show={this.state.showScore}  modalClosed={this.scoreScreenHandler}>
-                    {gameScores} 
-                </Modal> 
+                <div className={styles.GameHeader}>
+                            <p className={styles.GameTitle}>{this.state.gameId}</p>
+                            <div className={styles.RoomID}> 
+                                Room ID: {this.state.roomId}
+                            </div>
+                        </div>
+
+                
+                
                 {phase}
-           </div>
+                
+            </div>
+        </div>
+           
         )
     }
 }

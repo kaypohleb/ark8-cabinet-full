@@ -80,11 +80,12 @@ class DrawfulGame{
             }
             
             
-            console.log(userID);  
+            //console.log(this);  
             makeAction(userID, action);
-            //console.log("what is this", this);
+            console.log("what is this", this);
             switch(this.gameState.currentPhase){
                 case "DRAWING": 
+                    this.useState = true;
                     console.log("DRAWING");         
                     let ready = Object.values(this.hiddenState.submittedDrawings).every(function(i){return i!==null;})
                     this.timer = setTimeout(()=>{
@@ -152,10 +153,40 @@ class DrawfulGame{
                     }, timerLen);
                     break;
                 case "REVEAL":
-                    console.log("REVEAL")
-                    console.log("Final phase no updates after this");
+                    this.useState = true;
+                    console.log("REVEAL");
+                    let revealready = this.gameState.players.every(function(player){return player.ready});
+                    this.timer = setTimeout(()=>{
+                        if(revealready){
+                            console.log("HIT");
+                            if(this.useState){
+                                turn("GAME",3000);
+                                this.useState = false;
+                            }
+                        }
+                        else{
+                            turn("random",3000);
+                        }
+                    }, timerLen);
+                    break;
+                case "DISPLAY_SCORE_RANKING":
+                    this.useState = true;
+                    let scoreReady = this.gameState.players.every(function(player){return player.ready});
+                    this.timer = setTimeout(()=>{
+                        if(scoreReady){
+                            console.log("HIT");
+                            if(this.useState){
+                                turn("GAME",3000);
+                                this.useState = false;
+                            }
+                        }
+                        else{
+                            turn("random",3000);
+                        }
+                    }, timerLen);
                     break;
                 case "INITIAL":
+                    
                     console.log("INITIAL");
                     this.timer = setTimeout(()=>{makeAction(userID, action); turn("GAME",3000);}, timerLen);
                     break;

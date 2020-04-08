@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import Score from '../Score/Score';
+import React from 'react';
 import StatusBar from './StatusBar';
 import {Hand, Votables, RevealedResponses} from './Selectables';
 import {connect} from 'react-redux';
@@ -14,27 +13,27 @@ const RudeCards = (props) => {
 
     const game = props.game;
     const player = props.player;
-    const playerData = props.game.players.find(p => p.id == props.userID);
+    const playerData = props.game.players.find(p => p.id === props.userID);
     const timer = game.timerLength + game.timerStart;
 
     
     let selectable;
-    if (game.currentPhase == 'INITIAL'){
+    if (game.currentPhase === 'INITIAL'){
         selectable = null;
     }
-    else if (game.currentPhase == 'DRAW_CARDS' || game.currentPhase == 'PLACE_CARDS' ){
+    else if (game.currentPhase === 'DRAW_CARDS' || game.currentPhase === 'PLACE_CARDS' ){
         selectable = <Hand
             availableResponses = {player.availableResponses}
             currentResponse = {player.currentResponse}
             playCard={(response) => (()=> {props.gameAction({response}, 'SEND_CARD')})}/>;
     }
-    else if (game.currentPhase == 'VOTING'){
+    else if (game.currentPhase === 'VOTING'){
         selectable = <Votables 
             votableResponses = {player.votableResponses}
             votedResponse = {player.votedResponse}
             voteCard={(response) => (()=> {props.gameAction({response}, 'SEND_VOTE')})}/>;
     }
-    else if (game.currentPhase == 'UPDATE_SCORES'){
+    else if (game.currentPhase === 'UPDATE_SCORES'){
         selectable = <RevealedResponses revealedResponses ={props.game.currentPrompt.revealedResponses}/>;
     }
 
@@ -53,7 +52,7 @@ const RudeCards = (props) => {
 
                 <div className={styles.PromptCard}>
                     <div className={styles.PromptCardContent}>
-                        <a className={styles.PromptHeader}> prompt </a>
+                        <p className={styles.PromptHeader}> prompt </p>
                         <div className={styles.PromptText}>
                             {game.currentPrompt.prompt}
                         </div>
