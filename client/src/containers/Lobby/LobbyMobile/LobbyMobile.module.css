@@ -39,7 +39,7 @@
   display: inherit;
   flex-direction: row;
   flex-wrap: nowrap;
-  overflow: auto;
+  overflow: hidden;
 }
 .LobbyRoomID{
   margin:0 10%;

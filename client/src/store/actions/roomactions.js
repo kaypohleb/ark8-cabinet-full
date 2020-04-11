@@ -5,6 +5,7 @@ import{
   } from '../types';
 import axios from 'axios';
 import socketIOClient from "socket.io-client";
+import {toast} from "react-toastify";
 const BASE_URL = 'http://localhost:3001';
 
 
@@ -43,6 +44,12 @@ export const enterRoom = (roomID) =>{
       console.log({...room});
       dispatch(updateRoomStateSuccess(room));
     })  
+    socket.on('error', (data) => {
+      toast.error(`Error: ${data}`);
+    })
+    socket.on('room_action_error', (data) => {
+      toast.error(`Room Action Error: ${data.message}`);
+    })
   }
 }
 
@@ -90,8 +97,10 @@ export const startGame = (roomID,gameID) => {
 export const setRefreshGameState = () =>{
     return (dispatch) =>{
         socket.on('game_state_update', (data) => {
-       
             dispatch(updateGameStateSuccess(data));
+        })
+        socket.on('game_action_error', (data) => {
+          toast.error(`Game Action Error: ${data.message}`);
         })
     }
 }

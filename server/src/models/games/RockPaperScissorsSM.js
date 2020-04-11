@@ -44,11 +44,11 @@ class RockPaperScissorsSM {
             for (const playerId in playerStates){
                 if (winningSelection && playerStates[playerId].selection == winningSelection){
                     const player = updatedGameState.players.find(player => player.id == playerId);
-                    player.gameData.score++;
+                    player.score++;
                 }
             }
 
-
+            
             if (updatedGameState.currentRound < updatedGameState.totalRounds){
                 updatedGameState.currentRound++;
             }
@@ -56,7 +56,7 @@ class RockPaperScissorsSM {
             updatedGameState.timerStart = action.timerStart;
 
             for (const playerId in updatedPlayerStates){
-                updatedPlayerStates[playerId] = {};
+                updatedPlayerStates[playerId] = { selection: null};
             }
         }
 

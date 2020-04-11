@@ -68,7 +68,7 @@ class RockPaperScissorsGame extends Component {
         if(this.state.players){
             gameScores = (<div className={styles.Scores}>{
                 this.state.players.map((player) =>{ 
-                    return (<Score key={player.id} playerName={player.name} score={player.gameData.score} playerId = {player.id}/>
+                    return (<Score key={player.id} playerName={player.name} score={player.score} playerId = {player.id}/>
                     )}
                 )}</div>);
         }
