@@ -23,7 +23,7 @@ const updateUserData = async (userId, userData) => {
     // prevent the user from setting the id
     delete userData.id;
 
-    await userRef.set(userData, {merge: true});
+    await userRef.update(userData, {merge: true});
 
     user = userDoc.get();
 

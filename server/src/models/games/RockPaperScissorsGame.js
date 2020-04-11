@@ -2,12 +2,11 @@ const RockPaperScissorsSM = require('./RockPaperScissorsSM');
 
 class RockPaperScissorsGame {
     constructor(players){
-        console.log('rps game constructor', players);
         this.id = 'ROCK_PAPER_SCISSORS';
         this.timer = null;
         this.gameState = {
             gameId: 'ROCK_PAPER_SCISSORS',
-            players: players,
+            players: players.map((player) => ({id: player.id, name: player.name, score: 0})),
             currentRound: 0,
             totalRounds: 5,
             timerStart: null,
@@ -15,19 +14,13 @@ class RockPaperScissorsGame {
             history: [],
             prevWinner: null
         };
-        this.playerStates = {};
+        this.playerStates = players.reduce( (playerStates, player) => {
+            playerStates[player.id] = {selection : null};
+            return playerStates;
+        }, {});
         this.history = [];
         this.gameStateUpdateCallback = null;
         this.gameStateMachine = new RockPaperScissorsSM();
-
-        this.initializePlayerStates();
-    }
-
-    initializePlayerStates(){
-        this.gameState.players.forEach( player => {
-            this.playerStates[player.id] = {};
-            player.gameData.score = 0;
-        })
     }
 
     printState(){
