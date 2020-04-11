@@ -1,3 +1,4 @@
+const {addGameResults} = require('../firebase/utils')
 const roomActionValidator = require('./roomActionValidator');
 const games = require('./games');
 const Player = require('./Player');
@@ -118,9 +119,19 @@ class Room {
         if (!this.game){
             throw new Error("Game cannot be started as game has not been set");
         }
+        
+        this.game.publishScoreCallback = (winner, players) => {
+            console.log('publishScoreCallback called!')
+            addGameResults({
+            gameId: this.game.id,
+            roomId: this.id,
+            players,
+            winner
+        })};
+        
         this.gameStarted = true;
         this.game.start();
-
+        
         this.roomStateUpdateCallback( this.printRoomState() );
     }
     
