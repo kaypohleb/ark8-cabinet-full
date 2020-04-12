@@ -4,7 +4,8 @@ import Home  from '../Home/Home';
 import UserHome from '../UserHome/UserHome';
 import Lobby from '../Lobby/Lobby';
 import GameRoom from '../GameRoom/GameRoom';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   BrowserRouter as Router,
@@ -21,6 +22,7 @@ class App extends Component{
     return (
       <Router>
         <div className = "App">
+          <ToastContainer autoClose={false}/>
           <Switch>
             <Route exact path ="/" component={Home}/>
             <Route exact path = "/profile" component={UserHome}/>
