@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { connect  } from 'react-redux';
 import {withRouter} from  'react-router-dom';
-import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame} from '../../store/actions/index';
+import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame,exitGame} from '../../store/actions/index';
 import styles from './Lobby.module.css';
 import LobbyMobile from './LobbyMobile/LobbyMobile';
 import LobbyDesktop from './LobbyDesktop/LobbyDesktop';
@@ -102,6 +102,7 @@ class Lobby extends Component{
         this.props.unready(this.state.id);
     }
     goBackHandler(){
+        this.props.exitGame();
         this.props.history.push('/profile');
     }
 
@@ -157,6 +158,7 @@ const mapStateToProps = (state) => {
 const mapDispatchtoProps = (dispatch) =>{
 
    return {
+
        ready: (roomID,gameID) => dispatch(readyPlayer(roomID,gameID)),
        unready: (roomID,gameID)=> dispatch(unreadyPlayer(roomID,gameID)),
        setGame: (roomID,gameID) => dispatch(setGameTitle(roomID,gameID)),
@@ -164,7 +166,7 @@ const mapDispatchtoProps = (dispatch) =>{
        createRoom: ()=> dispatch(createRoom()),
        enterRoom: (roomid)=>dispatch(enterRoom(roomid)),
        closeRoom: ()=>dispatch(closeRoom()),
-
+       exitGame: ()=>dispatch(exitGame()),
    }
 }
 

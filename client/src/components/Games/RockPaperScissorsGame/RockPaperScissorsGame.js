@@ -65,13 +65,6 @@ class RockPaperScissorsGame extends Component {
     render(){
         
         let gameScores,history= null;
-        if(this.state.players){
-            gameScores = (<div className={styles.Scores}>{
-                this.state.players.map((player) =>{ 
-                    return (<Score key={player.id} playerName={player.name} score={player.score} playerId = {player.id}/>
-                    )}
-                )}</div>);
-        }
 
         if(this.state.history){
             history = <div>
@@ -83,9 +76,6 @@ class RockPaperScissorsGame extends Component {
         }
         return (
             <div className={styles.GameBG}>
-                <Modal show={this.state.showScore}  modalClosed={this.scoreScreenHandler}>
-                    {gameScores} 
-                </Modal> 
                 <div className ={styles.GameContent}>
                     <div className={styles.GameDirection}>
                     <motion.div 
