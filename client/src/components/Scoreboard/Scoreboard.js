@@ -1,8 +1,11 @@
 import React,{Component} from React;
 import styles from './Scoreboard.module.css';
+import Score from '../../Score/Score';
+import Modal from '../../UI/Modal/Modal';
 class Scoreboard extends Component{
     
     render(){
+        let gameScores = null;
         if(this.props.players){
             gameScores = (<div className={styles.Scores}>{
                 this.state.players.map((player) =>{ 
@@ -10,9 +13,7 @@ class Scoreboard extends Component{
                     )}
                 )}</div>);
         }
-        return <Modal show={this.state.showScore}  modalClosed={this.scoreScreenHandler}>
-        {gameScores} 
-    </Modal> 
+        return <div>{gameScores} </div>
     }
 }
 

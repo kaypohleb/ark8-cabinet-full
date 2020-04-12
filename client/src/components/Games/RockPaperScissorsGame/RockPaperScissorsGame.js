@@ -1,5 +1,4 @@
 import React,{ Component } from "react";
-import Score from '../../Score/Score';
 import { connect  } from 'react-redux';
 import styles from './RockPaperScissorsGame.module.css'
 import Rock from '../../../assets/svg/rock.svg';
@@ -8,7 +7,7 @@ import Scissors from '../../../assets/svg/scissors.svg';
 import {publishGameAction,setRefreshGameState,exitGame} from '../../../store/actions/index';
 import {motion} from 'framer-motion';
 import HistoryRoundActions from './HistoryAction/HistoryRoundActions';
-import Modal from '../../UI/Modal/Modal';
+
 class RockPaperScissorsGame extends Component {
     
     constructor(props){
@@ -64,7 +63,7 @@ class RockPaperScissorsGame extends Component {
 
     render(){
         
-        let gameScores,history= null;
+        let history= null;
 
         if(this.state.history){
             history = <div>
@@ -99,19 +98,19 @@ class RockPaperScissorsGame extends Component {
                     whileHover={{scale:1.1}}
                     whileTap={{scale:0.8}}
                     src={Rock} alt="rock" 
-                    onClick={()=>this.props.gameAction("rock","MAKE_SELECTION")}/>
+                    onClick={()=>this.props.gameAction({selection:"rock"},"MAKE_SELECTION")}/>
                     <motion.img 
                     className = {styles.SelectionOptions}
                     whileHover={{scale:1.1}}
                     whileTap={{scale:0.8}}
                     src={Paper} alt="paper" 
-                    onClick={()=>this.props.gameAction("paper","MAKE_SELECTION")}/>
+                    onClick={()=>this.props.gameAction({selection:"paper"},"MAKE_SELECTION")}/>
                     <motion.img 
                     className = {styles.SelectionOptions}
                     whileHover={{scale:1.1}}
                     whileTap={{scale:0.8}}
                     src={Scissors} alt="scissors" 
-                    onClick={()=>this.props.gameAction("scissors","MAKE_SELECTION")}/>
+                    onClick={()=>this.props.gameAction({selection:"scissors"},"MAKE_SELECTION")}/>
                 </div>
             </div>
         )

@@ -29,9 +29,8 @@ class DrawfulGame{
             timerStart: null,
             timerLength: 5000,
             history: null,
-            currentRound: 0,
-            totalRounds: 3,
             waiting: false,
+            toEnd:false,
         };
 
         this.playerStates = players.reduce( (playerStates, player) => {
@@ -62,6 +61,13 @@ class DrawfulGame{
             game: {...this.gameState},
             players: {...this.playerStates}
         }
+    }
+    end(){
+        console.log('ending game...')
+        const players = this.gameState.players;
+        players.sort((a,b) => b.score - a.score); // sort by highest score first
+        const winner = players[0];
+        this.publishScoreCallback(winner, players);
     }
 
     start(){
@@ -170,20 +176,9 @@ class DrawfulGame{
                     }, timerLen);
                     break;
                 case "DISPLAY_SCORE_RANKING":
-                    this.useState = true;
-                    let scoreReady = this.gameState.players.every(function(player){return player.ready});
-                    this.timer = setTimeout(()=>{
-                        if(scoreReady){
-                            console.log("HIT");
-                            if(this.useState){
-                                turn("GAME",3000);
-                                this.useState = false;
-                            }
-                        }
-                        else{
-                            turn("random",3000);
-                        }
-                    }, timerLen);
+                    if(this.gameState.toEnd){
+                        this.end();
+                    }
                     break;
                 case "INITIAL":
                     
