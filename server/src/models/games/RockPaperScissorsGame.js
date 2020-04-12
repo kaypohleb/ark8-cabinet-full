@@ -20,6 +20,7 @@ class RockPaperScissorsGame {
         }, {});
         this.history = [];
         this.gameStateUpdateCallback = null;
+        this.publishScoreCallback = null;
         this.gameStateMachine = new RockPaperScissorsSM();
     }
 
@@ -38,6 +39,11 @@ class RockPaperScissorsGame {
                 timerStart: new Date().getTime()
             }
             makeAction(null, action);
+            if (this.gameState.currentRound == this.gameState.totalRounds){
+                this.end();
+                return;
+            }
+
             if (this.gameState.currentRound < this.gameState.totalRounds){
                 this.timer = setTimeout(turn, this.gameState.timerLength);
             }
@@ -45,6 +51,14 @@ class RockPaperScissorsGame {
         }).bind(this);
 
         turn();
+    }
+
+    end(){
+        console.log('ending game...')
+        const players = this.gameState.players;
+        players.sort((a,b) => b.score - a.score); // sort by highest score first
+        const winner = players[0];
+        this.publishScoreCallback(winner, players);
     }
 
     validateAction(userId, action){

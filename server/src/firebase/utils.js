@@ -30,7 +30,32 @@ const updateUserData = async (userId, userData) => {
     return user.data();
 };
 
+const addGameResults = async ({gameId, winner, roomId, players}) => {
+    console.log('adding game results ..');
+    const ref = await db.collection('game_results').add({
+        gameId,
+        roomId,
+        winner,
+        players,
+        gameEndedAt: Date.now()
+    })
+
+    console.log(`results added with ref id ${ref.id}`);
+};
+
+const getGameHistory = async (userId) => {
+    const snapshot = await db.collection('game_results').get();
+    const history = snapshot.docs.map(doc => doc.data());
+
+    const userHistory = history.filter((gameResult) => (gameResult.players.find( (player) => player.userId == userId )));
+    userHistory.sort((a,b) => ( b.gameEndedAt - a.gameEndedAt)); // sort by newest first
+
+    return userHistory
+}
+
 module.exports = {
     getUserData,
-    updateUserData
+    updateUserData,
+    addGameResults,
+    getGameHistory
 };
