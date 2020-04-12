@@ -55,7 +55,7 @@
 }
 
 .Players{
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .Players::-webkit-scrollbar-track

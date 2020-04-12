@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import Drawing from './Drawing/Drawing';
 import Immutable from 'immutable';
 import styles from './DrawableCanvas.module.css';
-import { StyledMobileButton } from '../../StyledComponents/StyledButton';
+import { StyledMobileButton } from '../../../StyledComponents/StyledButton';
 class DrawableCanvas extends Component {
 
     constructor(props) {

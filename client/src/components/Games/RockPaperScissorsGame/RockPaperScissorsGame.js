@@ -1,14 +1,14 @@
 import React,{ Component } from "react";
-import Score from '../Score/Score';
+import Score from '../../Score/Score';
 import { connect  } from 'react-redux';
 import styles from './RockPaperScissorsGame.module.css'
-import Rock from '../../assets/svg/rock.svg';
-import Paper from '../../assets/svg/paper.svg';
-import Scissors from '../../assets/svg/scissors.svg';
-import {publishGameAction,setRefreshGameState,exitGame} from '../../store/actions/index';
+import Rock from '../../../assets/svg/rock.svg';
+import Paper from '../../../assets/svg/paper.svg';
+import Scissors from '../../../assets/svg/scissors.svg';
+import {publishGameAction,setRefreshGameState,exitGame} from '../../../store/actions/index';
 import {motion} from 'framer-motion';
 import HistoryRoundActions from './HistoryAction/HistoryRoundActions';
-import Modal from '../../components/UI/Modal/Modal';
+import Modal from '../../UI/Modal/Modal';
 class RockPaperScissorsGame extends Component {
     
     constructor(props){
@@ -87,12 +87,6 @@ class RockPaperScissorsGame extends Component {
                     {gameScores} 
                 </Modal> 
                 <div className ={styles.GameContent}>
-                    <div className={styles.GameHeader}>
-                        <p className={styles.GameTitle}>{this.state.gameId}</p>
-                        <div className={styles.RoomID}> 
-                        {this.state.roomId}
-                        </div>
-                    </div>
                     <div className={styles.GameDirection}>
                     <motion.div 
                         whileHover={{scale:1.1}}

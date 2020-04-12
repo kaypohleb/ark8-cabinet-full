@@ -1,8 +1,8 @@
 import React,{ Component } from 'react';
 import styles from './GameRoom.module.css';
-import RockPaperScissorsGame from '../../components/RockPaperScissorsGame/RockPaperScissorsGame';
-import Drawful from '../../components/Drawful/Drawful';
-import RudeCards from '../../components/RudeCardsGame/RudeCards';
+import RockPaperScissorsGame from '../../components/Games/RockPaperScissorsGame/RockPaperScissorsGame';
+import Drawful from '../../components/Games/Drawful/Drawful';
+import RudeCards from '../../components/Games/RudeCardsGame/RudeCards';
 
 class GameRoom extends Component{
     render(){

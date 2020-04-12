@@ -2,7 +2,7 @@ import React from 'react';
 import StatusBar from './StatusBar';
 import {Hand, Votables, RevealedResponses} from './Selectables';
 import {connect} from 'react-redux';
-import {publishGameAction,setRefreshGameState,exitGame} from '../../store/actions/index';
+import {publishGameAction,setRefreshGameState,exitGame} from '../../../store/actions/index';
 import styles from './RudeCards.module.css'
 
 const RudeCards = (props) => {
@@ -41,15 +41,7 @@ const RudeCards = (props) => {
     return (
         <div className={styles.GameBG}>
             <div className={styles.GameContent}>
-                <div className={styles.GameHeader}>
-                            <p className={styles.GameTitle}>{props.gameId}</p>
-                            <div className={styles.RoomID}> 
-                                Room ID: {props.roomId}
-                            </div>
-                        </div>
-
                 <StatusBar currentRound={game.currentRound} currentPhase={game.currentPhase} score={playerData.score} timer={timer}/>
-
                 <div className={styles.PromptCard}>
                     <div className={styles.PromptCardContent}>
                         <p className={styles.PromptHeader}> prompt </p>

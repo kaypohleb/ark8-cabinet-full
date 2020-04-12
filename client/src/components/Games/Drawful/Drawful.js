@@ -1,15 +1,15 @@
 import React,{ Component } from "react";
-import Score from '../Score/Score';
+import Score from '../../Score/Score';
 import { connect  } from 'react-redux';
 import DrawableCanvas from './DrawableCanvas/DrawableCanvas';
-import {publishGameAction,setRefreshGameState,exitGame} from '../../store/actions/index';
+import {publishGameAction,setRefreshGameState,exitGame} from '../../../store/actions/index';
 import Drawing from './DrawableCanvas/Drawing/Drawing';
-import Modal from '../../components/UI/Modal/Modal';
+import Modal from '../../UI/Modal/Modal';
 import styles from './Drawful.module.css'
-import {StyledMobileButton} from '../StyledComponents/StyledButton';
-import Mux from "../../hoc/Mux";
-import SmallerPlayer from '../Player/SmallerPlayer/SmallerPlayer';
-import OwnerPlayer from '../Player/SmallerPlayer/OwnerPlayer/OwnerPlayer';
+import {StyledMobileButton} from '../../StyledComponents/StyledButton';
+import Mux from "../../../hoc/Mux";
+import SmallerPlayer from '../../Player/SmallerPlayer/SmallerPlayer';
+import OwnerPlayer from '../../Player/SmallerPlayer/OwnerPlayer/OwnerPlayer';
 class Drawful extends Component{
     constructor(props){
         super(props);
@@ -209,14 +209,6 @@ class Drawful extends Component{
                 <Modal show={this.state.waiting}  modalClosed={this.waitScreenHandler}>
                     {waitingOn} 
                 </Modal> 
-                <div className={styles.GameHeader}>
-                            <p className={styles.GameTitle}>{this.state.gameId}</p>
-                            <div className={styles.RoomID}> 
-                                Room ID: {this.state.roomId}
-                            </div>
-                        </div>
-
-                
                 
                 {phase}
                 
