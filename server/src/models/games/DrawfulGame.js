@@ -14,6 +14,7 @@ class DrawfulGame{
         this.id = 'DRAWFUL';
         this.history = [];
         this.gameStateUpdateCallback = null;
+        this.publishScoreCallback = null;
         this.gameStateMachine = new DrawfulSM();
         this.useState = true;
         this.gameState = {
@@ -30,7 +31,7 @@ class DrawfulGame{
             timerLength: 5000,
             history: null,
             waiting: false,
-            toEnd:false,
+            gameEnded: false,
         };
 
         this.playerStates = players.reduce( (playerStates, player) => {

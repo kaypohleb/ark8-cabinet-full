@@ -12,7 +12,8 @@ class RockPaperScissorsGame {
             timerStart: null,
             timerLength: 5000,
             history: [],
-            prevWinner: null
+            prevWinner: null,
+            gameEnded: false,
         };
         this.playerStates = players.reduce( (playerStates, player) => {
             playerStates[player.id] = {selection : null};
@@ -54,7 +55,12 @@ class RockPaperScissorsGame {
     }
 
     end(){
-        console.log('ending game...')
+        const action = {
+            actionType: 'END_GAME',
+            timerStart: new Date().getTime()
+        };
+        this.makeAction(null,action);
+        console.log('ending game...');
         const players = this.gameState.players;
         players.sort((a,b) => b.score - a.score); // sort by highest score first
         const winner = players[0];

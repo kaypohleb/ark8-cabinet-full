@@ -1,9 +1,20 @@
 class RockPaperScissorsSM {
     step(userId, action, gameState, playerStates){
-        let updatedGameState = {...gameState};
+        let updatedGameState = {
+            ...gameState,
+            gameEnded:false,
+        }
+        
         let updatedPlayerStates = {...playerStates};
-
-        if (action.actionType == 'MAKE_SELECTION'){
+        if(action.actionType == 'END_GAME'){
+            console.log(action);
+            console.log(updatedGameState);
+            updatedGameState = {
+                ...updatedGameState,
+                gameEnded: true,
+            }
+        }
+        else if (action.actionType == 'MAKE_SELECTION'){
             updatedPlayerStates[userId] = { selection: action.selection };
         }
         else if (action.actionType = 'NEXT_TURN'){

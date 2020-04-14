@@ -41,7 +41,17 @@ const addGameResults = async ({gameId, winner, roomId, players}) => {
     })
 
     console.log(`results added with ref id ${ref.id}`);
+    return ref.id;
 };
+
+const addGameResIDtoUserHistory = async({refId,players}) =>{
+    for(player in players){
+        const history = await db.collection('users').doc(player.id).update({
+            history: firebase.firestore.FieldValue.arrayUnion(refId)
+        })
+    }
+    
+}
 
 const getGameHistory = async (userId) => {
     const snapshot = await db.collection('game_results').get();
@@ -57,5 +67,6 @@ module.exports = {
     getUserData,
     updateUserData,
     addGameResults,
-    getGameHistory
+    getGameHistory,
+    addGameResIDtoUserHistory
 };

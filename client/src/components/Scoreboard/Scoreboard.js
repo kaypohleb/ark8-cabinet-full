@@ -1,15 +1,15 @@
-import React,{Component} from React;
+import React,{Component} from 'react';
 import styles from './Scoreboard.module.css';
-import Score from '../../Score/Score';
-import Modal from '../../UI/Modal/Modal';
+import Score from '../Score/Score';
 class Scoreboard extends Component{
     
     render(){
         let gameScores = null;
         if(this.props.players){
-            gameScores = (<div className={styles.Scores}>{
-                this.state.players.map((player) =>{ 
-                    return (<Score key={player.id} playerName={player.name} score={player.score} playerId = {player.id}/>
+            gameScores = (<div className = {styles.Scores}>
+                <div>Scoreboard</div>
+                {this.props.players.map((player) =>{ 
+                    return (<Score key = {player.id} playerName = {player.name} score = {player.score} playerId = {player.id}/>
                     )}
                 )}</div>);
         }

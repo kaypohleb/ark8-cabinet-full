@@ -13,6 +13,6 @@ function DrawingLine({ line }) {
       })
       .join(" L ");
 
-  return <path className={styles.path} d={pathData} />;
+  return <path className = {styles.path} d = {pathData} />;
 }
 export default DrawingLine;

@@ -1,4 +1,4 @@
-const {addGameResults} = require('../firebase/utils')
+const {addGameResults,addGameResIDtoUserHistory} = require('../firebase/utils')
 const roomActionValidator = require('./roomActionValidator');
 const games = require('./games');
 const Player = require('./Player');
@@ -122,12 +122,14 @@ class Room {
         
         this.game.publishScoreCallback = (winner, players) => {
             console.log('publishScoreCallback called!')
-            addGameResults({
+            const refId = addGameResults({
             gameId: this.game.id,
             roomId: this.id,
             players,
             winner
-        })};
+            });
+            addGameResIDtoUserHistory(refId,players);
+        };
         
         this.gameStarted = true;
         this.game.start();

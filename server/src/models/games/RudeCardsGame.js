@@ -22,7 +22,8 @@ class RudeCardsGame {
             timerStart: null,
             timerLength: 10000,
             currentRound: 0,
-            totalRounds: 5
+            totalRounds: 5,
+            gameEnded: false,
         };
 
         this.playerStates = players.reduce( (playerStates, player) => {

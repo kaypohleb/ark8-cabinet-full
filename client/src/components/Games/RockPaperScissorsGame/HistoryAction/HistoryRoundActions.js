@@ -14,7 +14,7 @@ class HistoryRoundActions extends Component{
                        
                     }
                 });
-                return(<HistoryAction key={action.playerId} playerName={playername} selection={action.selection}/>);
+                return(<HistoryAction key = {action.playerId} playerName = {playername} selection = {action.selection}/>);
             })}</div>
         }
         

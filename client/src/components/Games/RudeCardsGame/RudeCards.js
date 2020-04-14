@@ -25,27 +25,27 @@ const RudeCards = (props) => {
         selectable = <Hand
             availableResponses = {player.availableResponses}
             currentResponse = {player.currentResponse}
-            playCard={(response) => (()=> {props.gameAction({response}, 'SEND_CARD')})}/>;
+            playCard = {(response) => (()=> {props.gameAction({response}, 'SEND_CARD')})}/>;
     }
     else if (game.currentPhase === 'VOTING'){
         selectable = <Votables 
             votableResponses = {player.votableResponses}
             votedResponse = {player.votedResponse}
-            voteCard={(response) => (()=> {props.gameAction({response}, 'SEND_VOTE')})}/>;
+            voteCard = {(response) => (()=> {props.gameAction({response}, 'SEND_VOTE')})}/>;
     }
     else if (game.currentPhase === 'UPDATE_SCORES'){
-        selectable = <RevealedResponses revealedResponses ={props.game.currentPrompt.revealedResponses}/>;
+        selectable = <RevealedResponses revealedResponses  = {props.game.currentPrompt.revealedResponses}/>;
     }
 
 
     return (
-        <div className={styles.GameBG}>
-            <div className={styles.GameContent}>
-                <StatusBar currentRound={game.currentRound} currentPhase={game.currentPhase} score={playerData.score} timer={timer}/>
-                <div className={styles.PromptCard}>
-                    <div className={styles.PromptCardContent}>
-                        <p className={styles.PromptHeader}> prompt </p>
-                        <div className={styles.PromptText}>
+        <div className = {styles.GameBG}>
+            <div className = {styles.GameContent}>
+                <StatusBar currentRound = {game.currentRound} currentPhase = {game.currentPhase} score = {playerData.score} timer = {timer}/>
+                <div className = {styles.PromptCard}>
+                    <div className = {styles.PromptCardContent}>
+                        <p className = {styles.PromptHeader}> prompt </p>
+                        <div className = {styles.PromptText}>
                             {game.currentPrompt.prompt}
                         </div>
                     </div>

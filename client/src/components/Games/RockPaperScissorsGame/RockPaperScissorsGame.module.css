@@ -30,6 +30,7 @@
     color:inherit;
 }
 .State{
+    max-height: 50vh;
     color:rgba(255, 255, 255, 0.377);
     overflow-y: auto;
     display: flex;

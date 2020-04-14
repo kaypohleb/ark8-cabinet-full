@@ -25,20 +25,20 @@ class UserHomeMobile extends Component{
         let joinButton = null;
         if(this.props.joining){
             join = (<PinInput
-                length={6}
-                inputStyle ={pinStyle}
+                length = {6}
+                inputStyle  = {pinStyle}
                 focus
-                ref={p => (this.pin = p)}
+                ref = {p => (this.pin = p)}
                 type="custom"
-                onChange={(val)=>this.props.roomIDChange(val)}
-                onComplete={(val)=>this.props.roomIDComplete(val)}
+                onChange = {(val)=>this.props.roomIDChange(val)}
+                onComplete = {(val)=>this.props.roomIDComplete(val)}
               />)
         }
         if(this.props.joinIdComplete){
             joinButton =  (<StyledMobileButton 
-            whileHover={{scale:1.1}}
-            whileTap={{scale:0.8}}
-            onClick={()=>{this.props.joinRoom()}}>
+            whileHover = {{scale:1.1}}
+            whileTap = {{scale:0.8}}
+            onClick = {()=>{this.props.joinRoom()}}>
             JOIN ROOM</StyledMobileButton>);
         }
         
@@ -53,40 +53,40 @@ class UserHomeMobile extends Component{
         return(
         
         <div className = {styles.UserHomeMobile}>
-            <Modal show={this.props.joining} modalClosed={()=>this.props.exitJoinScreen()}>
-                <div className={styles.joinCard}>
-                <p className={styles.joinTitle}>Please type the room number</p>
+            <Modal show = {this.props.joining} modalClosed = {()=>this.props.exitJoinScreen()}>
+                <div className = {styles.joinCard}>
+                <p className = {styles.joinTitle}>Please type the room number</p>
                 {join}
                 {joinButton}
                 </div>
                </Modal>   
-            <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
-            <div className={styles.options}>
+            <h1 className = {styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
+            <div className = {styles.options}>
                 <StyledMobileButton
-                style ={{backgroundColor: "#12CCB1", width:"70%", height:"5vh",textAlign:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.createRoom()}>CREATE ROOM</StyledMobileButton>
+                style  = {{backgroundColor: "#12CCB1", width:"70%", height:"5vh",textAlign:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.createRoom()}>CREATE ROOM</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#E51749", width:"70%", height:"5vh", textAlign:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.enterJoinScreen()}>JOIN ROOM</StyledMobileButton>
+                style  = {{backgroundColor: "#E51749", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.enterJoinScreen()}>JOIN ROOM</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#FF8DC6", width:"70%", height:"5vh", textAlign:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.signOut()}>GAME HISTORY</StyledMobileButton>
+                style  = {{backgroundColor: "#FF8DC6", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.signOut()}>GAME HISTORY</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#EBFF05", width:"70%", height:"5vh", textAlign:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.signOut()}>SETTINGS</StyledMobileButton>
+                style  = {{backgroundColor: "#EBFF05", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.signOut()}>SETTINGS</StyledMobileButton>
                 <StyledMobileButton 
-                style ={{backgroundColor: "#8B940C", width:"70%", height:"5vh", textAlign:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.signOut()}>SIGN OUT</StyledMobileButton>
+                style  = {{backgroundColor: "#8B940C", width:"70%", height:"5vh", textAlign:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.signOut()}>SIGN OUT</StyledMobileButton>
             </div>
         </div>
         );

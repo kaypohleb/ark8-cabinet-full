@@ -105,34 +105,34 @@ class DrawableCanvas extends Component {
         let prompt,submitButton,drawable = null;
         if(!this.props.disableDraw){
           
-          submitButton = <StyledMobileButton className={styles.Buttons} onClick={()=>this.props.gameAction({userId: this.props.userId, drawing:this.state.lines},"SEND_DRAWING")}>SUBMIT</StyledMobileButton>
-          prompt = <div className={styles.Prompt}>{this.props.prompt}</div>
+          submitButton = <StyledMobileButton className = {styles.Buttons} onClick = {()=>this.props.gameAction({userId: this.props.userId, drawing:this.state.lines},"SEND_DRAWING")}>SUBMIT</StyledMobileButton>
+          prompt = <div className = {styles.Prompt}>{this.props.prompt}</div>
           drawable = <div
-          className={styles.drawArea}
+          className = {styles.drawArea}
           ref="drawArea"
-          onMouseDown={this.handleMouseDown}
-          onMouseMove={this.handleMouseMove}
-          onTouchStart={this.handleTouchStart}
-          onTouchMove={this.handleTouchMove}
+          onMouseDown = {this.handleMouseDown}
+          onMouseMove = {this.handleMouseMove}
+          onTouchStart = {this.handleTouchStart}
+          onTouchMove = {this.handleTouchMove}
           > 
-          <Drawing lines={this.state.lines} />
+          <Drawing lines = {this.state.lines} />
           </div>;
           
         }else{
           drawable = (<div
-          className={styles.drawArea}
+          className = {styles.drawArea}
           ref="drawArea"
-          onMouseDown={this.handleMouseDown}
-            onMouseMove={this.handleMouseMove}
-            onTouchStart={this.handleTouchStart}
-            onTouchMove={this.handleTouchMove}
+          onMouseDown = {this.handleMouseDown}
+            onMouseMove = {this.handleMouseMove}
+            onTouchStart = {this.handleTouchStart}
+            onTouchMove = {this.handleTouchMove}
                       
           >
-          <Drawing lines={this.props.lines} />
+          <Drawing lines = {this.props.lines} />
         </div>)
         }
         return (
-          <div className={styles.DrawableCanvas}>          
+          <div className = {styles.DrawableCanvas}>          
             {prompt}
             {drawable}
             {submitButton}

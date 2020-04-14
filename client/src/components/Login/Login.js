@@ -16,14 +16,14 @@ class Login extends Component{
         return (
         <div className ="Login">
           <StyledHeader
-          animate={{y:-20}}
-          transition={{
+          animate = {{y:-20}}
+          transition = {{
             yoyo: Infinity,
             duration:2,
             ease:"easeInOut"
           }}>Sign in</StyledHeader>
           <StyledFirebaseAuth
-          uiConfig={this.props.uiConfig}
+          uiConfig = {this.props.uiConfig}
           firebaseAuth = {this.props.clicked()}
           />
         </div>

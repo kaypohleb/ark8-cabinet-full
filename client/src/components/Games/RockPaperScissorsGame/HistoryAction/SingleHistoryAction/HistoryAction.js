@@ -15,20 +15,20 @@ class HistoryAction extends Component{
         let icon =null;
         switch(this.props.selection){
             case "rock":
-                icon = <StyledIcon src={RockIcon} alt="rockicon" />
+                icon = <StyledIcon src = {RockIcon} alt="rockicon" />
                 break;
             case "paper":
-                icon = <StyledIcon src={PaperIcon} alt="papericon" />
+                icon = <StyledIcon src = {PaperIcon} alt="papericon" />
                 break;
             case "scissors":
-                icon = <StyledIcon src={ScissorsIcon} alt="scissorsicon" />
+                icon = <StyledIcon src = {ScissorsIcon} alt="scissorsicon" />
                 break;
             default:
                 icon = <p> nothing</p>
         }
         return(
-            <div className={styles.HistoryAction}>
-                <div className={styles.Action}>
+            <div className = {styles.HistoryAction}>
+                <div className = {styles.Action}>
                 <p>{this.props.playerName} played </p>
                 {icon}
                 </div>

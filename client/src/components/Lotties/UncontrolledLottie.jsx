@@ -18,9 +18,9 @@ class UncontrolledLottie extends Component {
 
     return(
       <Mux>
-        <Lottie options={defaultOptions}
-              height={this.props.height}
-              width={this.props.width}
+        <Lottie options = {defaultOptions}
+              height = {this.props.height}
+              width = {this.props.width}
         />
       </Mux>
     )

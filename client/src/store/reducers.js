@@ -67,7 +67,7 @@ function fetchLobbyDataReducer(state=initLobbyState,action){
     }
 }
 
-function fetchGameDataReducer(state={},action){
+function fetchGameDataReducer(state = {},action){
     switch(action.type){
         case(type.UPDATE_GAME_STATE_SUCCESS):
             return ({

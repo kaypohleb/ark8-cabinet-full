@@ -6,10 +6,13 @@ class DrawfulSM {
         this.selectedDrawing = null;
     }
     step(userId, action, gameState, playerStates, hiddenState){
-        let updatedGameState = {...gameState};
-       
+        let updatedGameState = {
+            ...gameState,
+            gameEnded:false,
+        }
         let updatedPlayerStates = {...playerStates};
         let updatedHiddenState = {...hiddenState};
+        
         if (gameState.currentPhase === 'INITIAL'){
             console.log(action);
             if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
@@ -233,7 +236,7 @@ class DrawfulSM {
                     console.log("end of drawings");
                     updatedGameState = {
                         ...updatedGameState,
-                        toEnd: true,
+                        gameEnded:true,
                     }
                 }
                 else {
@@ -291,6 +294,7 @@ class DrawfulSM {
             }
 
         }
+        
 
         return {game: updatedGameState, players: updatedPlayerStates, hidden: updatedHiddenState}
     }

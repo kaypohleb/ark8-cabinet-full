@@ -36,23 +36,23 @@ const StatusBar = (props) => {
 
 
     return (
-        <div className={styles.StatusBar}>
-            <div className={styles.RoundDisplay}>
-                <div className={styles.RoundText}>round</div>
-                <div className={styles.RoundNumber}>{props.currentRound}</div>
+        <div className = {styles.StatusBar}>
+            <div className = {styles.RoundDisplay}>
+                <div className = {styles.RoundText}>round</div>
+                <div className = {styles.RoundNumber}>{props.currentRound}</div>
             </div>
-            <div className={styles.Displays}>
-                <div className={styles.PhaseDisplay}>
+            <div className = {styles.Displays}>
+                <div className = {styles.PhaseDisplay}>
                     <p>phase</p> 
-                    <div className={styles.DisplayBox}>{phaseText}</div>
+                    <div className = {styles.DisplayBox}>{phaseText}</div>
                 </div>
 
-                <div className={styles.ScoreTimerDisplay}>
+                <div className = {styles.ScoreTimerDisplay}>
                     <p>score</p> 
-                    <div className={styles.DisplayBox}>{props.score}</div>
+                    <div className = {styles.DisplayBox}>{props.score}</div>
                     <p>timer</p> 
-                    <div className={styles.DisplayBox}>
-                    <Countdown key={props.timer} date={props.timer} renderer={renderer}/>
+                    <div className = {styles.DisplayBox}>
+                    <Countdown key = {props.timer} date = {props.timer} renderer = {renderer}/>
                     </div>
                 </div>
             </div>

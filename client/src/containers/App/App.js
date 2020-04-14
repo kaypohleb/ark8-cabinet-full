@@ -22,12 +22,12 @@ class App extends Component{
     return (
       <Router>
         <div className = "App">
-          <ToastContainer autoClose={false}/>
+          <ToastContainer autoClose = {false}/>
           <Switch>
-            <Route exact path ="/" component={Home}/>
-            <Route exact path = "/profile" component={UserHome}/>
-            <Route exact path = "/lobby" component={Lobby}/>
-            <Route exact path = "/game" component={GameRoom}/>
+            <Route exact path ="/" component = {Home}/>
+            <Route exact path = "/profile" component = {UserHome}/>
+            <Route exact path = "/lobby" component = {Lobby}/>
+            <Route exact path = "/game" component = {GameRoom}/>
           </Switch>
         </div>
       </Router>

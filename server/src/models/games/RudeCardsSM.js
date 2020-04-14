@@ -137,7 +137,7 @@ class RudeCardsSM{
             
         }
         else if (gameState.currentPhase == 'GAME_END'){
-            // this phase does nothing
+            gameState.gameEnded = true;
 
         }
     

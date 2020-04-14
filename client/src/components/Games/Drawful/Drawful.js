@@ -34,28 +34,6 @@ class Drawful extends Component{
         fakeValue:"",
         waiting:false,
     }
-
-    static getDerivedStateFromProps(nextProps, prevState){
-        // console.log(nextProps);
-        if(nextProps.game){
-            return { 
-            timerStart: nextProps.game.timerStart,
-            timerLength: nextProps.game.timerLength,
-            currentPhase: nextProps.game.currentPhase,
-            currentDrawing:nextProps.game.currentDrawing,
-            totalRounds: nextProps.game.totalRounds,
-            currentRound:nextProps.game.currentRound,
-            players:nextProps.game.players,
-            history: nextProps.game.history,
-            roomId: nextProps.roomId,
-            gameId: nextProps.gameId,
-            player: nextProps.player,
-            userId: nextProps.userId,
-         };
-        }else{
-            return null;
-        }
-     }
      
     componentDidUpdate(prevProps, prevState){
        if(prevProps!==this.props){
@@ -92,16 +70,16 @@ class Drawful extends Component{
     render(){
         let phase,waitingOn,answerList,fakeAnswer,reveal,gameScores = null;
         if(this.state.players){
-            gameScores = <div className={styles.Scores}>
+            gameScores = <div className = {styles.Scores}>
                 {this.state.players.map((player) =>{ 
-                    return (<Score key={player.id} playerName={player.name} score={player.score} playerId = {player.id}/>
+                    return (<Score key = {player.id} playerName = {player.name} score = {player.score} playerId = {player.id}/>
                     )}
                 )}
-                <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId},"ACKNOWLEDGE")}>OKAY</StyledMobileButton>
+                <StyledMobileButton onClick = {()=>this.props.gameAction({userId: this.props.userId},"ACKNOWLEDGE")}>OKAY</StyledMobileButton>
                 </div>;
         }
         if(this.state.waiting){
-            waitingOn = <div className={styles.Waiting}>
+            waitingOn = <div className = {styles.Waiting}>
                 <p>Waiting on...</p>
                 {this.state.players.map((player)=>{
                     if(!player.ready){
@@ -115,44 +93,44 @@ class Drawful extends Component{
        
         if(this.state.player){
             if(this.state.userId !== this.state.currentDrawing.userId){
-            fakeAnswer = <div className={styles.FakeAnswer}>
-                    <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+            fakeAnswer = <div className = {styles.FakeAnswer}>
+                    <div className = {styles.displayDrawing}>
+                    <Drawing lines = {this.state.currentDrawing.drawing} disableDraw = {true} userId = {this.state.userId} prompt = {this.state.player.prompt} gameAction = {this.props.gameAction}/>;
                     </div>
-                    <input value={this.state.fakeValue} onChange={this.inputHandleChange} className={styles.inputBox} type="text" placeholder="please write your fake answer"></input>
-                    <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>SUBMIT</StyledMobileButton>
+                    <input value = {this.state.fakeValue} onChange = {this.inputHandleChange} className = {styles.inputBox} type="text" placeholder="please write your fake answer"></input>
+                    <StyledMobileButton onClick = {()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>SUBMIT</StyledMobileButton>
                 </div>
             }
             else{
-                fakeAnswer = <div className={styles.FakeAnswer}>
-                    <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                fakeAnswer = <div className = {styles.FakeAnswer}>
+                    <div className = {styles.displayDrawing}>
+                    <Drawing lines = {this.state.currentDrawing.drawing} disableDraw = {true} userId = {this.state.userId} prompt = {this.state.player.prompt} gameAction = {this.props.gameAction}/>;
                     </div>
                     <div> its your drawing, enjoy it while others are making their answers</div>
                 </div>
             }
             if(this.state.player.shownAnswers ){
-                answerList = (<div className={styles.AnswerList}>
-                    <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                answerList = (<div className = {styles.AnswerList}>
+                    <div className = {styles.displayDrawing}>
+                    <Drawing lines = {this.state.currentDrawing.drawing} disableDraw = {true} userId = {this.state.userId} prompt = {this.state.player.prompt} gameAction = {this.props.gameAction}/>;
                     </div>
                     
                     {this.state.player.shownAnswers.map((answer)=>{
-                        return <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
+                        return <StyledMobileButton onClick = {()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
                     })}
                 </div>);
             }
             else{
-                answerList = (<div className={styles.AnswerList}>
-                    <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                answerList = (<div className = {styles.AnswerList}>
+                    <div className = {styles.displayDrawing}>
+                    <Drawing lines = {this.state.currentDrawing.drawing} disableDraw = {true} userId = {this.state.userId} prompt = {this.state.player.prompt} gameAction = {this.props.gameAction}/>;
                     </div>
                     <p> its your drawing, enjoy it while others are making their decision</p>
                     </div>);
             }
             
             if(!(this.state.currentDrawing.answers instanceof Array) && this.state.currentDrawing.answers!=null){
-                reveal = <div className={styles.Reveal}>
+                reveal = <div className = {styles.Reveal}>
                     {
                         Object.keys(this.state.currentDrawing.answers).map(answer=>{
                             let answerType = "FAKE";
@@ -164,17 +142,17 @@ class Drawful extends Component{
                                 <p>{answerType}</p>
                                 <p>{answer}</p>
                                 <p>Made by</p>
-                                <OwnerPlayer key = {this.state.currentDrawing.answers[answer].owner} name={this.state.currentDrawing.answers[answer].owner}/>
+                                <OwnerPlayer key = {this.state.currentDrawing.answers[answer].owner} name = {this.state.currentDrawing.answers[answer].owner}/>
                                 <p>Fooled</p>
                                 {this.state.currentDrawing.answers[answer].selected.map(player=>{
-                                    return <SmallerPlayer key = {player} name={player}/>
+                                    return <SmallerPlayer key = {player} name = {player}/>
                                 })}
 
                                 </div>
 
                         })
                     }
-                    <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId},"SEE_SCORE")}>SEE SCORES</StyledMobileButton>
+                    <StyledMobileButton onClick = {()=>this.props.gameAction({userId: this.props.userId},"SEE_SCORE")}>SEE SCORES</StyledMobileButton>
                 </div>
             }
             
@@ -182,10 +160,10 @@ class Drawful extends Component{
         
         switch(this.state.currentPhase){
             case "INITIAL":
-                phase = <div className={styles.Initial}>DRAW WELL AND GUESS WELL</div>;
+                phase = <div className = {styles.Initial}>DRAW WELL AND GUESS WELL</div>;
                 break;
             case "DRAWING":
-                phase = <DrawableCanvas disableDraw={false} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                phase = <DrawableCanvas disableDraw = {false} userId = {this.state.userId} prompt = {this.state.player.prompt} gameAction = {this.props.gameAction}/>;
                 break;
             case "FAKE_ANSWER":
                 phase = <Mux>{fakeAnswer}</Mux>
@@ -204,9 +182,9 @@ class Drawful extends Component{
         }
        
         return(
-            <div className={styles.GameBG}>
-            <div className={styles.GameContent}>
-                <Modal show={this.state.waiting}  modalClosed={this.waitScreenHandler}>
+            <div className = {styles.GameBG}>
+            <div className = {styles.GameContent}>
+                <Modal show = {this.state.waiting}  modalClosed = {this.waitScreenHandler}>
                     {waitingOn} 
                 </Modal> 
                 

@@ -14,7 +14,7 @@ const breakpoints = {
 }
 
 ReactDOM.render(
-    <Provider store ={store}>
+    <Provider store  = {store}>
     <ReactBreakpoints breakpoints = {breakpoints}>
         <App />
     </ReactBreakpoints>

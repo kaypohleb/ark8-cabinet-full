@@ -4,7 +4,7 @@ function Drawing({ lines }) {
     return (
       <svg  viewBox="0 0 400 400" preserveAspectRatio="xMinYMin meet">
         {lines.map((line, index) => (
-          <DrawingLine key={index} line={line} />
+          <DrawingLine key = {index} line = {line} />
         ))}
       </svg>
     );

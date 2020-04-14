@@ -4,10 +4,10 @@ import Mux from '../../../hoc/Mux';
 import Backdrop from '../Backdrop/Backdrop';
 const modal = (props) => (
     <Mux>
-        <Backdrop show={props.show} clicked={props.modalClosed}/>
+        <Backdrop show = {props.show} clicked = {props.modalClosed}/>
     
     <div className = {styles.Modal}
-        style ={{transform:props.show ? 'translateY(0)' : 'translateY(-300vh)',
+        style  = {{transform:props.show ? 'translateY(0)' : 'translateY(-300vh)',
                 opactity: props.show ? '1': '0'}}>
         {props.children}
     </div>

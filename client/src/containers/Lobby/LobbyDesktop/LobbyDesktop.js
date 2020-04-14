@@ -19,14 +19,14 @@ class LobbyDesktop extends Component{
             if(this.props.gameChosenCnfrm){
                 startGameButton = (
                     <StyledMobileButton 
-                        whileHover={{scale:1.1}}
-                        whileTap={{scale:0.8}}
-                        onClick={()=>{this.props.startGame()}}>
+                        whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}}
+                        onClick = {()=>{this.props.startGame()}}>
                         Start Game</StyledMobileButton>);
             }
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
-                <StyledSelect defaultValue="" onChange={(e)=>this.props.selectChange(e)}>
+                <StyledSelect defaultValue="" onChange = {(e)=>this.props.selectChange(e)}>
                     <option disabled value="">--pick-a-game--</option>
                     <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
                     <option value="DRAWFUL">drawful</option>
@@ -35,9 +35,9 @@ class LobbyDesktop extends Component{
                 {startGameButton}
                 </Mux>); 
             pickGame = (<StyledMobileButton 
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}} 
-                onClick={()=>this.props.gameScreenHandler()}>
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}} 
+                onClick = {()=>this.props.gameScreenHandler()}>
                     PICK A GAME
             </StyledMobileButton>)
 
@@ -45,45 +45,45 @@ class LobbyDesktop extends Component{
         
 
         if(this.props.gameStarted){
-            title = <LobbyHeader title={this.props.gameID} roomId={this.props.id} goBack={()=>this.props.goBack()}></LobbyHeader>
+            title = <LobbyHeader title = {this.props.gameID} roomId = {this.props.id} goBack = {()=>this.props.goBack()}></LobbyHeader>
             options = null;
-            current = <GameRoom game={this.props.gameID} userID={this.props.userID}></GameRoom>
+            current = <GameRoom game = {this.props.gameID} userID = {this.props.userID}></GameRoom>
         }else{
             if(this.props.getInfo){
                 players = (<Mux>{this.props.players.map((player)=>{
                     if(player.id === this.props.admin){
-                        return <CreatedPlayer key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                        return <CreatedPlayer key = {player.id}name = {player.name} id = {player.id} ready = {player.ready}/>
                     }
                     else{
-                        return <Player key={player.id}name={player.name} id={player.id} ready={player.ready}/>
+                        return <Player key = {player.id}name = {player.name} id = {player.id} ready = {player.ready}/>
                     }
                 })}</Mux>) ;
                 
             }
-            current = <div className={styles.Players}>           
+            current = <div className = {styles.Players}>           
                 {players}
             </div>;
-            options= <div className={styles.LobbyOptions}>
+            options= <div className = {styles.LobbyOptions}>
                 {pickGame}
                 {ready}
                 </div>;
-            modalPickGame = <Modal show={this.props.show} modalClosed={()=>this.props.gameScreenHandler()}>
+            modalPickGame = <Modal show = {this.props.show} modalClosed = {()=>this.props.gameScreenHandler()}>
                 {chooseGame}
             </Modal>
-            title = <LobbyHeader title="Lobby" roomId={this.props.id} goBack={()=>this.props.goBack()}></LobbyHeader>
+            title = <LobbyHeader title="Lobby" roomId = {this.props.id} goBack = {()=>this.props.goBack()}></LobbyHeader>
         }
     
         if(this.props.gameID){
             if(this.props.readyState){
                 ready = (<StyledMobileButton
-                    whileHover={{scale:1.1}}
-                    whileTap={{scale:0.8}} 
-                    onClick={()=>this.props.unready()}>UNREADY</StyledMobileButton>)
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}} 
+                    onClick = {()=>this.props.unready()}>UNREADY</StyledMobileButton>)
             }else{
                 ready = (<StyledMobileButton
-                    whileHover={{scale:1.1}}
-                    whileTap={{scale:0.8}} 
-                    onClick={()=>this.props.ready()}>READY</StyledMobileButton>)
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}} 
+                    onClick = {()=>this.props.ready()}>READY</StyledMobileButton>)
             }
         }
         if(!this.props.id){
@@ -98,9 +98,9 @@ class LobbyDesktop extends Component{
         
         return (
             
-            <div className={styles.LobbyDesktop}>
+            <div className = {styles.LobbyDesktop}>
                 {modalPickGame}
-                <div className={styles.LobbyContent}>
+                <div className = {styles.LobbyContent}>
                 {title}
                 {current}
                 </div>
