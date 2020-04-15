@@ -1,5 +1,5 @@
 const express = require('express');
-const {getUserData, updateUserData} = require('../firebase/utils');
+const {getUserData, updateUserData,getGameHistory} = require('../firebase/utils');
 const router = express.Router();
 
 router.post('/getUser', async (req, res) => {
@@ -26,6 +26,25 @@ router.post('updateUserData', async (req, res) => {
     }
 
     return res.json(user);
+})
+
+router.post('/getUserHistory',async (req, res) => {
+    const userId = req.userId;
+    const history= await getGameHistory(userId);;
+    console.log("GOt the history");
+    console.log(history);
+    
+    if (!history){
+        return res.json({
+            history:[],
+            getInfo: false,
+        })
+    }
+
+    return res.json({
+        history:history,
+        getInfo:true,
+    });
 })
 
 

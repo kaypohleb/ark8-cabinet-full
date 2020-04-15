@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import { connect  } from 'react-redux';
-import { withRouter } from  'react-router-dom';
+import { withRouter,Redirect } from  'react-router-dom';
 import { closeRoom,
          createRoom, 
          enterRoom,
@@ -20,10 +20,12 @@ import { toast } from 'react-toastify';
 class Lobby extends Component{
     constructor(props){
         super(props);
-        if(this.props.location.state.join===false){
-            this.props.createRoom();
-        }else if(this.props.location.state.join===true){
-            this.props.enterRoom(this.props.location.state.roomID)
+        if(this.props.location.state!==undefined){
+            if(this.props.location.state.join===false){
+                this.props.createRoom();
+            }else if(this.props.location.state.join===true){
+                this.props.enterRoom(this.props.location.state.roomID)
+            }
         }
         this.readyHandler = this.readyHandler.bind(this);
         this.unreadyHandler = this.unreadyHandler.bind(this);
@@ -35,7 +37,6 @@ class Lobby extends Component{
 
     state = {
         gameChosenCnfrm: false,
-        join: this.props.location.state.join,
         createdBy:"",
         userID:'',
         players:[],
@@ -43,7 +44,7 @@ class Lobby extends Component{
         getInfo:false,
         game:"",
         gameStarted:false,
-        isSignedIn:true,
+        isSignedIn:undefined,
         ready:false,
         gameScreen: false,  
     }
@@ -65,17 +66,18 @@ class Lobby extends Component{
 
     componentDidUpdate(prevProps, prevState){
        if(prevProps !== this.props){
-            this.setState({
-                id: this.props.id,
-                createdBy: this.props.createdBy,
-                admin: this.props.admin,
-                game: this.props.game,
-                players: this.props.players,
-                userID:this.props.userID,
-                getInfo: this.props.getInfo,
-                gameStarted: this.props.gameStarted,
-                isSignedIn: this.props.isSignedIn,
-            });
+                this.setState({
+                    id: this.props.id,
+                    createdBy: this.props.createdBy,
+                    admin: this.props.admin,
+                    game: this.props.game,
+                    players: this.props.players,
+                    userID:this.props.userID,
+                    getInfo: this.props.getInfo,
+                    gameStarted: this.props.gameStarted,
+                    isSignedIn: this.props.isSignedIn,
+                });
+            
         }
     }
 
@@ -125,6 +127,10 @@ class Lobby extends Component{
     render(){
         
        let loader = null;
+       if(this.state.isSignedIn===false && !this.state.userID){
+            
+        return <Redirect to="/"/>
+        }
        loader = (<Media>
         {({ breakpoints, currentBreakpoint }) =>
         {
@@ -157,7 +163,7 @@ class Lobby extends Component{
 }
 
 const mapStateToProps = (state) => {
-    
+    console.log(state);
     return{
         id: state.fetchLobbyDataReducer.id,
         createdBy: state.fetchLobbyDataReducer.createdBy,

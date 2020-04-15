@@ -7,8 +7,8 @@ class RockPaperScissorsSM {
         
         let updatedPlayerStates = {...playerStates};
         if(action.actionType == 'END_GAME'){
-            console.log(action);
-            console.log(updatedGameState);
+            //console.log(action);
+            //console.log(updatedGameState);
             updatedGameState = {
                 ...updatedGameState,
                 gameEnded: true,

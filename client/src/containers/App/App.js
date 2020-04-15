@@ -12,6 +12,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import GameHistory from '../GameHistory/GameHistory';
 
 
 
@@ -26,6 +27,7 @@ class App extends Component{
           <Switch>
             <Route exact path ="/" component = {Home}/>
             <Route exact path = "/profile" component = {UserHome}/>
+            <Route exact path = "/history" component = {GameHistory}/>
             <Route exact path = "/lobby" component = {Lobby}/>
             <Route exact path = "/game" component = {GameRoom}/>
           </Switch>

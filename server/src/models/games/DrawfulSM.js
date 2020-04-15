@@ -14,7 +14,7 @@ class DrawfulSM {
         let updatedHiddenState = {...hiddenState};
         
         if (gameState.currentPhase === 'INITIAL'){
-            console.log(action);
+            //console.log(action);
             if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
                 
                 updatedGameState = {
@@ -138,7 +138,7 @@ class DrawfulSM {
         else if (gameState.currentPhase === 'PICK_ANSWER'){
             
             if (action.actionType === 'PICK_ANSWER'){
-                console.log(action);
+                //console.log(action);
                 updatedPlayerStates[action.userId].pickedAnswer = action.pickedAnswer;
                 updatedGameState.players.forEach((player,index) => {
                     if(player.id === updatedGameState.currentDrawing.userId){

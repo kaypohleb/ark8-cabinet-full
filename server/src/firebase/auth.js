@@ -27,7 +27,8 @@ const checkAuth = async (req, res, next) => {
 
     if (userId == null){
         return res.json({
-            error: "Authentication Error"
+            error: "Authentication Error",
+            getInfo: false,
         })
     }
 

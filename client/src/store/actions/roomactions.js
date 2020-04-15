@@ -24,6 +24,7 @@ export const createRoom = () =>{
          
           dispatch(enterRoom(response.data.id));
         }).catch(error => {
+          console.log("caught");
           dispatch({
             type: UPDATE_ROOM_STATE_ERROR,
             error
@@ -41,13 +42,18 @@ export const enterRoom = (roomID) =>{
     socket.open();
     socket.emit('authentication', getState().idtokenReducer.idToken);
     socket.on('room_state_update', (room) =>{
-      console.log({...room});
+      console.log({...room})
       dispatch(updateRoomStateSuccess(room));
     })  
     socket.on('error', (data) => {
+      console.log(data);
+      if(data==="Invalid namespace"){
+        dispatch(updateRoomStateError());
+      }
       toast.error(`Error: ${data}`);
     })
     socket.on('room_action_error', (data) => {
+      console.log("room error");
       toast.error(`Room Action Error: ${data.message}`);
     })
   }
@@ -120,10 +126,19 @@ export const publishGameAction = (data, actionType) => {
 const updateRoomStateSuccess = (room) =>({
   type:UPDATE_ROOM_STATE_SUCCESS,
   payload:{
-    ...room
+    ...room,
     }
   
 })
+
+const updateRoomStateError = () =>({
+  type:UPDATE_ROOM_STATE_ERROR,
+  payload:{
+    }
+  
+})
+
+
 
 const updateGameStateSuccess = (data) =>({
     type:UPDATE_GAME_STATE_SUCCESS,

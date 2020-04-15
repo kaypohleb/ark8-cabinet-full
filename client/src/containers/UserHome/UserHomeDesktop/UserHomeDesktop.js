@@ -82,6 +82,7 @@ class UserHomeDesktop extends Component{
                     style  = {{backgroundColor: "#FF8DC6", width:"100%", textAlign:"center"}}
                     whileHover = {{scale:1.1}}
                     whileTap = {{scale:0.8}}
+                    onClick = {()=>this.props.enterHistory()}>
                     >GAME HISTORY</StyledButton>
                 <StyledButton 
                     style  = {{backgroundColor: "#EBFF05", width:"100%", textAlign:"center"}}

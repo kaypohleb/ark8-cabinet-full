@@ -101,7 +101,7 @@ class RudeCardsGame {
         this.hiddenState = hidden;
 
 
-        console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
+        //console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
         this.gameStateUpdateCallback(game, players);
     }
 

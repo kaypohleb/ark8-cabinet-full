@@ -21,6 +21,7 @@ class UserHome extends Component{
         this.exitJoinScreenHandler = this.exitJoinScreenHandler.bind(this);
         this.roomIDChange = this.roomIDChange.bind(this);
         this.roomIDComplete = this.roomIDComplete.bind(this);
+        this.enterHistory = this.enterHistory.bind(this);
     }
     
     state = {
@@ -104,6 +105,13 @@ class UserHome extends Component{
             joinIdComplete: true,
         });
     }
+
+    enterHistory(){
+        this.props.history.push({
+            pathname:"/history"
+        });
+    }
+
     
     render(){
         
@@ -116,15 +124,15 @@ class UserHome extends Component{
                 return <Redirect to="/"/>
             }else if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
             
-             return <UserHomeDesktop name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeDesktop name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
          
-             return <UserHomeTablet name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeTablet name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
           
-             return <UserHomeMobile name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeMobile name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= 0){
              return <div className = {styles.Home}>Unable to display: use a bigger screen</div>

@@ -23,8 +23,6 @@ class GameRoom extends Component{
             }
             
         }
-         
-         console.log(this.state);
      }
     render(){
         let game=null;
