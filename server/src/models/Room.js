@@ -120,16 +120,16 @@ class Room {
             throw new Error("Game cannot be started as game has not been set");
         }
         
-        this.game.publishScoreCallback = (winner, players) => {
+        this.game.publishScoreCallback = async (winner, players) => {
             console.log('publishScoreCallback called!')
-            const refId = addGameResults({
+            const refId = await addGameResults({
             gameId: this.game.id,
             roomId: this.id,
             players,
             winner
             });
-            addGameResIDtoUserHistory(refId,players);
-        };
+            addGameResIDtoUserHistory(players,refId);
+        }
         
         this.gameStarted = true;
         this.game.start();

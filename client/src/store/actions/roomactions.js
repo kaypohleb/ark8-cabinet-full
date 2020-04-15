@@ -4,7 +4,7 @@ import{
     UPDATE_GAME_STATE_SUCCESS
   } from '../types';
 import axios from 'axios';
-import socketIOClient from "socket.io-client";
+import io from "socket.io-client";
 import {toast} from "react-toastify";
 const BASE_URL = 'http://localhost:3001';
 
@@ -37,7 +37,7 @@ export const enterRoom = (roomID) =>{
  
   return(dispatch,getState)=>{
  
-    socket = socketIOClient(BASE_URL+"/"+roomID);
+    socket = io(BASE_URL+"/"+roomID);
     socket.open();
     socket.emit('authentication', getState().idtokenReducer.idToken);
     socket.on('room_state_update', (room) =>{
@@ -108,6 +108,7 @@ export const exitGame =  ()=>{
   return()=>{
     console.log("exiting game");
     socket.removeAllListeners('game_state_update');
+    
   }
 }
 export const publishGameAction = (data, actionType) => {

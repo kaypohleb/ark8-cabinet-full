@@ -16,7 +16,7 @@ class RockPaperScissorsGame extends Component {
         this.scoreScreenHandler = this.scoreScreenHandler.bind(this);
     }
 
-    state = {
+    state={
         currentRound:0,
         players:[],
         history:[],
@@ -25,6 +25,18 @@ class RockPaperScissorsGame extends Component {
         gameId:"",
     }
     
+    static getDerivedStateFromProps(nextProps, prevState){
+        // console.log(nextProps);
+        if(nextProps.game){
+            return { 
+            currentRound:nextProps.game.currentRound,
+            players:nextProps.game.players,
+            history: nextProps.game.history,
+            roomId: nextProps.roomId,
+            gameId: nextProps.gameId,
+         };
+        }
+     }
 
     componentDidUpdate(prevProps, prevState){
        if(prevProps!==this.props){
@@ -56,42 +68,42 @@ class RockPaperScissorsGame extends Component {
         if(this.state.history){
             history = <div>
                 {this.state.history.map((historyround,index)=>{
-                    return (<HistoryRoundActions key = {index} players = {this.state.players} round = {historyround}/>
+                    return (<HistoryRoundActions key={index} players={this.state.players} round={historyround}/>
                     )}
                 )}
             </div>
         }
         return (
-            <div className = {styles.GameBG}>
-                <div className  = {styles.GameContent}>
-                    <div className = {styles.GameDirection}>
-                    <div className = {styles.RoundBoard}>
+            <div className={styles.GameBG}>
+                <div className ={styles.GameContent}>
+                    <div className={styles.GameDirection}>
+                    <div className={styles.RoundBoard}>
                     <h2>Current Round: {this.state.currentRound}</h2></div>  
-                    <div className = {styles.State}>
+                    <div className={styles.State}>
                         <p>Previously played Actions</p>
                         {history}
                     </div>
                     </div>
                 </div>
-                <div className = {styles.choices}>
+                <div className={styles.choices}>
                     <motion.img 
                     className = {styles.SelectionOptions}
-                    whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}}
-                    src = {Rock} alt="rock" 
-                    onClick = {()=>this.props.gameAction({selection:"rock"},"MAKE_SELECTION")}/>
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.8}}
+                    src={Rock} alt="rock" 
+                    onClick={()=>this.props.gameAction({selection:"rock"},"MAKE_SELECTION")}/>
                     <motion.img 
                     className = {styles.SelectionOptions}
-                    whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}}
-                    src = {Paper} alt="paper" 
-                    onClick = {()=>this.props.gameAction({selection:"paper"},"MAKE_SELECTION")}/>
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.8}}
+                    src={Paper} alt="paper" 
+                    onClick={()=>this.props.gameAction({selection:"paper"},"MAKE_SELECTION")}/>
                     <motion.img 
                     className = {styles.SelectionOptions}
-                    whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}}
-                    src = {Scissors} alt="scissors" 
-                    onClick = {()=>this.props.gameAction({selection:"scissors"},"MAKE_SELECTION")}/>
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.8}}
+                    src={Scissors} alt="scissors" 
+                    onClick={()=>this.props.gameAction({selection:"scissors"},"MAKE_SELECTION")}/>
                 </div>
             </div>
         )

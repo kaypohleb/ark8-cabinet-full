@@ -1,5 +1,5 @@
 const firebase = require('./firebase');
-
+const admin = require('firebase-admin');
 const db = firebase.firestore();
 
 const getUserData = async (userId) => {
@@ -44,13 +44,16 @@ const addGameResults = async ({gameId, winner, roomId, players}) => {
     return ref.id;
 };
 
-const addGameResIDtoUserHistory = async({refId,players}) =>{
-    for(player in players){
+const addGameResIDtoUserHistory = (players,refId) =>{
+    console.log("addding to firebase");
+    console.log(refId);
+    players.forEach( async(player)=>{
+        console.log(player.id);
+        
         const history = await db.collection('users').doc(player.id).update({
-            history: firebase.firestore.FieldValue.arrayUnion(refId)
+            history: admin.firestore.FieldValue.arrayUnion(refId)
         })
-    }
-    
+    })
 }
 
 const getGameHistory = async (userId) => {
@@ -62,6 +65,13 @@ const getGameHistory = async (userId) => {
 
     return userHistory
 }
+
+async function asyncForEach(array, callback,ref) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index],ref);
+    }
+  }
+
 
 module.exports = {
     getUserData,
