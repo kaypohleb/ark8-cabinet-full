@@ -13,7 +13,7 @@ class LobbyMobile extends Component{
 
     render(){
         
-        let players,options,startGameButton,chooseGame,ready,pickGame,current,modalPickGame,title = null;
+        let players,options,startGameButton,gameChosen,chooseGame,ready,pickGame,current,modalPickGame,title = null;
         if(this.props.userID === this.props.admin){
           
             if(this.props.gameChosenCnfrm){
@@ -74,6 +74,7 @@ class LobbyMobile extends Component{
         }
     
         if(this.props.gameID){
+            gameChosen = <div>GAME CHOSEN: {this.props.gameID}</div>
             if(this.props.readyState){
                 ready = (<StyledMobileButton
                     whileHover = {{scale:1.1}}
@@ -102,6 +103,7 @@ class LobbyMobile extends Component{
                 {modalPickGame}
                 <div className = {styles.LobbyContent}>
                 {title}
+                {gameChosen}
                 {current}
                 </div>
                 {options}
