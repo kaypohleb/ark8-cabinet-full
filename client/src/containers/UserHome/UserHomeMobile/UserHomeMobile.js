@@ -21,8 +21,7 @@ const pinStyle = {
 class UserHomeMobile extends Component{
     
     render(){
-        let join = null;
-        let joinButton = null;
+        let join,name,joinButton = null;
         if(this.props.joining){
             join = (<PinInput
                 length = {6}
@@ -50,6 +49,13 @@ class UserHomeMobile extends Component{
             </div>)
         }
 
+        if(!this.props.useNew){
+            name= this.props.name;
+        }
+        else{
+            name = this.props.newName;
+        }
+
         return(
         
         <div className = {styles.UserHomeMobile}>
@@ -60,7 +66,14 @@ class UserHomeMobile extends Component{
                 {joinButton}
                 </div>
                </Modal>   
-            <h1 className = {styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
+               <Modal show = {this.props.naming} modalClosed = {()=>this.props.exitNamingScreen()}>
+                <div className = {styles.joinCard}>
+                <h2>You can change your nickname here</h2>
+                <input value={this.props.newName} onChange={(e)=>this.props.inputNameChangeHandler(e)} className={styles.inputBox} type="text" placeholder="new nickname"></input>
+                <StyledMobileButton onClick={()=>this.props.saveNickname()}>SAVE</StyledMobileButton>
+                </div>
+               </Modal> 
+            <h1 onClick = {()=>this.props.enterNamingScreen()}className = {styles.nameTitle}>{name}</h1>
             <div className = {styles.options}>
                 <StyledMobileButton
                 style  = {{backgroundColor: "#12CCB1", width:"70%", height:"5vh",textAlign:"center"}}
@@ -76,13 +89,8 @@ class UserHomeMobile extends Component{
                 style  = {{backgroundColor: "#FF8DC6", width:"70%", height:"5vh", textAlign:"center"}}
                 whileHover = {{scale:1.1}}
                 whileTap = {{scale:0.8}}
-                onClick = {()=>this.props.enterHistory()}
-                >GAME HISTORY</StyledMobileButton>
-                <StyledMobileButton 
-                style  = {{backgroundColor: "#EBFF05", width:"70%", height:"5vh", textAlign:"center"}}
-                whileHover = {{scale:1.1}}
-                whileTap = {{scale:0.8}}
-                >SETTINGS</StyledMobileButton>
+                onClick = {()=>this.props.enterHistory()}>
+                dGAME HISTORY</StyledMobileButton>
                 <StyledMobileButton 
                 style  = {{backgroundColor: "#8B940C", width:"70%", height:"5vh", textAlign:"center"}}
                 whileHover = {{scale:1.1}}

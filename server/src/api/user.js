@@ -1,5 +1,5 @@
 const express = require('express');
-const {getUserData, updateUserData,getGameHistory} = require('../firebase/utils');
+const {getUserData, updateUserData,getGameHistory,saveNicknameToFirestore} = require('../firebase/utils');
 const router = express.Router();
 
 router.post('/getUser', async (req, res) => {
@@ -26,7 +26,7 @@ router.post('updateUserData', async (req, res) => {
     }
 
     return res.json(user);
-})
+});
 
 router.post('/getUserHistory',async (req, res) => {
     const userId = req.userId;
@@ -45,7 +45,14 @@ router.post('/getUserHistory',async (req, res) => {
         history:history,
         getInfo:true,
     });
-})
+});
 
+router.post('/saveNickname',async (req, res) => {
+    console.log("trying to save");
+    const userId = req.userId;
+    const newName = req.body.name;
+    await saveNicknameToFirestore(userId,newName);
+
+});
 
 module.exports = router;

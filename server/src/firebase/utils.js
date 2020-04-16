@@ -80,7 +80,10 @@ const getGameHistory = async (userId) => {
     return gameListProcess;
 }
 
-
+const saveNicknameToFirestore = async(userId,newName) =>{
+    console.log(newName);
+    await db.collection('users').doc(userId).update({name:newName});
+}
 
 module.exports = {
     getUserData,
@@ -88,4 +91,5 @@ module.exports = {
     addGameResults,
     getGameHistory,
     addGameResIDtoUserHistory,
+    saveNicknameToFirestore,
 };

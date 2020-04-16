@@ -42,3 +42,25 @@ const fetchUserDataHistorySuccess = (res) => ({
     ...res,
   }
 })
+
+export const saveNickName = (newName) =>{
+  return async(dispatch,getState) =>{
+    let requestURL = `${BASE_URL}/saveNickname`;
+    console.log(newName);
+    await axios.post(
+      requestURL,
+      {name: newName},
+      {
+        headers: {
+          Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
+        }
+      }).then(response=>{
+          console.log(response);
+          
+        }).catch(error => {
+          console.log(error);
+          
+        })
+    
+    }
+}

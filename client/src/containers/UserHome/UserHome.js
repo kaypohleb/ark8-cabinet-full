@@ -4,7 +4,7 @@ import {withRouter, Redirect} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './UserHome.module.css';
 import { Media } from 'react-breakpoints';
-import {fetchUserData} from '../../store/actions/authactions';
+import {fetchUserData,saveNickName} from '../../store/actions/index';
 import UserHomeDesktop from './UserHomeDesktop/UserHomeDesktop';
 import UserHomeTablet from './UserHomeTablet/UserHomeTablet';
 import UserHomeMobile from './UserHomeMobile/UserHomeMobile';
@@ -19,9 +19,13 @@ class UserHome extends Component{
         this.joinRoomHandler = this.joinRoomHandler.bind(this);
         this.joinRoomScreenHandler = this.joinRoomScreenHandler.bind(this);
         this.exitJoinScreenHandler = this.exitJoinScreenHandler.bind(this);
+        this.joinNamingScreenHandler = this.joinNamingScreenHandler.bind(this);
+        this.exitNamingScreenHandler = this.exitNamingScreenHandler.bind(this);
         this.roomIDChange = this.roomIDChange.bind(this);
         this.roomIDComplete = this.roomIDComplete.bind(this);
         this.enterHistory = this.enterHistory.bind(this);
+        this.inputNameHandler = this.inputNameHandler.bind(this);
+        this.saveNicknameHandler = this.saveNicknameHandler.bind(this);
     }
     
     state = {
@@ -30,6 +34,9 @@ class UserHome extends Component{
         name:'',
         id:'',
         isSignedIn:true,
+        naming: false,
+        newName: '',
+        useNew: false,
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
@@ -91,6 +98,32 @@ class UserHome extends Component{
       })
     }
 
+    joinNamingScreenHandler(){
+        this.setState({
+            naming:true,
+          })
+    }
+
+    inputNameHandler(event){
+        this.setState({
+            newName: event.target.value
+        })
+    }
+    saveNicknameHandler(){
+        console.log("called");
+        const newNameH = this.state.newName;
+        this.props.dispatch(saveNickName(newNameH));
+        this.setState({
+            naming:false,
+            useNew: true,
+        });
+    }
+    exitNamingScreenHandler(){
+      this.setState({
+        naming:false,
+      })
+    }
+
     roomIDChange(value){
         this.setState({
             joinRoomId: value,
@@ -124,15 +157,15 @@ class UserHome extends Component{
                 return <Redirect to="/"/>
             }else if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
             
-             return <UserHomeDesktop name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeDesktop useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
          
-             return <UserHomeTablet name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeTablet useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
           
-             return <UserHomeMobile name = {this.state.name} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeMobile useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= 0){
              return <div className = {styles.Home}>Unable to display: use a bigger screen</div>

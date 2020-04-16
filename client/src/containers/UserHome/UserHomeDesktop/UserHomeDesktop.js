@@ -3,7 +3,7 @@ import styles from './UserHomeDesktop.module.css';
 import LoadingLottie from '../../../components/Lotties/LoadingLottie';
 import Modal from '../../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
-import {StyledButton} from '../../../components/StyledComponents/StyledButton';
+import {StyledButton,StyledMobileButton} from '../../../components/StyledComponents/StyledButton';
 import createRoomIcon from '../../../assets/svg/icon/createRoomIcon.svg';
 import joinRoomIcon from '../../../assets/svg/icon/joinRoomIcon.svg';
 const pinStyle = {
@@ -23,8 +23,7 @@ const pinStyle = {
 class UserHomeDesktop extends Component{
     
     render(){
-        let join = null;
-        let joinButton = null;
+        let join,name,joinButton = null;
         if(this.props.joining){
             join = (<PinInput
                 length = {6}
@@ -50,6 +49,12 @@ class UserHomeDesktop extends Component{
                 <LoadingLottie/>
             </div>)
         }
+        if(!this.props.useNew){
+            name= this.props.name;
+        }
+        else{
+            name = this.props.newName;
+        }
 
         return(
         
@@ -61,7 +66,14 @@ class UserHomeDesktop extends Component{
                 {joinButton}
                 </div>
                </Modal>   
-            <h1 className = {styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
+               <Modal show = {this.props.naming} modalClosed = {()=>this.props.exitNamingScreen()}>
+                <div className = {styles.joinCard}>
+                <h2>You can change your nickname here</h2>
+                <input value={this.props.newName} onChange={(e)=>this.props.inputNameChangeHandler(e)} className={styles.inputBox} type="text" placeholder="new nickname"></input>
+                <StyledMobileButton onClick={()=>this.props.saveNickname()}>SAVE</StyledMobileButton>
+                </div>
+               </Modal> 
+            <h1 onClick = {()=>this.props.enterNamingScreen()}className = {styles.nameTitle}>{name}</h1>
             <div className = {styles.options}>
             <StyledButton
                 style  = {{backgroundColor: "#12CCB1", height: "auto",width:"auto", display:"flex", flexDirection:"column"}}
@@ -83,12 +95,7 @@ class UserHomeDesktop extends Component{
                     whileHover = {{scale:1.1}}
                     whileTap = {{scale:0.8}}
                     onClick = {()=>this.props.enterHistory()}>
-                    >GAME HISTORY</StyledButton>
-                <StyledButton 
-                    style  = {{backgroundColor: "#EBFF05", width:"100%", textAlign:"center"}}
-                    whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}}
-                   >SETTINGS</StyledButton>
+                    GAME HISTORY</StyledButton>
                 <StyledButton 
                     style  = {{backgroundColor: "#8B940C", width:"100%", textAlign:"center"}}
                     whileHover = {{scale:1.1}}

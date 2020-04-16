@@ -47,3 +47,12 @@
   margin: 40px;
   
 }
+.inputBox {
+  border-radius: 25px;
+  border: 2px solid #DFEE0C;
+  padding: 20px; 
+  width: 200px;
+  height: 15px;
+  background-color: transparent;  
+  color: #DFEE0C;
+}
