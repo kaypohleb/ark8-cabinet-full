@@ -9,11 +9,13 @@ import {StyledSelect} from '../../../components/StyledComponents/StyledSelect';
 import LobbyHeader from '../../../components/LobbyHeader/LobbyHeader';
 import Modal from '../../../components/UI/Modal/Modal';
 import Mux from '../../../hoc/Mux';
+import SettingsIcon from '../../../assets/svg/icon/settingsIcon.svg';
+import LowerModal from '../../../components/UI/Modal/LowerModal/LowerModal';
 class LobbyTablet extends Component{
 
     render(){
         
-        let players,options,startGameButton,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
+        let players,options,startGameButton,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
         if(this.props.userID === this.props.admin){
           
             if(this.props.gameChosenCnfrm){
@@ -23,6 +25,7 @@ class LobbyTablet extends Component{
                         whileTap = {{scale:0.8}}
                         onClick = {()=>{this.props.startGame()}}>
                         Start Game</StyledMobileButton>);
+                gameSettingsButton = (<img className={styles.settingIcon} src={SettingsIcon} onClick={()=>this.props.settingsScreenHandler()} alt="SettingsIcon"/> );
             }
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
@@ -32,6 +35,7 @@ class LobbyTablet extends Component{
                     <option value="DRAWFUL">drawful</option>
                     <option value="RUDE_CARDS">rude-cards</option>
                 </StyledSelect>
+                {gameSettingsButton}
                 {startGameButton}
                 </Mux>); 
             pickGame = (<StyledMobileButton 
@@ -74,6 +78,9 @@ class LobbyTablet extends Component{
         }
     
         if(this.props.gameID){
+            gameSettingsModal = (<LowerModal show={this.props.settingScreen} modalClosed = {()=>this.props.settingsScreenHandler()}>
+                <h1>GAME PARAMETERS</h1>
+            </LowerModal>);
             gameChosen = <div>GAME CHOSEN: {this.props.gameID}</div>
             if(this.props.readyState){
                 ready = (<StyledMobileButton
@@ -101,6 +108,7 @@ class LobbyTablet extends Component{
             
             <div className = {styles.LobbyTablet}>
                 {modalPickGame}
+                {gameSettingsModal}
                 <div className = {styles.LobbyContent}>
                 {title}
                 {gameChosen}

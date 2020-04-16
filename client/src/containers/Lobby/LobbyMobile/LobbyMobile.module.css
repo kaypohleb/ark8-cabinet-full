@@ -20,6 +20,12 @@
   width: 25px;
   margin: 0 5px 0 0;
 }
+.settingIcon{
+  
+  height:25px;
+  width:25px;
+  
+}
 .LobbyTitle{
   font-size: 5vh;
   font-weight: 400;

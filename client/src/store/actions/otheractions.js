@@ -64,3 +64,5 @@ export const saveNickName = (newName) =>{
     
     }
 }
+//TODO add all setSettings, addNewSettings
+

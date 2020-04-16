@@ -18,3 +18,4 @@ exports.handleNewSignups = functions.auth.user().onCreate(async (userRecord) => 
         console.log("Error:" + error.message);
     });
 });
+

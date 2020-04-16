@@ -1,7 +1,8 @@
 const RockPaperScissorsSM = require('./RockPaperScissorsSM');
 
 class RockPaperScissorsGame {
-    constructor(players){
+    constructor(players,settings={}){
+        //TODO setup based on settings, default also taken from firestore
         this.id = 'ROCK_PAPER_SCISSORS';
         this.timer = null;
         this.gameState = {

@@ -3,7 +3,8 @@ const shuffle = require('knuth-shuffle-seeded');
 const {prompts, responses} = require('./RudeCardsData.json');
 
 class RudeCardsGame {
-    constructor(players){
+    constructor(players,settings={}){
+        //TODO setup based on settings, default also taken from firestore
         this.id = 'RUDE_CARDS';
         this.history = [];
         this.timer = null;
