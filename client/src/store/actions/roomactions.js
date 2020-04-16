@@ -73,7 +73,6 @@ export const closeRoom = () =>{
 export const setGameTitle = (roomID,gameID)=>{
  
   return () => {
-    
     socket.emit('room_action',{roomId:roomID, gameId:gameID, actionType:"ADD_GAME"});
     
   }

@@ -23,7 +23,7 @@ class App extends Component{
     return (
       <Router>
         <div className = "App">
-          <ToastContainer autoClose = {false}/>
+          <ToastContainer/>
           <Switch>
             <Route exact path ="/" component = {Home}/>
             <Route exact path = "/profile" component = {UserHome}/>

@@ -29,7 +29,35 @@ const updateUserData = async (userId, userData) => {
 
     return user.data();
 };
+const addNewGameSettings = async(playerId,settingId,settings) =>{
+    console.log('saving new game settings');
+    await db.collection('settings').doc(settingId).set({
+        ...settings,
+    });
+    await db.collection('users').doc(playerId).update({
+        settings: admin.firestore.FieldValue.arrayUnion(settingId),
+    })
+    //TODO maybe add setGame Settings immediately after add new
+}
 
+const getGameSettingsList = async(playerId) =>{
+    console.log(`getting ${playerId}'s settings list`);
+    return await db.collection('users').doc(playerId).get().data().settings;
+}
+
+const setGameSettings = async(settingsId) =>{
+    console.log(`getting ${settingsId}`);    
+    const settings = await db.collection('settings').doc(settingsId).get().data();
+    //TODO to incorporate settings params into constructor of Game Object for initialisation
+}
+
+const deleteGameSettings = async(playerId,settingsId) =>{
+    console.log(`deleting ${settingsId}`);
+    await db.collection('settings').doc(settingsId).delete();
+    await db.collection('users').doc(playerId).update({
+        settings: admin.firestore.FieldValue.arrayRemove(settingsId),
+    })
+}
 
 const addGameResults = async ({gameId, winner, roomId, players}) => {
     console.log('adding game results ..');
@@ -87,6 +115,10 @@ const saveNicknameToFirestore = async(userId,newName) =>{
 
 module.exports = {
     getUserData,
+    addNewGameSettings,
+    getGameSettingsList,
+    setGameSettings,
+    deleteGameSettings,
     updateUserData,
     addGameResults,
     getGameHistory,

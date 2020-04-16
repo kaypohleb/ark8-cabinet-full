@@ -10,7 +10,7 @@ class CreatedPlayer extends Component{
     render(){
         let ready = <img className = {styles.icon} alt="not ready" src = {Stop} height="100px"/>;
         if(this.props.ready){
-            ready=<img className = {styles.icon} alt="ready" src = {Tick}/>;
+            ready=<img className = {styles.icon} alt="ready" src = {Tick} height="100px"/>;
         }
         return (
             <div className = {styles.Player}>
