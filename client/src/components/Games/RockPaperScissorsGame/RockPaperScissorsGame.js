@@ -4,7 +4,7 @@ import styles from './RockPaperScissorsGame.module.css'
 import Rock from '../../../assets/svg/rock.svg';
 import Paper from '../../../assets/svg/paper.svg';
 import Scissors from '../../../assets/svg/scissors.svg';
-import {publishGameAction,setRefreshGameState,exitGame} from '../../../store/actions/index';
+import {publishGameAction,setRefreshGameState} from '../../../store/actions/index';
 import {motion} from 'framer-motion';
 import HistoryRoundActions from './HistoryAction/HistoryRoundActions';
 
@@ -54,11 +54,6 @@ class RockPaperScissorsGame extends Component {
         this.setState({
             showScore: !this.state.showScore,
         });
-    }
-
-       
-    componentWillUnmount(){
-        this.props.exitGame();
     }
 
     render(){
@@ -126,7 +121,6 @@ const mapDispatchtoProps = (dispatch) =>{
     return {
         gameAction: (selection,actionType) => {dispatch(publishGameAction(selection,actionType))},
         refreshGame: ()=> {dispatch(setRefreshGameState())},
-        exitGame: ()=>{dispatch(exitGame())},
     }
  }
 

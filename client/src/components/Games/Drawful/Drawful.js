@@ -2,7 +2,7 @@ import React,{ Component } from "react";
 import Score from '../../Score/Score';
 import { connect  } from 'react-redux';
 import DrawableCanvas from './DrawableCanvas/DrawableCanvas';
-import {publishGameAction,setRefreshGameState,exitGame} from '../../../store/actions/index';
+import {publishGameAction,setRefreshGameState} from '../../../store/actions/index';
 import Drawing from './DrawableCanvas/Drawing/Drawing';
 import Modal from '../../UI/Modal/Modal';
 import styles from './Drawful.module.css'
@@ -84,9 +84,6 @@ class Drawful extends Component{
         this.setState({
             waiting: false,
         })
-    }
-    componentWillUnmount(){
-        this.props.exitGame();
     }
 
     render(){
@@ -236,7 +233,6 @@ const mapDispatchtoProps = (dispatch) =>{
     return {
         gameAction: (data,actionType) => dispatch(publishGameAction(data,actionType)),
         refreshGame: ()=> dispatch(setRefreshGameState()),
-        exitGame: ()=>dispatch(exitGame()),
     }
  }
 

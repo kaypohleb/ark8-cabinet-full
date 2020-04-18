@@ -11,6 +11,8 @@ exports.handleNewSignups = functions.auth.user().onCreate(async (userRecord) => 
     return await firebase.firestore().collection("users").doc(userRecord.uid).set({
         id: userRecord.uid,
         name: userRecord.displayName,
+        history: [], 
+        settings: []
     }).then(() => {
         console.log("Welcome to ark8");
         return true;
