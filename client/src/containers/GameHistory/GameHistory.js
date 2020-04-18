@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter, Redirect} from 'react-router-dom';
 import { connect  } from 'react-redux';
-import styles from './GameHistory.module.css';
-import {getUserHistoryData, idTokenChanged} from '../../store/actions/index';
+import {getUserHistoryData} from '../../store/actions/index';
 import AllGameHistory from '../../components/AllGameHistory/AllGameHistory';
 
 

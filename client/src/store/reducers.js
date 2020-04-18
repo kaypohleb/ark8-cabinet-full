@@ -96,6 +96,21 @@ function fetchGameDataReducer(state = {},action){
     }
 }
 
+function fetchSettingsListReducer(state = {},action){
+    switch(action.type){
+        case(type.FETCH_SETTINGS_LIST_SUCCESS):
+            return ({
+                ...action.payload
+            })
+        case(type.FETCH_SETTINGS_LIST_ERROR):
+            return ({
+                ...action.payload
+            })
+        default: 
+            return state;
+    }
+}
+
 
 
 export const rootReducer = combineReducers({
@@ -105,4 +120,5 @@ export const rootReducer = combineReducers({
     fetchUserHistoryDataReducer,
     fetchLobbyDataReducer,
     fetchGameDataReducer,
+    fetchSettingsListReducer,
 });

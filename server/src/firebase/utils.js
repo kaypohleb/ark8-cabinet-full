@@ -40,15 +40,27 @@ const addNewGameSettings = async(playerId,settingId,settings) =>{
     //TODO maybe add setGame Settings immediately after add new
 }
 
-const getGameSettingsList = async(playerId) =>{
-    console.log(`getting ${playerId}'s settings list`);
-    return await db.collection('users').doc(playerId).get().data().settings;
+const getGameSettingsList = async(players,gameID) =>{
+    const settinglist = [];
+    await Promise.all(players.map(async player =>{
+        
+        let data = await db.collection('users').doc(player.id).get();
+        if(data.data().settings){
+            settinglist.push({
+                settingsName: data.data().settings[gameID],
+                player: player.name,
+            });
+        }
+        
+    }));
+    console.log(settinglist);
+    return(settinglist);
+
 }
 
 const setGameSettings = async(settingsId) =>{
     console.log(`getting ${settingsId}`);    
     const settings = await db.collection('settings').doc(settingsId).get().data();
-    //TODO to incorporate settings params into constructor of Game Object for initialisation
 }
 
 const deleteGameSettings = async(playerId,settingsId) =>{
@@ -73,16 +85,15 @@ const addGameResults = async ({gameId, winner, roomId, players}) => {
     return ref.id;
 };
 
-const addGameResIDtoUserHistory = (players,refId) =>{
+const addGameResIDtoUserHistory = async(players,refId) =>{
     console.log("addding to firebase");
     console.log(refId);
-    players.forEach( async(player)=>{
-        console.log(player.id);
-        
-        const history = await db.collection('users').doc(player.id).update({
+    await Promise.all(players.map(async player =>{
+        await db.collection('users').doc(player.id).update({
             history: admin.firestore.FieldValue.arrayUnion(refId)
         })
-    })
+        
+    }));
 }
 
 const getGameHistory = async (userId) => {

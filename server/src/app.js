@@ -22,6 +22,7 @@ app.use(express.json());
 // API route handlers
 app.use(require('./api/user'));
 app.use(require('./api/room'));
+app.use(require('./api/game'));
 
 http.listen(port, () => {
     console.log(`Server started at port ${port}`)

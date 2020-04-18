@@ -1,9 +1,10 @@
+
 const {addGameResults,addGameResIDtoUserHistory} = require('../firebase/utils')
 const roomActionValidator = require('./roomActionValidator');
 const games = require('./games');
 const Player = require('./Player');
-
 class Room {
+    //TOOD maybe fix        the constracutor problems here?
     constructor(id, createdBy){
         this.id = id;
         this.createdBy = createdBy;
@@ -78,12 +79,12 @@ class Room {
 
             player.ready = true;
 
-            const allPlayersReady = this.players.reduce((prev, player) => (prev && player.ready), true);
+            // const allPlayersReady = this.players.reduce((prev, player) => (prev && player.ready), true);
 
-            if (allPlayersReady){
-                this.gameStarted = true;
-                this.startGame();
-            }
+            // if (allPlayersReady){
+            //     this.gameStarted = true;
+            //     this.startGame();
+            // }
         }
         else if ( actionType == 'SET_UNREADY'){
             const player = this.players.find( player => player.id == userId);
@@ -101,10 +102,12 @@ class Room {
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            this.game = new games[action.gameId](this.players);
-            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
+            
+            
         }
         else if ( actionType == 'START_GAME'){
+            this.game = new games[action.gameId](this.players);//add settings params here
+            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
             this.startGame();
         }
         console.log("sent room_state_update")

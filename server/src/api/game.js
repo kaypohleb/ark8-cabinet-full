@@ -3,9 +3,17 @@ const {addNewGameSettings,getGameSettingsList} = require('../firebase/utils');
 const router = express.Router();
 
 router.post('/getSettingsList',async (req, res) => {
-    console.log("trying to get options for select");
-    return await getGameSettingsList(req.userId,req.body.settingsId);
-     
+    const result = await getGameSettingsList(req.body.players,req.body.gameID);
+    
+    if (!result) {
+        return res.json({
+            error : "Error setting game settings list",
+        });
+    }
+
+    return res.json({
+        settingsList: result
+    });
 });
 
 

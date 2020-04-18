@@ -46,7 +46,6 @@ const fetchUserDataHistorySuccess = (res) => ({
 export const saveNickName = (newName) =>{
   return async(dispatch,getState) =>{
     let requestURL = `${BASE_URL}/saveNickname`;
-    console.log(newName);
     await axios.post(
       requestURL,
       {name: newName},

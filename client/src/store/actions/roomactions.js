@@ -11,7 +11,6 @@ const BASE_URL = 'http://localhost:3001';
 
 export const createRoom = () =>{
   return async(dispatch,getState) =>{
-    
       let requestURL = `${BASE_URL}/createRoom`;
       await axios.post(
         requestURL,
