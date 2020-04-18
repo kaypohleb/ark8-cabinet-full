@@ -16,11 +16,7 @@ class LobbyMobile extends Component{
 
     render(){
         
-<<<<<<< HEAD
         let players,options,startGameButton,intro,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
-=======
-        let players,options,startGameButton,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
->>>>>>> Caleb_Dev
         if(this.props.userID === this.props.admin){
             
             if(this.props.gameChosenCnfrm){
@@ -30,11 +26,7 @@ class LobbyMobile extends Component{
                         whileTap = {{scale:0.8}}
                         onClick = {()=>{this.props.startGame()}}>
                         Start Game</StyledMobileButton>);   
-<<<<<<< HEAD
                 gameSettingsButton = (<StyledMobileButton onClick={()=>this.props.settingsScreenHandler()}>ADD NEW</StyledMobileButton> );
-=======
-                gameSettingsButton = (<img className={styles.settingIcon} src={SettingsIcon} onClick={()=>this.props.settingsScreenHandler()} alt="SettingsIcon"/> );
->>>>>>> Caleb_Dev
             }
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
@@ -45,10 +37,7 @@ class LobbyMobile extends Component{
                     <option value="DRAWFUL">drawful</option>
                     <option value="RUDE_CARDS">rude-cards</option>
                 </StyledSelect>
-<<<<<<< HEAD
                 <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{}}/>
-=======
->>>>>>> Caleb_Dev
                 {gameSettingsButton}
                 {startGameButton}
                 </Mux>); 
