@@ -199,6 +199,9 @@ class Drawful extends Component{
             case "DISPLAY_SCORE_RANKING":
                 phase=<Mux>{gameScores}</Mux>;
                 break;
+            case "NO_ANSWER":
+                phase=<div>{this.state.currentDrawing.userId} did not do a drawing so he loses points</div>;
+                break;
             default:
                 phase =null;
         }

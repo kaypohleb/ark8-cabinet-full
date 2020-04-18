@@ -10,7 +10,7 @@ class RudeCardsGame {
         this.timer = null;
         this.gameStateUpdateCallback = null;
         this.gameStateMachine = new RudeCardsSM();
-
+        
         this.gameState = {
             gameId: 'RUDE_CARDS',
             players: players.map((player) => ({id: player.id, name: player.name, score: 0})),
@@ -42,7 +42,14 @@ class RudeCardsGame {
         this.setResponses(responses);
     }
 
-
+    end(){
+        console.log('ending game...')
+        const players = this.gameState.players;
+        players.sort((a,b) => b.score - a.score); // sort by highest score first
+        const winner = players[0];
+        this.publishScoreCallback(winner, players);
+    }
+    
     printState(){
         return {
             game: {...this.gameState},
@@ -82,6 +89,11 @@ class RudeCardsGame {
                     nextPhase(Date.now(), 3000)
                     turn();
                 }, 5000)
+            }
+            else if (phase == 'END_GAME'){
+                if(this.gameState.toEnd){
+                    this.end();
+                }
             }
         }).bind(this);
 

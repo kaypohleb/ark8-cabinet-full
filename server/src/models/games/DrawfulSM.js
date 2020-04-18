@@ -1,4 +1,3 @@
-
 class DrawfulSM {
     constructor(props){
         this.selectedPrompt = null;
@@ -14,57 +13,50 @@ class DrawfulSM {
         let updatedHiddenState = {...hiddenState};
         
         if (gameState.currentPhase === 'INITIAL'){
-            //console.log(action);
-            if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
-                
+            if (action.actionType === 'NEXT_PHASE'){ 
                 updatedGameState = {
                     ...updatedGameState,
                     currentPhase: 'DRAWING',
                     timerStart: action.timerStart,
                     timerLength: action.timerLength,
                     history: [],
-                    waiting:false,
                 }
                 
                 for (const userId in updatedPlayerStates){
                     let selectPrompt = updatedHiddenState.allDrawingPrompts.splice(Math.floor(Math.random()*updatedHiddenState.allDrawingPrompts.length), 1)[0]; 
                     updatedPlayerStates[userId].prompt = selectPrompt;
                     updatedHiddenState.drawingPrompts[userId] = selectPrompt;
-                }
-                
+                }  
             }
         }
         else if (gameState.currentPhase === 'DRAWING'){
             if (action.actionType === 'SEND_DRAWING'){
                 updatedHiddenState.submittedDrawings[action.userId] = action.drawing;
-                updatedGameState.players.forEach((player,index) => {
-                    if(player.id === action.userId){
-                        updatedGameState.players[index].ready = true;
-                    }else{
-                        if(!player.ready){
-                            updatedGameState.waiting = true;
-                        }
-                    }
-                });
-                
             }
-            if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
+            if (action.actionType === 'NEXT_PHASE'){
                 const nextDrawingUserId = Object.keys(updatedHiddenState.submittedDrawings)[0];
-                // TODO: figure out what to do when a player does not submit a drawing
-                // waiting till all finished
-                if (updatedHiddenState.submittedDrawings[nextDrawingUserId] == null){
-                    //throw new Error('Player has not submitted drawing');
-                }
-                
                 this.selectedDrawing = updatedHiddenState.submittedDrawings[nextDrawingUserId];
                 this.selectedUserId = nextDrawingUserId;
                 this.selectedPrompt = updatedHiddenState.drawingPrompts[this.selectedUserId];
                 delete updatedHiddenState.submittedDrawings[nextDrawingUserId];
-                updatedGameState.players.forEach((player,index) => {
-                    updatedGameState.players[index].ready = false;
-                    
-                });
-                updatedGameState.waiting = false;
+                
+                if (this.selectedDrawing === []){
+                    updatedGameState.players[this.selectedUserId].score -= 1000;
+                    updatedGameState = {
+                        ...updatedGameState,
+                        currentPhase: 'NO_DRAWING',
+                        currentDrawing: {
+                            drawing: this.selectedDrawing,
+                            userId: this.selectedUserId,
+                            correctAnswer: null,
+                            answers: null
+                        },
+                        timerStart: action.timerStart,
+                        timerLength: action.timerLength
+                    }
+                }
+                else{
+                
                 updatedGameState = {
                     ...updatedGameState,
                     currentPhase: 'FAKE_ANSWER',
@@ -84,23 +76,15 @@ class DrawfulSM {
                         prompt: null
                     }
                 }
+                }
             }
         }
         else if (gameState.currentPhase === 'FAKE_ANSWER'){
             if (action.actionType === 'SEND_FAKE_ANSWER'){
                 updatedHiddenState.fakeAnswers[action.userId] = action.fakeAnswer;
-                updatedGameState.players.forEach((player,index) => {
-                    if(player.id === updatedGameState.currentDrawing.userId){
-                        updatedGameState.players[index].ready = true;
-                    }
-                    if(player.id === action.userId){
-                        updatedGameState.players[index].ready = true;
-                    }else if(!player.ready){
-                            updatedGameState.waiting = true;
-                        }    
-                });
             }
-            if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
+            if (action.actionType === 'NEXT_PHASE'){
+            
                 updatedGameState = {
                     ...updatedGameState,
                     currentPhase: 'PICK_ANSWER',
@@ -113,10 +97,7 @@ class DrawfulSM {
                     timerStart: action.timerStart,
                     timerLength: action.timerLength
                 }
-                updatedGameState.players.forEach((player,index) => {
-                    updatedGameState.players[index].ready = false;
-                    
-                });
+    
                 // this means the correct answer is always the last item. solve this on front end?
                 const answers = Object.keys(updatedHiddenState.fakeAnswers).map((userId) => updatedHiddenState.fakeAnswers[userId]).filter((answer) => !!answer);
                 answers.push(hiddenState.drawingPrompts[updatedGameState.currentDrawing.userId]);
@@ -127,33 +108,25 @@ class DrawfulSM {
                     if (userId === updatedGameState.currentDrawing.userId){
                         shownAnswers = [];
                     }
-
+    
                     updatedPlayerStates[userId] = {
                         ...updatedPlayerStates[userId],
                         shownAnswers: shownAnswers
                     }
                 }
+            
             }
         }
         else if (gameState.currentPhase === 'PICK_ANSWER'){
             
             if (action.actionType === 'PICK_ANSWER'){
-                //console.log(action);
+                
                 updatedPlayerStates[action.userId].pickedAnswer = action.pickedAnswer;
-                updatedGameState.players.forEach((player,index) => {
-                    if(player.id === updatedGameState.currentDrawing.userId){
-                        updatedGameState.players[index].ready = true;
-                    }
-                    if(player.id === action.userId){
-                        updatedGameState.players[index].ready = true;
-                    }else if(!player.ready){
-                            updatedGameState.waiting = true;
-                        }    
-                });
             }
-            if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
+            if (action.actionType === 'NEXT_PHASE'){
                 const newAnswers = {};
                 updatedGameState.currentDrawing.answers.forEach((answer)=>{
+                    
                     if(!(answer in newAnswers)){
                         let owner = this.selectedUserId;
                         for(const playerId in updatedHiddenState.fakeAnswers){
@@ -171,6 +144,7 @@ class DrawfulSM {
                             selected:[],
                         }
                     }
+                
                     for(const player in updatedPlayerStates){
                         if(updatedPlayerStates[player].pickedAnswer==answer){
                             let playername = null;
@@ -184,10 +158,6 @@ class DrawfulSM {
                     }
                 })
              
-                updatedGameState.players.forEach((player,index) => {
-                    updatedGameState.players[index].ready = false;
-                    
-                });
                 updatedGameState = {
                     ...updatedGameState,
                     currentPhase: 'REVEAL',
@@ -215,23 +185,8 @@ class DrawfulSM {
 
         }
         else if (gameState.currentPhase === 'REVEAL'){
-            if (action.actionType === 'SEE_SCORE'){
-                updatedGameState.players.forEach((player,index) => {
-                    if(player.id == action.userId){
-                        updatedGameState.players[index].ready = true;
-                    }else if(!player.ready){
-                            updatedGameState.waiting = true;
-                        }    
-                });
-            }
-            if (userId === 'GAME' && action.actionType === 'NEXT_PHASE'){
-
-               
+            if (action.actionType === 'NEXT_PHASE'){
                 const noMoreDrawings = (Object.keys(updatedHiddenState.submittedDrawings).length == 0);
-                updatedGameState.players.forEach((player,index) => {
-                    updatedGameState.players[index].ready = false;
-                    
-                });
                 if (noMoreDrawings){
                     console.log("end of drawings");
                     updatedGameState = {
@@ -251,21 +206,27 @@ class DrawfulSM {
                         }
                     }
                     const nextDrawingUserId = Object.keys(updatedHiddenState.submittedDrawings)[0];
-                    // TODO: figure out what to do when a player does not submit a drawing
-                    // waiting till all finished
-                    if (updatedHiddenState.submittedDrawings[nextDrawingUserId] == null){
-                        //throw new Error('Player has not submitted drawing');
-                    }
-                    
                     this.selectedDrawing = updatedHiddenState.submittedDrawings[nextDrawingUserId];
                     this.selectedUserId = nextDrawingUserId;
                     this.selectedPrompt = updatedHiddenState.drawingPrompts[this.selectedUserId];
+                    delete updatedHiddenState.submittedDrawings[nextDrawingUserId];
+                    if (this.selectedDrawing === []){
+                        updatedGameState.players[this.selectedUserId].score -= 1000;
+                        updatedGameState = {
+                            ...updatedGameState,
+                            currentPhase: 'NO_DRAWING',
+                            currentDrawing: {
+                                drawing: this.selectedDrawing,
+                                userId: this.selectedUserId,
+                                correctAnswer: null,
+                                answers: null
+                            },
+                            timerStart: action.timerStart,
+                            timerLength: action.timerLength
+                        }
+                    }
+                    else{
                     
-                    updatedGameState.players.forEach((player,index) => {
-                        updatedGameState.players[index].ready = false;
-                        
-                    });
-                    updatedGameState.waiting = false;
                     updatedGameState = {
                         ...updatedGameState,
                         currentPhase: 'FAKE_ANSWER',
@@ -289,7 +250,8 @@ class DrawfulSM {
                             fooled: null,
                         }
                     }
-                    delete updatedHiddenState.submittedDrawings[nextDrawingUserId];
+                        
+                    }
                 }
             }
 

@@ -31,7 +31,6 @@ class DrawfulGame{
             timerStart: null,
             timerLength: 5000,
             history: null,
-            waiting: false,
             gameEnded: false,
         };
 
@@ -42,7 +41,7 @@ class DrawfulGame{
 
         this.hiddenState = {
             submittedDrawings: players.reduce( (submittedDrawings, player) => {
-                submittedDrawings[player.id] = null;
+                submittedDrawings[player.id] = [];
                 return submittedDrawings;
             }, {}),
             drawingPrompts: players.reduce( (drawingPrompts, player) => {
@@ -50,13 +49,12 @@ class DrawfulGame{
                 return drawingPrompts;
             }, {}),
             fakeAnswers: players.reduce( (fakeAnswers, player) => {
-                fakeAnswers[player.id] = null;
+                fakeAnswers[player.id] = "";
                 return fakeAnswers;
             }, {}),
             allDrawingPrompts: null,
         };
     }
-
 
     printState(){
         return {
@@ -73,126 +71,62 @@ class DrawfulGame{
     }
 
     start(){
-        console.log(allPrompts);
-        this.hiddenState = {
-            ...this.hiddenState,
-            allDrawingPrompts: allPrompts,
-        }
-        console.log(this.hiddenState);
-        const makeAction = this.makeAction.bind(this);
-        const turn = (function(userID,timerLen=3000){
-            const action = {
-                actionType: 'NEXT_PHASE',
-                timerStart: new Date().getTime(),
-                timerLength: timerLen,
+        const nextPhase = ((timerStart, timerLength) => {this.makeAction(null, {actionType: 'NEXT_PHASE', timerStart: timerStart, timerLength: timerLength})}).bind(this)
+        const turn = (function(){
+            const phase = this.gameState.currentPhase;
+            if (phase == 'INITIAL'){
+                this.hiddenState = {
+                    ...this.hiddenState,
+                    allDrawingPrompts: allPrompts,
+                }
+                nextPhase(Date.now(), 3000);
+                turn();
+            }
+            else if (phase == 'DRAWING'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                }, 10000)
+            }
+            else if (phase == 'FAKE_ANSWER'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                }, 10000)
+            }
+            else if (phase == 'ANSWER'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                },10000)
+            }
+            else if (phase == 'REVEAL'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                }, 10000)
+            }
+            else if (phase == 'DISPLAY_SCORE_RANKING'){
+                if(this.gameState.toEnd){
+                    this.end();
+                }else{
+                    setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                    }, 10000)
+                }
+            }else if(phase == 'NO_DRAWING'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                }, 10000)
             }
             
-            
-            //console.log(this);  
-            makeAction(userID, action);
-            console.log("what is this", this);
-            switch(this.gameState.currentPhase){
-                case "DRAWING": 
-                    this.useState = true;
-                    console.log("DRAWING");         
-                    let ready = Object.values(this.hiddenState.submittedDrawings).every(function(i){return i!==null;})
-                    this.timer = setTimeout(()=>{
-                            if(ready){
-                                console.log("HIT");
-                                if(this.useState){
-                                    turn("GAME",3000);
-                                    this.useState = false;
-                                }
-                            }
-                            else{
-                                turn("random",3000);
-                            }
-                        }, timerLen);
-                    break;
-                case "FAKE_ANSWER":
-                    console.log("FAKEANSWER");
-                    let numOfnull = 0;
-                    this.useState = true;
-                    console.log(this.hiddenState.fakeAnswers);
-                    for(const player in this.hiddenState.fakeAnswers){
-                        if(this.hiddenState.fakeAnswers[player] === null){
-                            numOfnull +=1;
-                        }
-                    }
-                   
-                    this.timer = setTimeout(()=>{  
-                        if((numOfnull===1)){
-                            console.log("HIT");
-                            if(this.useState){
-                                turn("GAME",3000);
-                                this.useState = false;
-                            }
-                            
-                        }
-                        else{
-                            console.log("MIS");
-                            turn("random",3000);
-                        }
-                    }, timerLen);
-                    break;
-                case "PICK_ANSWER": 
-                    //console.log(`setting timer for next phase to ${this.gameState.timerLength}`);
-                    let pickednumOfnull = 0;
-                    this.useState = true;
-                    console.log(this.playerStates);
-                    for(const player in this.playerStates){
-                        console.log(player);
-                        if(this.playerStates[player].pickedAnswer == null){
-                            pickednumOfnull +=1;
-                        }
-                    }
-                    this.timer = setTimeout(()=>{  
-                        if((pickednumOfnull==1)){
-                            console.log("HIT");
-                            if(this.useState){
-                                turn("GAME",3000);
-                                this.useState = false;
-                            }
-                            
-                        }
-                        else{
-                            turn("random",3000);
-                        }
-                    }, timerLen);
-                    break;
-                case "REVEAL":
-                    this.useState = true;
-                    console.log("REVEAL");
-                    let revealready = this.gameState.players.every(function(player){return player.ready});
-                    this.timer = setTimeout(()=>{
-                        if(revealready){
-                            console.log("HIT");
-                            if(this.useState){
-                                turn("GAME",3000);
-                                this.useState = false;
-                            }
-                        }
-                        else{
-                            turn("random",3000);
-                        }
-                    }, timerLen);
-                    break;
-                case "DISPLAY_SCORE_RANKING":
-                    if(this.gameState.toEnd){
-                        this.end();
-                    }
-                    break;
-                case "INITIAL":
-                    
-                    console.log("INITIAL");
-                    this.timer = setTimeout(()=>{makeAction(userID, action); turn("GAME",3000);}, timerLen);
-                    break;
-                }
-            }).bind(this);
-        turn(null);
+        
+        }).bind(this);
 
+        turn();
     }
-
     
     validateAction(userId, action){
         return true;

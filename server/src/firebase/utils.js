@@ -8,7 +8,6 @@ const getUserData = async (userId) => {
     if (!user.exists){
         return null;
     }
-
     return user.data();
 }
 

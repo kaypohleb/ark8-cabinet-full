@@ -67,6 +67,10 @@ class Room {
         if (action.actionType == 'ADD_GAME' && this.admin != userId){
             throw new Error("Only admin can add game");
         }
+
+        if (action.actionType == 'CHANGE_SETTINGS' && this.admin != userId){
+            throw new Error("Only admin can change settings");
+        }
     }
 
     makeRoomAction(userId, action){
@@ -105,6 +109,10 @@ class Room {
             this.game = new games[action.gameId](this.players);//add settings params here
             this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
             
+        }
+
+        else if(actionType == "CHANGE_SETTINGS"){
+            this.game = new games[action.gameId](this.players,action.settings);
         }
         else if ( actionType == 'START_GAME'){
             
