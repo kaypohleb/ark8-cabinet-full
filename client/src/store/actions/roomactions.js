@@ -34,9 +34,9 @@ export const createRoom = () =>{
 
 export let socket;
 export const enterRoom = (roomID) =>{
- 
+  console.log("entering room", roomID);
+
   return(dispatch,getState)=>{
- 
     socket = io(BASE_URL+"/"+roomID);
     socket.open();
     socket.emit('authentication', getState().idtokenReducer.idToken);
@@ -56,17 +56,6 @@ export const enterRoom = (roomID) =>{
       toast.error(`Room Action Error: ${data.message}`);
     })
   }
-}
-
-
-export const closeRoom = () =>{
-  return () =>{
-
-   
-      //socket.close();
-    
-  }
-  
 }
 
 export const setGameTitle = (roomID,gameID)=>{
@@ -108,11 +97,9 @@ export const setRefreshGameState = () =>{
         })
     }
 }
-export const exitGame =  ()=>{
-  return()=>{
-    console.log("exiting game");
-    socket.removeAllListeners('game_state_update');
-    socket.disconnect();
+export const exitRoom =  () => {
+  return () => {
+    socket.close();
   }
 }
 export const publishGameAction = (data, actionType) => {

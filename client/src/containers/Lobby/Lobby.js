@@ -1,14 +1,13 @@
 import React,{ Component } from 'react';
 import { connect  } from 'react-redux';
 import { withRouter,Redirect } from  'react-router-dom';
-import { closeRoom,
-         createRoom, 
+import { createRoom, 
          enterRoom,
          setGameTitle,
          readyPlayer,
          unreadyPlayer,
          startGame,
-         exitGame,
+         exitRoom,
          getUserSettings,
         } from '../../store/actions/index';
 import styles from './Lobby.module.css';
@@ -21,11 +20,6 @@ import { toast } from 'react-toastify';
 class Lobby extends Component{
     constructor(props){
         super(props);
-        if(this.props.location.state!==undefined && this.props.location.state.join){
-            this.props.enterRoom(this.props.location.state.roomID);
-        }else{
-            this.props.createRoom();
-        }
         this.readyHandler = this.readyHandler.bind(this);
         this.unreadyHandler = this.unreadyHandler.bind(this);
         this.startGameHandler = this.startGameHandler.bind(this);
@@ -65,6 +59,15 @@ class Lobby extends Component{
               isSignedIn: nextProps.isSignedIn,
         };
         
+    }
+
+    componentDidMount(){
+        console.log("Lobby ComponentDidMount")
+        if(this.props.location.state!==undefined && this.props.location.state.join){
+            this.props.enterRoom(this.props.location.state.roomID);
+        }else{
+            this.props.createRoom();
+        }
     }
 
     componentDidUpdate(prevProps, prevState){
@@ -138,7 +141,8 @@ class Lobby extends Component{
         this.props.unready(this.state.id);
     }
     goBackHandler(){
-        this.props.exitGame();
+        console.log("calling exitRoom from lobby gobackhandler");
+        this.props.exitRoom();
         this.props.history.push('/profile');
     }
     
@@ -206,8 +210,7 @@ const mapDispatchtoProps = (dispatch) =>{
        startGame: (roomID,gameID) => dispatch(startGame(roomID,gameID)),
        createRoom: ()=> dispatch(createRoom()),
        enterRoom: (roomid)=>dispatch(enterRoom(roomid)),
-       closeRoom: ()=>dispatch(closeRoom()),
-       exitGame: ()=>dispatch(exitGame()),
+       exitRoom: ()=>dispatch(exitRoom()),
        getUserSettings: (players,gameID)=>dispatch(getUserSettings(players,gameID)),
    }
 }

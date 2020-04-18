@@ -4,6 +4,9 @@ const router = express.Router();
 
 router.post('/getUser', async (req, res) => {
     const userId = req.userId;
+    
+    console.log('getUser request', userId);
+
     const user = await getUserData(userId);
 
     if (!user){
@@ -15,7 +18,7 @@ router.post('/getUser', async (req, res) => {
     return res.json(user);
 })
 
-router.post('updateUserData', async (req, res) => {
+router.post('/updateUserData', async (req, res) => {
     const userId = req.userId;
     const user = await updateUserData(userId, req.body);
 
@@ -31,7 +34,6 @@ router.post('updateUserData', async (req, res) => {
 router.post('/getUserHistory',async (req, res) => {
     const userId = req.userId;
     const history= await getGameHistory(userId);;
-    console.log("GOt the history");
     console.log(history);
     
     if (!history){
