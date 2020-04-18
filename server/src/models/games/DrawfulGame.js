@@ -9,7 +9,7 @@ const getPrompts = async () =>{
 }
 module.exports 
 class DrawfulGame{
-    constructor(players,settings={}){
+    constructor(players){
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
         this.id = 'DRAWFUL';

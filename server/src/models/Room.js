@@ -102,12 +102,12 @@ class Room {
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            
+            this.game = new games[action.gameId](this.players);//add settings params here
+            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
             
         }
         else if ( actionType == 'START_GAME'){
-            this.game = new games[action.gameId](this.players);//add settings params here
-            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
+            
             this.startGame();
         }
         console.log("sent room_state_update")

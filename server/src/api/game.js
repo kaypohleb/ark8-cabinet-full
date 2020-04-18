@@ -17,8 +17,6 @@ router.post('/getSettingsList',async (req, res) => {
 });
 
 
-
-
 router.post('/saveNewSettings',async (req, res) => {
     console.log("trying to save new settings");
     await addNewGameSettings(req.userId,req.body);

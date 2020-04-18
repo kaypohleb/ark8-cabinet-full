@@ -112,7 +112,7 @@ export const exitGame =  ()=>{
   return()=>{
     console.log("exiting game");
     socket.removeAllListeners('game_state_update');
-    
+    socket.disconnect();
   }
 }
 export const publishGameAction = (data, actionType) => {

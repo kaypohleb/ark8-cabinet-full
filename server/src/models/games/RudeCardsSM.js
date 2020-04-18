@@ -127,6 +127,7 @@ class RudeCardsSM{
 
                 if (gameState.currentRound == gameState.totalRounds){
                     gameState.currentPhase = 'GAME_END';
+                    gameState.gameEnded = true;
                 }
                 else {
                     gameState.currentPhase = 'DRAW_CARDS';

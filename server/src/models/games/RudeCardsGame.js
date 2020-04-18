@@ -23,7 +23,7 @@ class RudeCardsGame {
             timerStart: null,
             timerLength: 10000,
             currentRound: 0,
-            totalRounds: 5,
+            totalRounds: 2,
             gameEnded: false,
         };
 
