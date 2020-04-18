@@ -145,7 +145,10 @@ class UserHome extends Component{
         });
     }
 
-    
+    //TODO add a handler for addingnewSettings,
+    //TODO dynamic select option for players settings,
+    //maybe axios.post get all players in lobby's
+    //settings for ease of access e.g TEST_RPS(Caleb)
     render(){
         
         let loader;

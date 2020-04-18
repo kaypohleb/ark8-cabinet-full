@@ -9,14 +9,23 @@ import {StyledSelect} from '../../../components/StyledComponents/StyledSelect';
 import LobbyHeader from '../../../components/LobbyHeader/LobbyHeader';
 import Modal from '../../../components/UI/Modal/Modal';
 import Mux from '../../../hoc/Mux';
+<<<<<<< HEAD
 import LowerModal from '../../../components/UI/Modal/LowerModal/LowerModal';
 import {isAllReady} from '../../../functions/arrayFunctions';
 import DynamicSelect from '../../../components/DynamicSelect/DynamicSelect';
+=======
+import SettingsIcon from '../../../assets/svg/icon/settingsIcon.svg';
+import LowerModal from '../../../components/UI/Modal/LowerModal/LowerModal';
+>>>>>>> Caleb_Dev
 class LobbyTablet extends Component{
 
     render(){
         
+<<<<<<< HEAD
         let players,options,startGameButton,intro,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
+=======
+        let players,options,startGameButton,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
+>>>>>>> Caleb_Dev
         if(this.props.userID === this.props.admin){
           
             if(this.props.gameChosenCnfrm){
