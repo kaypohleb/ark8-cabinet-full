@@ -1,10 +1,9 @@
 import React,{ Component } from "react";
-import Score from '../../Score/Score';
 import { connect  } from 'react-redux';
 import DrawableCanvas from './DrawableCanvas/DrawableCanvas';
 import {publishGameAction,setRefreshGameState} from '../../../store/actions/index';
 import Drawing from './DrawableCanvas/Drawing/Drawing';
-import Modal from '../../UI/Modal/Modal';
+import StatusBar from '../RudeCardsGame/StatusBar';
 import styles from './Drawful.module.css'
 import {StyledMobileButton} from '../../StyledComponents/StyledButton';
 import Mux from "../../../hoc/Mux";
@@ -16,7 +15,6 @@ class Drawful extends Component{
         this.props.refreshGame();
         this.scoreScreenHandler = this.scoreScreenHandler.bind(this);
         this.inputHandleChange = this.inputHandleChange.bind(this);
-        this.waitScreenHandler =this.waitScreenHandler.bind(this);
     }
     state = {
         roomId: "",
@@ -24,50 +22,32 @@ class Drawful extends Component{
         players: [],
         currentPhase: "INITIAL",
         currentDrawing:{},
-        timerStart: null,
-        timerLength: null,
+        timerStart: 0,
+        timerLength: 0,
         history: null,
         currentRound: 0,
-        totalRounds: 3,
+        totalRounds: 0,
         showScore:false,
         userId:"",
         fakeValue:"",
-        waiting:false,
     }
 
-    static getDerivedStateFromProps(nextProps, prevState){
-        // console.log(nextProps);
-        if(nextProps.game){
-            return { 
-            timerStart: nextProps.game.timerStart,
-            timerLength: nextProps.game.timerLength,
-            currentPhase: nextProps.game.currentPhase,
-            currentDrawing:nextProps.game.currentDrawing,
-            totalRounds: nextProps.game.totalRounds,
-            currentRound:nextProps.game.currentRound,
-            players:nextProps.game.players,
-            history: nextProps.game.history,
-            roomId: nextProps.roomId,
-            gameId: nextProps.gameId,
-            player: nextProps.player,
-            userId: nextProps.userId,
-         };
-        }else{
-            return null;
-        }
-     }
      
     componentDidUpdate(prevProps, prevState){
        if(prevProps!==this.props){
             this.setState({
+                currentDrawing:this.props.game.currentDrawing,
+                currentPhase:this.props.game.currentPhase,
                 currentRound:this.props.game.currentRound,
+                totalRounds:this.props.game.totalRounds,
                 players: this.props.game.players,
                 history: this.props.game.history,
                 roomId: this.props.roomId,
                 gameId: this.props.gameId,
                 player: this.props.player,
                 userId: this.props.userId,
-                waiting: this.props.game.waiting,
+                timerStart: this.props.game.timerStart,
+                timerLength: this.props.game.timerLength,
             })
         }
         console.log(this.state);
@@ -80,41 +60,24 @@ class Drawful extends Component{
             showScore: !this.state.showScore,
         });
     }
-    waitScreenHandler(){
-        this.setState({
-            waiting: false,
-        })
-    }
+    
 
     render(){
-        let phase,waitingOn,answerList,fakeAnswer,reveal,gameScores = null;
+        const timer = this.state.timerLength + this.state.timerStart;
+        let phase,answerList,fakeAnswer,statusbar,reveal = null;
         if(this.state.players){
-            gameScores = <div className={styles.Scores}>
-                {this.state.players.map((player) =>{ 
-                    return (<Score key={player.id} playerName={player.name} score={player.score} playerId = {player.id}/>
-                    )}
-                )}
-                <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId},"ACKNOWLEDGE")}>OKAY</StyledMobileButton>
-                </div>;
+            const playerData = this.state.players.find(p => p.id === this.props.quickID);
+            if(playerData && this.state.currentPhase){
+                statusbar = <StatusBar currentRound = {this.state.currentRound} currentPhase = {this.state.currentPhase} score = {playerData.score} timer = {timer}/>
+            }
         }
-        if(this.state.waiting){
-            waitingOn = <div className={styles.Waiting}>
-                <p>Waiting on...</p>
-                {this.state.players.map((player)=>{
-                    if(!player.ready){
-                        return <p>{player.name}</p>
-                    }else{
-                        return null;
-                    }
-                })}
-            </div>
-        }
+        
        
         if(this.state.player){
             if(this.state.userId !== this.state.currentDrawing.userId){
             fakeAnswer = <div className={styles.FakeAnswer}>
                     <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     <input value={this.state.fakeValue} onChange={this.inputHandleChange} className={styles.inputBox} type="text" placeholder="please write your fake answer"></input>
                     <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>SUBMIT</StyledMobileButton>
@@ -123,7 +86,7 @@ class Drawful extends Component{
             else{
                 fakeAnswer = <div className={styles.FakeAnswer}>
                     <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     <div> its your drawing, enjoy it while others are making their answers</div>
                 </div>
@@ -131,7 +94,7 @@ class Drawful extends Component{
             if(this.state.player.shownAnswers ){
                 answerList = (<div className={styles.AnswerList}>
                     <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     
                     {this.state.player.shownAnswers.map((answer)=>{
@@ -142,7 +105,7 @@ class Drawful extends Component{
             else{
                 answerList = (<div className={styles.AnswerList}>
                     <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     <p> its your drawing, enjoy it while others are making their decision</p>
                     </div>);
@@ -171,7 +134,6 @@ class Drawful extends Component{
 
                         })
                     }
-                    <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId},"SEE_SCORE")}>SEE SCORES</StyledMobileButton>
                 </div>
             }
             
@@ -193,11 +155,9 @@ class Drawful extends Component{
             case "REVEAL":
                 phase = <Mux>{reveal}</Mux>;
                 break;
-            case "DISPLAY_SCORE_RANKING":
-                phase=<Mux>{gameScores}</Mux>;
-                break;
-            case "NO_ANSWER":
-                phase=<div>{this.state.currentDrawing.userId} did not do a drawing so he loses points</div>;
+            case "NO_DRAWING":
+                const failPlay = this.state.players.find(p => p.id === this.state.currentDrawing.userId);
+                phase = <div className={styles.Initial}>{failPlay.name} did not do a drawing so he loses points</div>;
                 break;
             default:
                 phase =null;
@@ -205,13 +165,10 @@ class Drawful extends Component{
        
         return(
             <div className={styles.GameBG}>
+            {statusbar}
             <div className={styles.GameContent}>
-                <Modal show={this.state.waiting}  modalClosed={this.waitScreenHandler}>
-                    {waitingOn} 
-                </Modal> 
                 
                 {phase}
-                
             </div>
         </div>
            
@@ -227,7 +184,6 @@ const mapStateToProps = (state) =>{
         roomId:state.fetchLobbyDataReducer.id,
         gameId:state.fetchLobbyDataReducer.game,
         userId:state.fetchUserDataReducer.id,
-        
     }
 }
 

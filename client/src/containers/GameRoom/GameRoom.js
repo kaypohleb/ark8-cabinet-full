@@ -35,7 +35,7 @@ class GameRoom extends Component{
                     game =  <RockPaperScissorsGame/>
                 }
                 else if(this.props.game==="DRAWFUL"){
-                    game = <Drawful/>
+                    game = <Drawful quickID = {this.props.userID}/>
                 }
                 else if(this.props.game==="RUDE_CARDS"){
                     game = <RudeCards userID = {this.props.userID}/>

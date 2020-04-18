@@ -30,6 +30,8 @@ class DrawfulGame{
             },
             timerStart: null,
             timerLength: 5000,
+            currentRound: 0,
+            totalRounds: 1,
             history: null,
             gameEnded: false,
         };
@@ -79,7 +81,7 @@ class DrawfulGame{
                     ...this.hiddenState,
                     allDrawingPrompts: allPrompts,
                 }
-                nextPhase(Date.now(), 3000);
+                nextPhase(Date.now(), 10000);
                 turn();
             }
             else if (phase == 'DRAWING'){
@@ -94,6 +96,12 @@ class DrawfulGame{
                     turn();
                 }, 10000)
             }
+            else if (phase == 'PICK_ANSWER'){
+                setTimeout(() => {
+                    nextPhase(Date.now(), 10000)
+                    turn();
+                },10000)
+            }
             else if (phase == 'ANSWER'){
                 setTimeout(() => {
                     nextPhase(Date.now(), 10000)
@@ -105,23 +113,18 @@ class DrawfulGame{
                     nextPhase(Date.now(), 10000)
                     turn();
                 }, 10000)
-            }
-            else if (phase == 'DISPLAY_SCORE_RANKING'){
-                if(this.gameState.toEnd){
-                    this.end();
-                }else{
-                    setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                    }, 10000)
-                }
+            
             }else if(phase == 'NO_DRAWING'){
                 setTimeout(() => {
                     nextPhase(Date.now(), 10000)
                     turn();
                 }, 10000)
+            }else if(phase == 'END_GAME'){
+                if(this.gameState.toEnd){
+                    this.end();
+                }
             }
-            
+           
         
         }).bind(this);
 

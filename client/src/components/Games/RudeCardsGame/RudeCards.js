@@ -2,7 +2,7 @@ import React from 'react';
 import StatusBar from './StatusBar';
 import {Hand, Votables, RevealedResponses} from './Selectables';
 import {connect} from 'react-redux';
-import {publishGameAction,setRefreshGameState, exitRoom} from '../../../store/actions/index';
+import {publishGameAction,setRefreshGameState} from '../../../store/actions/index';
 import styles from './RudeCards.module.css'
 
 const RudeCards = (props) => {

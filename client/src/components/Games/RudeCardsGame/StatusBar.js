@@ -29,6 +29,21 @@ const StatusBar = (props) => {
         case 'GAME_END':
             phaseText = 'end';
             break;
+        case 'DRAWING':
+            phaseText = 'drawing';
+            break;
+        case 'FAKE_ANSWER':
+            phaseText = 'answer';
+            break;
+        case 'PICK_ANSWER':
+            phaseText = 'pick';
+            break;
+        case 'REVEAL':
+            phaseText = 'reveal';
+            break;
+        case 'NO_DRAWING':
+            phaseText = 'nodrawing';
+            break;
         default:
             phaseText = '';
 
