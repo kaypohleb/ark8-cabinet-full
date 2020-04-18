@@ -58,6 +58,22 @@ function fetchUserHistoryDataReducer(state={},action){
     }
 }
 
+function fetchUserProfileDataReducer(state={}, action){
+    switch(action.type){
+        case(type.FETCH_USER_PROFILE_SUCCESS):
+            return ({
+                ...action.payload,
+            })
+        case(type.FETCH_USER_PROFILE_ERROR):{
+            return({
+                ...action.payload
+            })
+        }
+        default: 
+            return state;
+    }
+}
+
 const initLobbyState = {
     admin:'',
     game:null,
@@ -113,11 +129,14 @@ function fetchSettingsListReducer(state = {},action){
 
 
 
+
+
 export const rootReducer = combineReducers({
     userReducer,
     idtokenReducer,
     fetchUserDataReducer,
     fetchUserHistoryDataReducer,
+    fetchUserProfileDataReducer,
     fetchLobbyDataReducer,
     fetchGameDataReducer,
     fetchSettingsListReducer,

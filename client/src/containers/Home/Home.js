@@ -77,7 +77,7 @@ class Home extends Component{
             user.getIdToken().then((idToken) => {
             this.props.dispatch(idTokenChanged(idToken));
             this.setState({isSignedIn: true,});
-            this.props.history.push('/profile');
+            this.props.history.push('/home');
           });
           } 
             

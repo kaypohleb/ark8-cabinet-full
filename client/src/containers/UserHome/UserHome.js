@@ -23,7 +23,7 @@ class UserHome extends Component{
         this.exitNamingScreenHandler = this.exitNamingScreenHandler.bind(this);
         this.roomIDChange = this.roomIDChange.bind(this);
         this.roomIDComplete = this.roomIDComplete.bind(this);
-        this.enterHistory = this.enterHistory.bind(this);
+        this.enterProfile = this.enterProfile.bind(this);
         this.inputNameHandler = this.inputNameHandler.bind(this);
         this.saveNicknameHandler = this.saveNicknameHandler.bind(this);
     }
@@ -139,9 +139,9 @@ class UserHome extends Component{
         });
     }
 
-    enterHistory(){
+    enterProfile(){
         this.props.history.push({
-            pathname:"/history"
+            pathname: "/profile/" + this.props.id 
         });
     }
 
@@ -161,15 +161,15 @@ class UserHome extends Component{
                 return <Redirect to="/"/>
             }else if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
             
-             return <UserHomeDesktop useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeDesktop useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterProfile = {this.enterProfile} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
          
-             return <UserHomeTablet useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeTablet useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterProfile = {this.enterProfile} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
           
-             return <UserHomeMobile useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterHistory = {this.enterHistory} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
+             return <UserHomeMobile useNew = {this.state.useNew} newName={this.state.newName} name = {this.state.name} naming={this.state.naming} joining = {this.state.joining} userID = {this.props.id} joinIdComplete  = {this.state.joinIdComplete} isSignedIn  = {this.state.isSignedIn} enterProfile = {this.enterProfile} signOut = {this.signoutHander} createRoom = {this.createRoomHandler} joinRoom = {this.joinRoomHandler} enterNamingScreen = {this.joinNamingScreenHandler} saveNickname={this.saveNicknameHandler} inputNameChangeHandler={this.inputNameHandler} exitNamingScreen = {this.exitNamingScreenHandler} enterJoinScreen = {this.joinRoomScreenHandler} exitJoinScreen = {this.exitJoinScreenHandler} roomIDChange = {this.roomIDChange} roomIDComplete = {this.roomIDComplete}/>
              }
              else if (breakpoints[currentBreakpoint] >= 0){
              return <div className = {styles.Home}>Unable to display: use a bigger screen</div>

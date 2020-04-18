@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Home  from '../Home/Home';
 import UserHome from '../UserHome/UserHome';
+import UserProfile from '../UserProfile/UserProfile';
 import Lobby from '../Lobby/Lobby';
 import GameRoom from '../GameRoom/GameRoom';
 import { ToastContainer } from "react-toastify";
@@ -26,7 +27,8 @@ class App extends Component{
           <ToastContainer/>
           <Switch>
             <Route exact path ="/" component = {Home}/>
-            <Route exact path = "/profile" component = {UserHome}/>
+            <Route exact path = "/home" component = {UserHome}/>
+            <Route exact path = "/profile/:id" component = {UserProfile}/>
             <Route exact path = "/history" component = {GameHistory}/>
             <Route exact path = "/lobby" component = {Lobby}/>
             <Route exact path = "/game" component = {GameRoom}/>

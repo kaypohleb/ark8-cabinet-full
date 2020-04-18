@@ -1,6 +1,8 @@
 import{
     FETCH_USER_HISTORY_DATA_SUCCESS, 
     FETCH_USER_HISTORY_ERROR,
+    FETCH_USER_PROFILE_SUCCESS,
+    FETCH_USER_PROFILE_ERROR
   } from '../types';
 
 import axios from 'axios';
@@ -22,8 +24,7 @@ export const getUserHistoryData = () =>{
         }).catch(error => {
           dispatch(fetchUserHistoryDataError());
           
-        })
-    
+        })   
     }
 }
 
@@ -34,13 +35,48 @@ const fetchUserHistoryDataError = () =>({
     },
 })
 
-
-
 const fetchUserDataHistorySuccess = (res) => ({
   type:FETCH_USER_HISTORY_DATA_SUCCESS,
   payload:{
     ...res,
   }
+})
+
+export const getUserProfileData = (userId) => {
+  return async(dispatch,getState) =>{
+    let requestURL = `${BASE_URL}/getProfile`;
+    await axios.post(
+      requestURL,
+      {userId},
+      {
+        headers: {
+          Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
+        }
+      }).then(response=>{
+          dispatch(fetchUserProfileSuccess(response.data));
+          
+        }).catch(error => {
+          dispatch(fetchUserProfileError());
+          
+        })   
+    }
+}
+
+const fetchUserProfileSuccess = (res) => ({
+  type:FETCH_USER_PROFILE_SUCCESS,
+  payload:{
+    ...res,
+  }
+})
+
+const fetchUserProfileError = () =>({
+  type: FETCH_USER_PROFILE_ERROR,
+  payload:{
+    name: '',
+    id: '',
+    mostPlayedWith: [],
+    matchHistory: []
+  },
 })
 
 export const saveNickName = (newName) =>{

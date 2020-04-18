@@ -1,0 +1,33 @@
+.UserProfile {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.UserProfileContainer {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 768px;
+}
+
+.userName {
+    font-family: 'Abduction';
+    font-weight: 400;
+    color:rgb(223, 238, 12);
+    font-size: 4rem;
+    align-self: flex-start;
+    margin: 10px 10px;
+}
+
+.userId {
+    font-family: 'Poppins', sans-serif;
+    color: grey;
+    font-size: 0.8rem;
+}
+
+@media screen and (max-width: 768px) {
+    .UserProfileContainer {
+        width: 95%;
+    }
+}
