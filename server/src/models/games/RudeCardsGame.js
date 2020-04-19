@@ -1,10 +1,17 @@
 const RudeCardsSM = require('./RudeCardsSM');
+const firebase = require('../../firebase/firebase');
 const shuffle = require('knuth-shuffle-seeded');
-const {prompts, responses} = require('./RudeCardsData.json');
+const db = firebase.firestore();
+const getPrompts = async()=>{
+    await db.collection('prompts').doc('rude_cards').get().then(result=>{allPrompts = result.data()});
+}
 
+let allPrompts = null;
 class RudeCardsGame {
     constructor(players,settings={}){
+        console.log(settings);
         //TODO setup based on settings, default also taken from firestore
+        getPrompts();
         this.id = 'RUDE_CARDS';
         this.history = [];
         this.timer = null;
@@ -35,13 +42,11 @@ class RudeCardsGame {
         this.hiddenState = {
             availablePrompts: [],
             availableResponses: [],
-            currentResponses: []
+            currentResponses: [],
         };
 
-        this.setPrompts(prompts);
-        this.setResponses(responses);
+        
     }
-
     end(){
         console.log('ending game...')
         const players = this.gameState.players;
@@ -63,6 +68,8 @@ class RudeCardsGame {
         const turn = (function(){
             const phase = this.gameState.currentPhase;
             if (phase == 'INITIAL'){
+                this.setPrompts(allPrompts.prompts);
+                this.setResponses(allPrompts.responses);
                 nextPhase(Date.now(), 3000);
                 turn();
             }
@@ -118,12 +125,12 @@ class RudeCardsGame {
         this.gameStateUpdateCallback(game, players);
     }
 
-    setPrompts(prompts){
+    setPrompts = (prompts)=>{
         this.hiddenState.availablePrompts = [...prompts];
         shuffle(this.hiddenState.availablePrompts);
     }
 
-    setResponses(responses){
+    setResponses = (responses)=>{
         this.hiddenState.availableResponses = [...responses];
         shuffle(this.hiddenState.availableResponses);
     }

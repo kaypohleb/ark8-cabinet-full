@@ -87,6 +87,13 @@ export const startGame = (roomID,gameID) => {
       socket.emit('room_action',{roomId:roomID, gameId:gameID,actionType:"START_GAME"});
   }
 }
+
+export const changeSettings = (roomID,gameID,settings) => {
+    return () => {
+        socket.emit('room_action',{roomId:roomID, gameId:gameID, settings:settings, actionType:"CHANGE_SETTINGS"});
+    }
+}
+
 export const setRefreshGameState = () =>{
     return (dispatch) =>{
         socket.on('game_state_update', (data) => {

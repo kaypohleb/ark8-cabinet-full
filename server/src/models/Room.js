@@ -113,6 +113,7 @@ class Room {
 
         else if(actionType == "CHANGE_SETTINGS"){
             this.game = new games[action.gameId](this.players,action.settings);
+            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
         }
         else if ( actionType == 'START_GAME'){
             

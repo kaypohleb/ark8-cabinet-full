@@ -1,5 +1,5 @@
 const express = require('express');
-const {addNewGameSettings,getGameSettingsList} = require('../firebase/utils');
+const {addNewGameSettings,getGameSettingsList,getDefaultSettings} = require('../firebase/utils');
 const router = express.Router();
 
 router.post('/getSettingsList',async (req, res) => {
@@ -16,11 +16,21 @@ router.post('/getSettingsList',async (req, res) => {
     });
 });
 
+router.post('/getDefaultSettings',async(req,res) =>{
+    const result = await getDefaultSettings(req.body.game);
+    if (!result) {
+        return res.json({
+            error : "Error setting default game settings",
+        });
+    }
 
-router.post('/saveNewSettings',async (req, res) => {
-    console.log("trying to save new settings");
-    await addNewGameSettings(req.userId,req.body);
-
+    return res.json({
+        ...result
+    });
+});
+router.post('/setNewSettings',async (req, res) => {
+    console.log("trying to set and save new settings");
+    await addNewGameSettings(req.userID,req.body.setting,req.body.gameID,req.body.settingID);
 });
 
 

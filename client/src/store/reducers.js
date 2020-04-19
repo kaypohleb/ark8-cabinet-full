@@ -111,6 +111,18 @@ function fetchSettingsListReducer(state = {},action){
     }
 }
 
+function fetchDefaultSettingsReducer(state = {},action){
+    switch(action.type){
+        case(type.FETCH_DEFAULT_SETTINGS_SUCCESS):
+            return ({
+                ...action.payload
+            })
+        default: 
+            return state;
+    }
+}
+
+
 
 
 export const rootReducer = combineReducers({
@@ -121,4 +133,5 @@ export const rootReducer = combineReducers({
     fetchLobbyDataReducer,
     fetchGameDataReducer,
     fetchSettingsListReducer,
+    fetchDefaultSettingsReducer,
 });

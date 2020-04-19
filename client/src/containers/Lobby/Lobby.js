@@ -9,6 +9,7 @@ import { createRoom,
          startGame,
          exitRoom,
          getUserSettings,
+         getDefaultSettings,
         } from '../../store/actions/index';
 import styles from './Lobby.module.css';
 import LobbyMobile from './LobbyMobile/LobbyMobile';
@@ -44,6 +45,7 @@ class Lobby extends Component{
         gameScreen: false,
         settingsScreen:false,
         chosenSetting:"default",
+        defSettings:{},
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
@@ -62,7 +64,7 @@ class Lobby extends Component{
     }
 
     componentDidMount(){
-        console.log("Lobby ComponentDidMount")
+    
         if(this.props.location.state!==undefined && this.props.location.state.join){
             this.props.enterRoom(this.props.location.state.roomID);
         }else{
@@ -83,6 +85,7 @@ class Lobby extends Component{
                     gameStarted: this.props.gameStarted,
                     isSignedIn: this.props.isSignedIn,
                     settingsList: this.props.settingsList,
+                    defSettings: this.props.defSettings,
                 });
             
         }
@@ -98,6 +101,7 @@ class Lobby extends Component{
             game: event.target.value,
             gameChosenCnfrm: true,
         });
+        this.props.getDefaultSettings(event.target.value);
         this.props.setGame(this.state.id,event.target.value);
         
     }
@@ -158,15 +162,15 @@ class Lobby extends Component{
         {
           if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
            
-            return <LobbyDesktop settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted} startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler} />
+            return <LobbyDesktop defSettings={this.state.defSettings} settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted} startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler} />
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
           
-            return <LobbyTablet settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted}  startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler}/>
+            return <LobbyTablet defSettings={this.state.defSettings} settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted}  startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
             
-            return <LobbyMobile settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted} startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler}/>
+            return <LobbyMobile defSettings={this.state.defSettings} settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted} startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= 0){
             return <div className = {styles.Lobby}>Unable to display: use a bigger screen</div>
@@ -197,6 +201,7 @@ const mapStateToProps = (state) => {
         gameStarted: state.fetchLobbyDataReducer.gameStarted,
         isSignedIn:state.fetchLobbyDataReducer.isSignedIn,
         settingsList: state.fetchSettingsListReducer.settingsList,
+        defSettings: state.fetchDefaultSettingsReducer,
     }
 }
 
@@ -212,6 +217,7 @@ const mapDispatchtoProps = (dispatch) =>{
        enterRoom: (roomid)=>dispatch(enterRoom(roomid)),
        exitRoom: ()=>dispatch(exitRoom()),
        getUserSettings: (players,gameID)=>dispatch(getUserSettings(players,gameID)),
+       getDefaultSettings: (gameID) => dispatch(getDefaultSettings(gameID)),
    }
 }
 

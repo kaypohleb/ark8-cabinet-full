@@ -5,11 +5,11 @@ const db = firebase.firestore();
 let allPrompts = null;
 const getPrompts = async () =>{
     await db.collection('prompts').doc('drawful').get().then(result=>{allPrompts =  result.data().drawingprompts});
-    
 }
 module.exports 
 class DrawfulGame{
-    constructor(players){
+    constructor(players,setting={}){
+        console.log(setting);
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
         this.id = 'DRAWFUL';

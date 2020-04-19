@@ -3,6 +3,7 @@ import axios from 'axios';
 import {
     FETCH_SETTINGS_LIST_ERROR,
     FETCH_SETTINGS_LIST_SUCCESS,
+    FETCH_DEFAULT_SETTINGS_SUCCESS,
 } from '../types';
 const BASE_URL = 'http://localhost:3001';
 
@@ -30,12 +31,39 @@ export const getUserSettings = (players,gameID) =>{
   }
 }
 
-export const getSettings = (settingsID) =>{
+export const getDefaultSettings = (gameID) =>{
     return async(dispatch,getState) =>{
-      let requestURL = `${BASE_URL}/getSettings`;
+      let requestURL = `${BASE_URL}/getDefaultSettings`;
       await axios.post(
         requestURL,
-        {settings: settingsID},
+        {game: gameID},
+        {
+          headers: {
+            Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
+          }
+        }).then(response=>{
+            dispatch(fetchDefaultSettingsSuccess(response.data));
+            
+          }).catch(error => {
+            console.log("Get Default Settings Error")
+            
+          })
+      
+      }
+  }
+
+
+  export const setNewSettings = (settings,gameID,settingID="previous") =>{
+    return async(dispatch,getState) =>{
+      let requestURL = `${BASE_URL}/setNewSettings`;
+      await axios.post(
+        requestURL,
+        {
+            userID: getState().fetchUserDataReducer.id,
+            setting: settings,
+            gameID: gameID,
+            settingID: settingID,
+        },
         {
           headers: {
             Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
@@ -44,13 +72,21 @@ export const getSettings = (settingsID) =>{
             console.log(response.data)
             
           }).catch(error => {
-            console.log("Get User Settings Error")
+            console.log("set new Settings Error")
             
           })
       
       }
   }
 
+  
+
+  const fetchDefaultSettingsSuccess = (res) => ({
+      type: FETCH_DEFAULT_SETTINGS_SUCCESS,
+      payload:{
+          ...res,
+      }
+  })
   const fetchSettingsListSuccess = (res) => ({
     type:FETCH_SETTINGS_LIST_SUCCESS,
     payload:{

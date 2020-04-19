@@ -12,6 +12,7 @@ import Mux from '../../../hoc/Mux';
 import LowerModal from '../../../components/UI/Modal/LowerModal/LowerModal';
 import {isAllReady} from '../../../functions/arrayFunctions';
 import DynamicSelect from '../../../components/DynamicSelect/DynamicSelect';
+import SettingsInput from '../../../components/SettingsInput/SettingsInput';
 class LobbyTablet extends Component{
 
     render(){
@@ -107,6 +108,7 @@ class LobbyTablet extends Component{
         if(this.props.gameID){
             gameSettingsModal = (<LowerModal show={this.props.settingScreen} modalClosed = {()=>this.props.settingsScreenHandler()}>
                 <h1>GAME PARAMETERS</h1>
+                <SettingsInput roomID={this.props.id} gameID={this.gameID} settings={this.props.defSettings}/>
             </LowerModal>);
             gameChosen = <div>GAME CHOSEN: {this.props.gameID}</div>
         }
