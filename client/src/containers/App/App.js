@@ -5,6 +5,8 @@ import UserHome from '../UserHome/UserHome';
 import UserProfile from '../UserProfile/UserProfile';
 import Lobby from '../Lobby/Lobby';
 import GameRoom from '../GameRoom/GameRoom';
+import GameHistory from '../GameHistory/GameHistory';
+import Scoreboard from '../Scoreboard/Scoreboard';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -13,8 +15,6 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import GameHistory from '../GameHistory/GameHistory';
-
 
 
 class App extends Component{
@@ -32,6 +32,7 @@ class App extends Component{
             <Route exact path = "/history" component = {GameHistory}/>
             <Route exact path = "/lobby" component = {Lobby}/>
             <Route exact path = "/game" component = {GameRoom}/>
+            <Route exact path = "/scoreboard" component = {Scoreboard}/>
           </Switch>
         </div>
       </Router>

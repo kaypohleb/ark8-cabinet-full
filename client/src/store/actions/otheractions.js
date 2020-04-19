@@ -2,7 +2,9 @@ import{
     FETCH_USER_HISTORY_DATA_SUCCESS, 
     FETCH_USER_HISTORY_ERROR,
     FETCH_USER_PROFILE_SUCCESS,
-    FETCH_USER_PROFILE_ERROR
+    FETCH_USER_PROFILE_ERROR,
+    FETCH_SCOREBOARD_SUCCESS,
+    FETCH_SCOREBOARD_ERROR
   } from '../types';
 
 import axios from 'axios';
@@ -44,7 +46,6 @@ const fetchUserDataHistorySuccess = (res) => ({
 
 export const getUserProfileData = (userId) => {
   return async(dispatch,getState) =>{
-    console.log("making req!")
     let requestURL = `${BASE_URL}/getProfile`;
     try {
       const userProfile = await axios.post( requestURL, {userId},
@@ -75,6 +76,35 @@ const fetchUserProfileError = () =>({
     matchHistory: []
   },
 })
+
+export const getScoreboardData = (gameId) => {
+  return async (dispatch, getState) => {
+    let requestURL = `${BASE_URL}/getScoreboard`;
+    try {
+      const scoreboard = await axios.post( requestURL, {gameId},
+        {headers : {Authorization: 'Bearer ' + getState().idtokenReducer.idToken}} );
+      console.log(scoreboard.data)
+      dispatch(fetchScoreboardSuccess(gameId, scoreboard.data));   
+    }
+    catch (e) {
+      console.log(e);
+      dispatch(fetchScoreboardError());
+    }
+  }
+}
+
+const fetchScoreboardSuccess = (gameId, res) => ({
+  type: FETCH_SCOREBOARD_SUCCESS,
+  payload: {
+    gameId,
+    scoreboard: res.scoreboard
+  }
+})
+
+const fetchScoreboardError = () => ({
+  type: FETCH_SCOREBOARD_ERROR
+})
+
 
 export const saveNickName = (newName) =>{
   return async(dispatch,getState) =>{

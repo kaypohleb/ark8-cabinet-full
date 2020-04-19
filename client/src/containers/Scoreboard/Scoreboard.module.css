@@ -1,0 +1,113 @@
+.Scoreboard {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.scoreboardContainer {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    width: 768px;
+}
+
+.scoreboardBox {
+    background-color: #32BEA6;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 10px;
+    margin-bottom: 15px;
+}
+
+.titleText {
+    font-family: 'Abduction';
+    font-weight: 400;
+    color:rgb(223, 238, 12);
+    font-size: 2.5rem;
+    align-self: flex-start;
+    margin: 10px 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.scoreHeader {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0px 10px;
+    margin: 5px 0;
+}
+
+.playerDisp {
+    background-color: white;
+    border-radius: 10px;
+    flex-grow: 1;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 2px 0;
+}
+
+.playerDisp:hover{
+    background-color: #DDDDEE;
+}
+
+.selectorBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    border-bottom: solid white 2px;
+    flex-wrap: wrap;
+}
+
+.selector {
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    background-color: transparent;
+    border: transparent;
+    text-align: left;
+    cursor: pointer;
+    
+}
+
+.option {
+    background-color: white;
+    color: black;
+    font-size: 0.8rem;
+    border-radius: 10px;
+}
+
+.selectButton {
+    background-color: rgb(223, 238, 12);
+    border: none;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .scoreboardContainer {
+        width: 95%;
+    }
+}
