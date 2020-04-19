@@ -97,7 +97,7 @@ const addGameResults = async ({gameId, winner, roomId, players}) => {
 };
 
 const addGameResIDtoUserHistory = async(players,refId) =>{
-    console.log("addding to firebase");
+    console.log("adding to firebase");
     console.log(refId);
     await Promise.all(players.map(async player =>{
         await db.collection('users').doc(player.id).update({
@@ -113,12 +113,14 @@ const getGameHistory = async (userId) => {
     if (!user.exists){
         return null;
     }
-    console.log(await user.data());
 
     const historyList = user.data().history;
-    console.log(historyList);
 
-    var gameListProcess = new Promise((resolve,reject) =>{
+    if (historyList.length == 0) {
+        return [];
+    }
+    
+    let gameListProcess = new Promise((resolve,reject) =>{
         const gameList = [];
         historyList.forEach(async(gameID,index) => {
             const snapshot = await db.collection('game_results').doc(gameID).get();
@@ -128,11 +130,13 @@ const getGameHistory = async (userId) => {
             }  
         });   
     });
+
     gameListProcess.then((fullgameList)=>{
         return fullgameList.sort((a,b)=>(b.gameEndedAt-a.gameEndedAt));
     }).catch(()=>{
         console.log("retrieval of history error");
     })
+
     return gameListProcess;
 }
 

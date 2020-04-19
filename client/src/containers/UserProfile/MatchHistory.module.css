@@ -1,28 +1,48 @@
 .MatchHistory {
-
+    background-color: #FF8DC6;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 10px;
+    min-height: 2rem;
 }
 
 .title {
-
+    align-self: start;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    color: white;
+    
 }
 
 .resultDisp {
-
+    background-color: white;
+    border-radius: 10px;
+    flex-grow: 1;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
 }
 
 .gameInfo {
-
 }
 
 .gameName {
-
+    font-weight: 600;
+    font-size: 1.5rem;
 }
 
 .endTime {
-
+    color: grey;
+    font-size: 1rem;
 }
 
 .scores {
-
-
+    font-weight: 400;
+    font-size: 1.2rem;
 }

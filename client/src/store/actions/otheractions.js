@@ -46,23 +46,17 @@ export const getUserProfileData = (userId) => {
   return async(dispatch,getState) =>{
     console.log("making req!")
     let requestURL = `${BASE_URL}/getProfile`;
-    await axios.post(
-      requestURL,
-      {userId},
-      {
-        headers: {
-          Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
-        }
-      }).then(response=>{
-          console.log(response.data)
-          dispatch(fetchUserProfileSuccess(response.data));
-          
-        }).catch(error => {
-          console.log(error);
-          dispatch(fetchUserProfileError());
-          
-        })   
+    try {
+      const userProfile = await axios.post( requestURL, {userId},
+        {headers : {Authorization: 'Bearer ' + getState().idtokenReducer.idToken}} );
+      console.log(userProfile.data)
+      dispatch(fetchUserProfileSuccess(userProfile.data));   
     }
+    catch (e) {
+      console.log(e);
+      dispatch(fetchUserProfileError());
+    }
+  }
 }
 
 const fetchUserProfileSuccess = (res) => ({

@@ -7,10 +7,10 @@ const MatchHistory = (props) => {
 
     const isOwnProfile = (props.userId == props.profileId) && (props.userId);
     if (isOwnProfile){
-        titleText = 'your match history';
+        titleText = 'Your match history';
     }
     else {
-        titleText = 'your shared match history';
+        titleText = 'Your shared match history';
     }
 
     if (props.matchHistory){
@@ -28,8 +28,8 @@ const MatchHistory = (props) => {
                     </div>
 
                     <div className={styles.scores}>
-                        <div> you scored {userResult.score} points</div>
-                        {(isOwnProfile) ? '' :<div> {profileResult.name} score {profileResult.score} points </div>}
+                        <div> You scored {userResult.score} points</div>
+                        {(isOwnProfile) ? '' :<div> {profileResult.name} scored {profileResult.score} points </div>}
                         <div>{winnerName} won!</div>
                     </div>
                 </div>

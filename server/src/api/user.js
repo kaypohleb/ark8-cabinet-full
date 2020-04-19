@@ -22,7 +22,6 @@ router.post('/getProfile', async (req, res) => {
     const otherId = req.body.userId;
 
     const user = await getUserData(otherId);
-    console.log('got user')
 
     if (!user){
         return res.json({
@@ -35,7 +34,6 @@ router.post('/getProfile', async (req, res) => {
     let matchHistory = [];
 
     const userHistory = await getGameHistory(otherId);
-    console.log('got history')
 
     if (!user){
         return res.json({
