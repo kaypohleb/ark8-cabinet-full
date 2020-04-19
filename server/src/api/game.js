@@ -1,5 +1,5 @@
 const express = require('express');
-const {addNewGameSettings,getGameSettingsList,getDefaultSettings,getSettings} = require('../firebase/utils');
+const {addNewGameSettings,getGameSettingsList,getDefaultSettings,getSettings,getScoreboard} = require('../firebase/utils');
 const router = express.Router();
 
 router.post('/getSettingsList',async (req, res) => {
@@ -55,6 +55,15 @@ router.post('/setNewSettings',async (req, res) => {
     await addNewGameSettings(req.body.userID,req.body.gameID,req.body.setting,settingID);
 });
 
+router.post('/getScoreBoard', async (req, res) => {
+    const gameId = req.body.gameId;
+
+    const scoreboard = await getScoreboard(gameId);
+
+    return res.json({
+        scoreboard
+    })
+})
 
 
 module.exports = router;
