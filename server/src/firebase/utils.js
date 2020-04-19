@@ -113,9 +113,11 @@ const getGameHistory = async (userId) => {
     if (!user.exists){
         return null;
     }
+    console.log(await user.data());
 
     const historyList = user.data().history;
-    
+    console.log(historyList);
+
     var gameListProcess = new Promise((resolve,reject) =>{
         const gameList = [];
         historyList.forEach(async(gameID,index) => {
