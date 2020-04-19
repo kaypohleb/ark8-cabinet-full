@@ -152,7 +152,7 @@ class Lobby extends Component{
     goBackHandler(){
         console.log("calling exitRoom from lobby gobackhandler");
         this.props.exitRoom();
-        this.props.history.push('/profile');
+        this.props.history.push('/home');
     }
     
     render(){

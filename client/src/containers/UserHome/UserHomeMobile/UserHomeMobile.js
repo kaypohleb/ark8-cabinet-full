@@ -89,8 +89,8 @@ class UserHomeMobile extends Component{
                 style  = {{backgroundColor: "#FF8DC6", width:"70%", height:"5vh", textAlign:"center"}}
                 whileHover = {{scale:1.1}}
                 whileTap = {{scale:0.8}}
-                onClick = {()=>this.props.enterHistory()}>
-                GAME HISTORY</StyledMobileButton>
+                onClick = {()=>this.props.enterProfile()}>
+                YOUR PROFILE</StyledMobileButton>
                 <StyledMobileButton 
                 style  = {{backgroundColor: "#8B940C", width:"70%", height:"5vh", textAlign:"center"}}
                 whileHover = {{scale:1.1}}

@@ -9,7 +9,7 @@ const getUserData = async (userId) => {
         return null;
     }
     return user.data();
-}
+};
 
 const updateUserData = async (userId, userData) => {
     const userRef = await db.collection('users').doc(userId);
@@ -109,6 +109,11 @@ const addGameResIDtoUserHistory = async(players,refId) =>{
 
 const getGameHistory = async (userId) => {
     const user = await db.collection('users').doc(userId).get();
+
+    if (!user.exists){
+        return null;
+    }
+
     const historyList = user.data().history;
     
     var gameListProcess = new Promise((resolve,reject) =>{
@@ -122,7 +127,6 @@ const getGameHistory = async (userId) => {
         });   
     });
     gameListProcess.then((fullgameList)=>{
-        //console.log(fullgameList);
         return fullgameList.sort((a,b)=>(b.gameEndedAt-a.gameEndedAt));
     }).catch(()=>{
         console.log("retrieval of history error");

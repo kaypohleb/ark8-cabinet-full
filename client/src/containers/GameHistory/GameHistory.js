@@ -47,8 +47,6 @@ class GameHistory extends Component{
             loader = <AllGameHistory gamehistory={this.state.gamehistory}/>
         }
         
-        
-        
         return(
             <div>
                 {loader}
