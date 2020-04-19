@@ -35,10 +35,6 @@ const getDefaultSettings = async(gameID) => {
 };
 
 const addNewGameSettings = async(playerId,gameID,settings,settingID) =>{
-    console.log("playerId");
-    console.log(playerId);
-    console.log("settings");
-    console.log(settings);
     console.log("settingID");
     console.log(settingID);
     console.log('saving new game settings');

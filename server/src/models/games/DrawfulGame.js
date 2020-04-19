@@ -11,11 +11,12 @@ class DrawfulGame{
     constructor(players,settings){
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
+        this.settings = settings;
         this.id = 'DRAWFUL';
         this.history = [];
         this.gameStateUpdateCallback = null;
         this.publishScoreCallback = null;
-        this.gameStateMachine = new DrawfulSM(settings);
+        this.gameStateMachine = new DrawfulSM(this.settings);
         this.useState = true;
         this.gameState = {
             gameId: 'DRAWFUL',
@@ -56,7 +57,7 @@ class DrawfulGame{
             allDrawingPrompts: null,
         };
         if(settings){
-            this.gameState.totalRounds = settings.totalRounds.defaultValue;
+            this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
         }
     }
 
@@ -78,10 +79,14 @@ class DrawfulGame{
         const nextPhase = ((timerStart, timerLength) => {this.makeAction(null, {actionType: 'NEXT_PHASE', timerStart: timerStart, timerLength: timerLength})}).bind(this)
         const turn = (function(){
             const phase = this.gameState.currentPhase;
+            let updatedPrompts = allPrompts;
+            if(this.settings){
+                updatedPrompts = updatedPrompts.concat(this.settings.customPrompts);
+            }
             if (phase == 'INITIAL'){
                 this.hiddenState = {
                     ...this.hiddenState,
-                    allDrawingPrompts: allPrompts,
+                    allDrawingPrompts: updatedPrompts,
                 }
                 nextPhase(Date.now(), 10000);
                 turn();

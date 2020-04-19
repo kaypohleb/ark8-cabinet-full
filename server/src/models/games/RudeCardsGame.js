@@ -11,11 +11,12 @@ class RudeCardsGame {
     constructor(players,settings){
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
+        this.settings = settings;
         this.id = 'RUDE_CARDS';
         this.history = [];
         this.timer = null;
         this.gameStateUpdateCallback = null;
-        this.gameStateMachine = new RudeCardsSM(settings);
+        this.gameStateMachine = new RudeCardsSM(this.settings);
         
         this.gameState = {
             gameId: 'RUDE_CARDS',
@@ -43,8 +44,8 @@ class RudeCardsGame {
             availableResponses: [],
             currentResponses: [],
         };
-        if(settings){
-            this.gameState.totalRounds = settings.totalRounds.defaultValue;
+        if(this.settings){
+            this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
         }
         
     }
@@ -69,8 +70,16 @@ class RudeCardsGame {
         const turn = (function(){
             const phase = this.gameState.currentPhase;
             if (phase == 'INITIAL'){
-                this.setPrompts(allPrompts.prompts);
-                this.setResponses(allPrompts.responses);
+                let updatedPrompts = allPrompts.prompts
+                if(this.settings.customPrompts){
+                    updatedPrompts = updatedPrompts.concat(this.settings.customPrompts);
+                }
+                let updatedResponse = allPrompts.responses
+                if(this.settings.customResponse){
+                    updatedResponse = updatedResponse.concat(this.settings.customResponse);
+                }
+                this.setPrompts(updatedPrompts);
+                this.setResponses(updatedResponse);
                 nextPhase(Date.now(), 3000);
                 turn();
             }

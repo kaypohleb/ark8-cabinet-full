@@ -52,7 +52,7 @@ router.post('/setNewSettings',async (req, res) => {
     if(!req.body.settingID){
         settingID = "previous";
     }
-    await addNewGameSettings(req.body.userID,req.body.gameID,req.body.setting,settingID);
+    await addNewGameSettings(req.body.userID,req.body.gameID,req.body.settings,settingID);
 });
 
 router.post('/getScoreBoard', async (req, res) => {

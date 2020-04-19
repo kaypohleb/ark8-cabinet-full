@@ -3,7 +3,7 @@ import styles from './UserHomeTablet.module.css';
 import LoadingLottie from '../../../components/Lotties/LoadingLottie';
 import Modal from '../../../components/UI/Modal/Modal';
 import PinInput from "react-pin-input";
-import {StyledButton,StyledMobileButton} from '../../../components/StyledComponents/StyledButton';
+import {StyledButton} from '../../../components/StyledComponents/StyledButton';
 import createRoomIcon from '../../../assets/svg/icon/createRoomIcon.svg';
 import joinRoomIcon from '../../../assets/svg/icon/joinRoomIcon.svg';
 

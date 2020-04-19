@@ -5,7 +5,7 @@ const MatchHistory = (props) => {
     let content = '';
     let titleText = 'match history';
 
-    const isOwnProfile = (props.userId == props.profileId) && (props.userId);
+    const isOwnProfile = (props.userId === props.profileId) && (props.userId);
     if (isOwnProfile){
         titleText = 'Your match history';
     }
@@ -16,9 +16,9 @@ const MatchHistory = (props) => {
     if (props.matchHistory){
         content = props.matchHistory.map((result) => {
             const endDate = new Date(result.gameEndedAt).toDateString();
-            const userResult = result.players.find(player => player.id == props.userId);
-            const profileResult = result.players.find(player => player.id == props.profileId);
-            const winnerName = (result.winner.id == props.userId) ? 'You' : result.winner.name;
+            const userResult = result.players.find(player => player.id === props.userId);
+            const profileResult = result.players.find(player => player.id === props.profileId);
+            const winnerName = (result.winner.id === props.userId) ? 'You' : result.winner.name;
 
             return (
                 <div className={styles.resultDisp}>

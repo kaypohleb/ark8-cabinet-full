@@ -91,7 +91,7 @@ export const getDefaultSettings = (gameID) =>{
         requestURL,
         {
             userID: getState().fetchUserDataReducer.id,
-            setting: settings,
+            settings: settings,
             gameID: gameID,
             settingID: settingID,
         },
