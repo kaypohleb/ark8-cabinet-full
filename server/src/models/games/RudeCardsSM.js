@@ -1,4 +1,11 @@
 class RudeCardsSM{
+    constructor(settings){
+        if(settings){
+            this.votePoints = settings.votePoints.defaultValue;
+        }else{
+            this.votePoints = 1;
+        }
+    }
     step(userId, action, gameState, playerStates, hiddenState){
         const player = gameState.players.find( p => p.id == userId);
 
@@ -98,7 +105,7 @@ class RudeCardsSM{
 
                 hiddenState.currentResponses.forEach(r => {
                     const p = gameState.players.find(p => p.id == r.userId);
-                    p.score += r.votes;
+                    p.score += (r.votes*this.votePoints);
                 })
 
                 gameState.currentPhase = 'UPDATE_SCORES';

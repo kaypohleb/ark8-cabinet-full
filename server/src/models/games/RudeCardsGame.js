@@ -8,15 +8,14 @@ const getPrompts = async()=>{
 
 let allPrompts = null;
 class RudeCardsGame {
-    constructor(players,settings={}){
-        console.log(settings);
+    constructor(players,settings){
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
         this.id = 'RUDE_CARDS';
         this.history = [];
         this.timer = null;
         this.gameStateUpdateCallback = null;
-        this.gameStateMachine = new RudeCardsSM();
+        this.gameStateMachine = new RudeCardsSM(settings);
         
         this.gameState = {
             gameId: 'RUDE_CARDS',
@@ -44,7 +43,9 @@ class RudeCardsGame {
             availableResponses: [],
             currentResponses: [],
         };
-
+        if(settings){
+            this.gameState.totalRounds = settings.totalRounds.defaultValue;
+        }
         
     }
     end(){

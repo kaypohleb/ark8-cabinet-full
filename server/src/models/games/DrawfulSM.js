@@ -1,8 +1,17 @@
 class DrawfulSM {
-    constructor(props){
+    constructor(settings){
         this.selectedPrompt = null;
         this.selectedUserId = null;
         this.selectedDrawing = null;
+        if(settings){
+            this.correctPoints = settings.correctPoints.defaultValue;
+            this.foolPoints = settings.foolPoints.defaultValue;
+            this.penalty = settings.penalty.defaultValue;  
+        }else{
+            this.correctPoints = 100;
+            this.foolPoints = 50;
+            this.penalty = 25;
+        }
     }
     step(userId, action, gameState, playerStates, hiddenState){
         let updatedGameState = {
@@ -46,7 +55,7 @@ class DrawfulSM {
                     console.log("MOVING TO NO_DRAWING");
                     updatedGameState.players.forEach(player => {
                         if(player.id == this.selectedUserId){
-                            player.score-=1000;
+                            player.score-=this.penalty;
                         }
                     });
                     updatedGameState = {
@@ -229,7 +238,7 @@ class DrawfulSM {
                     if (Array.isArray(this.selectedDrawing) && this.selectedDrawing.length==0){
                         updatedGameState.players.forEach(player => {
                             if(player.id == this.selectedUserId){
-                                player.score-=1000;
+                                player.score-=this.penalty;
                             }
                         });
                         updatedGameState = {
@@ -303,16 +312,27 @@ class DrawfulSM {
                     }
                 }
                 else {
-                    for (const userId in playerStates){
-                        if (playerStates[userId].pickedAnswer === this.selectedPrompt){
-                            updatedGameState.players.forEach(player => {
-                                if(player.id == userId){
-                                    player.score+=1000;
+                    for(answer in updatedGameState.currentDrawing.answers){
+                        if(answer.owner==this.selectedUserId){
+                            answer.selected.forEach(select=>{
+                                updatedGameState.players.forEach(player=>{
+                                    if(player.name == select){
+                                        player.score+=this.correctPoints;
+                                    }
+                                });
+                            });
+                        }else{
+                            updatedGameState.players.forEach(player=>{
+                                if(player.name == answer.owner){
+                                    answer.selected.forEach(select=>{
+                                        player.score+=this.foolPoints;
+                                    });   
                                 }
                             });
                             
                         }
                     }
+                    
                     const nextDrawingUserId = Object.keys(updatedHiddenState.submittedDrawings)[0];
                     this.selectedDrawing = updatedHiddenState.submittedDrawings[nextDrawingUserId];
                     this.selectedUserId = nextDrawingUserId;
@@ -323,7 +343,7 @@ class DrawfulSM {
                     if (Array.isArray(this.selectedDrawing) && this.selectedDrawing.length==0){
                         updatedGameState.players.forEach(player => {
                             if(player.id == this.selectedUserId){
-                                player.score-=1000;
+                                player.score-=this.penalty;
                             }
                         });
                         updatedGameState = {

@@ -8,15 +8,14 @@ const getPrompts = async () =>{
 }
 module.exports 
 class DrawfulGame{
-    constructor(players,setting={}){
-        console.log(setting);
+    constructor(players,settings){
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
         this.id = 'DRAWFUL';
         this.history = [];
         this.gameStateUpdateCallback = null;
         this.publishScoreCallback = null;
-        this.gameStateMachine = new DrawfulSM();
+        this.gameStateMachine = new DrawfulSM(settings);
         this.useState = true;
         this.gameState = {
             gameId: 'DRAWFUL',
@@ -56,6 +55,9 @@ class DrawfulGame{
             }, {}),
             allDrawingPrompts: null,
         };
+        if(settings){
+            this.gameState.totalRounds = settings.totalRounds.defaultValue;
+        }
     }
 
     printState(){

@@ -30,7 +30,14 @@ router.post('/getDefaultSettings',async(req,res) =>{
 });
 router.post('/setNewSettings',async (req, res) => {
     console.log("trying to set and save new settings");
-    await addNewGameSettings(req.userID,req.body.setting,req.body.gameID,req.body.settingID);
+    
+    console.log(req.body);
+    
+    let settingID = req.body.settingID;
+    if(!req.body.settingID){
+        settingID = "previous";
+    }
+    await addNewGameSettings(req.body.userID,req.body.gameID,req.body.setting,settingID);
 });
 
 

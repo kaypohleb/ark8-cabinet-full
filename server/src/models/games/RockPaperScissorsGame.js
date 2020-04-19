@@ -1,8 +1,8 @@
 const RockPaperScissorsSM = require('./RockPaperScissorsSM');
 
 class RockPaperScissorsGame {
-    constructor(players,settings={}){
-        console.log(settings);
+    constructor(players,settings){
+        console.log("adding settings in game");
         //TODO setup based on settings, default also taken from firestore
         this.id = 'ROCK_PAPER_SCISSORS';
         this.timer = null;
@@ -16,6 +16,7 @@ class RockPaperScissorsGame {
             history: [],
             prevWinner: null,
             gameEnded: false,
+            labels: ["rock","paper","scissors"],
         };
         this.playerStates = players.reduce( (playerStates, player) => {
             playerStates[player.id] = {selection : null};
@@ -24,7 +25,11 @@ class RockPaperScissorsGame {
         this.history = [];
         this.gameStateUpdateCallback = null;
         this.publishScoreCallback = null;
-        this.gameStateMachine = new RockPaperScissorsSM();
+        this.gameStateMachine = new RockPaperScissorsSM(settings);
+        if(this.settings){
+            this.gameState.totalRounds = settings.totalRounds.defaultValue;
+            this.gameState.labels = settings.labels;
+        }
     }
 
     printState(){

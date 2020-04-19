@@ -23,7 +23,6 @@ export const createRoom = () =>{
          
           dispatch(enterRoom(response.data.id));
         }).catch(error => {
-          console.log("caught");
           dispatch({
             type: UPDATE_ROOM_STATE_ERROR,
             error
@@ -52,7 +51,6 @@ export const enterRoom = (roomID) =>{
       toast.error(`Error: ${data}`);
     })
     socket.on('room_action_error', (data) => {
-      console.log("room error");
       toast.error(`Room Action Error: ${data.message}`);
     })
   }

@@ -117,7 +117,6 @@ class Lobby extends Component{
         })
     }
     getSettingListHandler(event){
-        console.log(event);
         this.props.getUserSettings(this.state.players,event.target.value);   
     }
     startGameHandler(){ 

@@ -34,13 +34,19 @@ const getDefaultSettings = async(gameID) => {
     return defaults.data()[gameID];
 };
 
-const addNewGameSettings = async(playerId,settings,gameID,settingID="previous") =>{
+const addNewGameSettings = async(playerId,gameID,settings,settingID) =>{
+    console.log("playerId");
+    console.log(playerId);
+    console.log("settings");
+    console.log(settings);
+    console.log("settingID");
+    console.log(settingID);
     console.log('saving new game settings');
-    await db.collection('settings').doc(settingID).set({
+    await db.collection('settings').doc(playerId+'-'+settingID+'-'+gameID).set({
         ...settings,
     });
     await db.collection('users').doc(playerId).update({
-        [`settings.${gameID}`]: admin.firestore.FieldValue.arrayUnion(settingID),
+        [`settings.${gameID}`]: admin.firestore.FieldValue.arrayUnion(playerId+'-'+settingID+'-'+gameID),
     });
 }
 
@@ -70,8 +76,8 @@ const setGameSettings = async(settingsId) =>{
 
 const deleteGameSettings = async(playerId,settingsId) =>{
     console.log(`deleting ${settingsId}`);
-    await db.collection('settings').doc(settingsId).delete();
-    await db.collection('users').doc(playerId).update({
+    await db.collection('settings').doc(settingsId).get().delete();
+    await db.collection('users').doc(playerId).get().update({
         settings: admin.firestore.FieldValue.arrayRemove(settingsId),
     })
 }

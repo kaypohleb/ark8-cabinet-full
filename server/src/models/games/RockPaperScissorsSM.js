@@ -1,4 +1,12 @@
-class RockPaperScissorsSM {
+class RockPaperScissorsSM{
+    constructor(settings){
+        if(settings){
+            this.correctPoints = settings.correctPoints.defaultValue;
+        }else{
+            this.correctPoints = 1;
+        }
+    }
+
     step(userId, action, gameState, playerStates){
         let updatedGameState = {
             ...gameState,
@@ -55,7 +63,7 @@ class RockPaperScissorsSM {
             for (const playerId in playerStates){
                 if (winningSelection && playerStates[playerId].selection == winningSelection){
                     let player = updatedGameState.players.find(player => player.id == playerId);
-                    player.score++;
+                    player.score+=this.correctPoints;
                 }
             }
 

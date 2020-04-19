@@ -27,7 +27,7 @@ class LobbyMobile extends Component{
                         whileTap = {{scale:0.8}}
                         onClick = {()=>{this.props.startGame()}}>
                         Start Game</StyledMobileButton>);   
-                gameSettingsButton = (<StyledMobileButton onClick={()=>this.props.settingsScreenHandler()}>ADD NEW</StyledMobileButton> );
+                gameSettingsButton = (<StyledMobileButton onClick={()=>this.props.settingsScreenHandler()}>SETTINGS</StyledMobileButton> );
             }
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
@@ -108,7 +108,7 @@ class LobbyMobile extends Component{
         if(this.props.gameID){
             gameSettingsModal = (<LowerModal show={this.props.settingScreen} modalClosed = {()=>this.props.settingsScreenHandler()}>
                 <h1>GAME PARAMETERS</h1>
-                <SettingsInput gameID={this.gameID} roomID={this.props.id} settings={this.props.defSettings}/>
+                <SettingsInput gameID={this.props.gameID} roomID={this.props.id} settings={this.props.defSettings} toClose={()=>this.props.settingsScreenHandler()}/>
             </LowerModal>);
             gameChosen = <div>GAME CHOSEN: {this.props.gameID}</div>
         

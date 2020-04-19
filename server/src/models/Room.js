@@ -106,12 +106,15 @@ class Room {
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            this.game = new games[action.gameId](this.players);//add settings params here
+            this.game = new games[action.gameId](this.players,null);//add settings params here
             this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
             
         }
 
-        else if(actionType == "CHANGE_SETTINGS"){
+        else if(actionType == 'CHANGE_SETTINGS'){
+            if (!games[action.gameId]) {
+                throw new Error("Game does not exist");
+            }
             this.game = new games[action.gameId](this.players,action.settings);
             this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
         }

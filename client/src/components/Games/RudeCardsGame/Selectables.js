@@ -8,10 +8,10 @@ const Hand = (props) => {
             <p>your hand</p>
             {props.availableResponses.reverse().map(response => {
                 if (response === props.currentResponse){
-                    return (<div class = {styles.SelectedHandResponse}> {response}</div>)
+                    return (<div key={response} className={styles.SelectedHandResponse}> {response}</div>)
                 }
                 else {
-                    return (<div class = {styles.HandResponse} onClick = {props.playCard(response)}> {response} </div>)
+                    return (<div key={response} className={styles.HandResponse} onClick = {props.playCard(response)}> {response} </div>)
                 }
             })}
         </div>
@@ -26,10 +26,10 @@ const Votables = (props) => {
             <p>vote for p response</p>
             {props.votableResponses.map((response) => {
                 if (response === props.votedResponse){
-                    return (<div class = {styles.SelectedVote}> {response}</div>)
+                    return (<div key={response} className={styles.SelectedVote}> {response}</div>)
                 }
                 else {
-                    return (<div class = {styles.Vote} onClick = {props.voteCard(response)}> {response} </div>)
+                    return (<div key={response} className={styles.Vote} onClick = {props.voteCard(response)}> {response} </div>)
                 }
             })}
         </div>
@@ -41,7 +41,7 @@ const RevealedResponses = (props) => {
         <div class = {styles.RevealedResponsesContainer}>
             <p>response scores</p>
             {props.revealedResponses.map((response) => (
-                <div class = {styles.RevealedResponse}>
+                <div key={response.playerName} className={styles.RevealedResponse}>
                     <p>{response.playerName} played:</p>
                     <strong>{response.response}</strong>
                     <p>and got {response.votes} votes</p>

@@ -53,7 +53,7 @@ export const getDefaultSettings = (gameID) =>{
   }
 
 
-  export const setNewSettings = (settings,gameID,settingID="previous") =>{
+  export const setNewSettings = (settings,gameID,settingID) =>{
     return async(dispatch,getState) =>{
       let requestURL = `${BASE_URL}/setNewSettings`;
       await axios.post(

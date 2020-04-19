@@ -110,7 +110,6 @@ class UserHome extends Component{
         })
     }
     saveNicknameHandler(){
-        console.log("called");
         const newNameH = this.state.newName;
         this.props.dispatch(saveNickName(newNameH));
         this.setState({

@@ -54,9 +54,14 @@ class SettingsInput extends Component{
 
     }
     handleSubmit(){
-        console.log("clicked");
-        this.props.dispatch(setNewSettings(this.state.settings,this.props.gameID,this.state.settingsID));
+        console.log(this.props.gameID);
+        let set = 'previous';
+        if(this.state.settingsID){
+            set = this.state.settingsID;
+        }
+        this.props.dispatch(setNewSettings(this.state.settings,this.props.gameID,set));
         this.props.dispatch(changeSettings(this.props.roomID,this.props.gameID,this.state.settings));
+        this.props.toClose();
     }
 
     render(){
