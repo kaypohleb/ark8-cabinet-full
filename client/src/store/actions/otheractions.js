@@ -44,6 +44,7 @@ const fetchUserDataHistorySuccess = (res) => ({
 
 export const getUserProfileData = (userId) => {
   return async(dispatch,getState) =>{
+    console.log("making req!")
     let requestURL = `${BASE_URL}/getProfile`;
     await axios.post(
       requestURL,
@@ -53,9 +54,11 @@ export const getUserProfileData = (userId) => {
           Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
         }
       }).then(response=>{
+          console.log(response.data)
           dispatch(fetchUserProfileSuccess(response.data));
           
         }).catch(error => {
+          console.log(error);
           dispatch(fetchUserProfileError());
           
         })   

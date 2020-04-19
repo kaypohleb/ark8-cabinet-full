@@ -12,8 +12,10 @@ class UserProfile extends Component{
         super(props);
         const userId = props.match.params.id;
         if (userId){
+            console.log("calling!")
             this.props.dispatch(getUserProfileData(userId))
         }
+
     }
 
     componentDidUpdate(prevProps){
@@ -31,7 +33,7 @@ class UserProfile extends Component{
                 <div className={styles.UserProfileContainer}>
                     <div className={styles.userName}>{this.props.name}</div>
                     <MostPlayedWith mostPlayedWith={this.props.mostPlayedWith} history={this.props.history}/>
-                    <MatchHistory matchHistory={this.props.matchHistory}/>
+                    <MatchHistory matchHistory={this.props.matchHistory} userId={this.props.id} profileId={this.props.profileId} />
                 </div>
             </div>
         )
@@ -43,8 +45,9 @@ class UserProfile extends Component{
 const mapStateToProps = (state) => {
     console.log(state);
     return{
-        name: state.fetchUserProfileDataReducer.name,
         id: state.fetchUserDataReducer.id,
+        profileId: state.fetchUserProfileDataReducer.id,
+        name: state.fetchUserProfileDataReducer.name,
         mostPlayedWith: state.fetchUserProfileDataReducer.mostPlayedWith,
         matchHistory: state.fetchUserProfileDataReducer.matchHistory
     }
