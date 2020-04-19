@@ -68,13 +68,6 @@ class UserHomeTablet extends Component{
                 {joinButton}
                 </div>
                </Modal> 
-            <Modal show = {this.props.naming} modalClosed = {()=>this.props.exitNamingScreen()}>
-                <div className = {styles.joinCard}>
-                <h2>You can change your nickname here</h2>
-                <input value={this.props.newName} onChange={(e)=>this.props.inputNameChangeHandler(e)} className={styles.inputBox} type="text" placeholder="new nickname"></input>
-                <StyledMobileButton onClick={()=>this.props.saveNickname()}>SAVE</StyledMobileButton>
-                </div>
-               </Modal> 
             <h1 onClick = {()=>this.props.enterNamingScreen()}className = {styles.nameTitle}>{name}</h1>
             <div className = {styles.options}>
             <StyledButton

@@ -97,7 +97,7 @@ const addGameResults = async ({gameId, winner, roomId, players}) => {
 };
 
 const addGameResIDtoUserHistory = async(players,refId) =>{
-    console.log("addding to firebase");
+    console.log("adding to firebase");
     console.log(refId);
     await Promise.all(players.map(async player =>{
         await db.collection('users').doc(player.id).update({
@@ -114,29 +114,61 @@ const getGameHistory = async (userId) => {
         return null;
     }
 
-    const historyList = user.data().history;
+    let history = [];
+
+    if (await user.data().history.length == 0) {
+        return [];
+    }
     
-    var gameListProcess = new Promise((resolve,reject) =>{
-        const gameList = [];
-        historyList.forEach(async(gameID,index) => {
-            const snapshot = await db.collection('game_results').doc(gameID).get();
-            gameList.push(snapshot.data());
-            if(index==historyList.length-1){
-                resolve(gameList);
-            }  
-        });   
-    });
-    gameListProcess.then((fullgameList)=>{
-        return fullgameList.sort((a,b)=>(b.gameEndedAt-a.gameEndedAt));
-    }).catch(()=>{
-        console.log("retrieval of history error");
+    const resultsSnapshot = await db.collection('game_results').get();
+    await resultsSnapshot.forEach(async (doc) => {
+        const result = await doc.data();
+        history.push(result);
     })
-    return gameListProcess;
+
+    history = history.filter((result) => result.players.find( (player) => player.id == userId ));
+
+    return history;
 }
 
 const saveNicknameToFirestore = async(userId,newName) =>{
     console.log(newName);
     await db.collection('users').doc(userId).update({name:newName});
+}
+
+const getScoreboard = async (gameId) => {
+    const resultsRef = db.collection('game_results');
+    const queryRef = resultsRef.where('gameId', '==', gameId);
+    const resultsSnapshot = await queryRef.get();
+
+    if (resultsSnapshot.empty){
+        return [];
+    }
+
+    const players = {};
+
+    await resultsSnapshot.forEach(async (doc) => {
+        const result = await doc.data();
+        result.players.forEach( (player) => {
+            if (player.id in players){
+                players[player.id].score += player.score;
+            }
+            else {
+                players[player.id] = player;
+            }
+        });
+    })
+
+    let scoreboard = [];
+
+    for (const playerId in players){
+        scoreboard.push(players[playerId]);
+    }
+
+    scoreboard.sort( (a,b) => (b.score - a.score) );
+    scoreboard = scoreboard.slice(0,10);
+
+    return scoreboard
 }
 
 module.exports = {
@@ -151,4 +183,5 @@ module.exports = {
     getGameHistory,
     addGameResIDtoUserHistory,
     saveNicknameToFirestore,
+    getScoreboard
 };
