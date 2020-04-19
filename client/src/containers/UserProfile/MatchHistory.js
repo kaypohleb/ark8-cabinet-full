@@ -18,12 +18,12 @@ const MatchHistory = (props) => {
             const endDate = new Date(result.gameEndedAt).toDateString();
             const userResult = result.players.find(player => player.id == props.userId);
             const profileResult = result.players.find(player => player.id == props.profileId);
-            const winnerName = (result.winner.id == props.userId) ? 'you' : result.winner.name;
+            const winnerName = (result.winner.id == props.userId) ? 'You' : result.winner.name;
 
             return (
                 <div className={styles.resultDisp}>
                     <div className={styles.gameInfo}>
-                        <div className={styles.gameName}>{result.gameId.replace("_"," ")}</div>
+                        <div className={styles.gameName}>{result.gameId.split('_').join(' ')}</div>
                         <div className={styles.endTime}>Game played on {endDate}</div>
                     </div>
 

@@ -114,30 +114,21 @@ const getGameHistory = async (userId) => {
         return null;
     }
 
-    const historyList = user.data().history;
+    let history = [];
 
-    if (historyList.length == 0) {
+    if (await user.data().history.length == 0) {
         return [];
     }
     
-    let gameListProcess = new Promise((resolve,reject) =>{
-        const gameList = [];
-        historyList.forEach(async(gameID,index) => {
-            const snapshot = await db.collection('game_results').doc(gameID).get();
-            gameList.push(snapshot.data());
-            if(index==historyList.length-1){
-                resolve(gameList);
-            }  
-        });   
-    });
-
-    gameListProcess.then((fullgameList)=>{
-        return fullgameList.sort((a,b)=>(b.gameEndedAt-a.gameEndedAt));
-    }).catch(()=>{
-        console.log("retrieval of history error");
+    const resultsSnapshot = await db.collection('game_results').get();
+    await resultsSnapshot.forEach(async (doc) => {
+        const result = await doc.data();
+        history.push(result);
     })
 
-    return gameListProcess;
+    history = history.filter((result) => result.players.find( (player) => player.id == userId ));
+
+    return history;
 }
 
 const saveNicknameToFirestore = async(userId,newName) =>{
