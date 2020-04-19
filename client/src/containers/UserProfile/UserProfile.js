@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {withRouter, Redirect} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import {getUserProfileData} from '../../store/actions/index';
-import AllGameHistory from '../../components/AllGameHistory/AllGameHistory';
 import styles from './UserProfile.module.css';
 import MostPlayedWith from './MostPlayedWith';
 import MatchHistory from './MatchHistory';
@@ -17,7 +16,7 @@ class UserProfile extends Component{
     }
 
     componentDidUpdate(prevProps){
-        if (this.props.match.params.id != prevProps.match.params.id){
+        if (this.props.match.params.id !== prevProps.match.params.id){
             const userId = this.props.match.params.id;
             if (userId){
                 this.props.dispatch(getUserProfileData(userId))

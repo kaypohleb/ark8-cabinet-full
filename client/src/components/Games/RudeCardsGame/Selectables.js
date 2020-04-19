@@ -4,7 +4,7 @@ import styles from './Selectables.module.css'
 
 const Hand = (props) => {
     return (
-        <div class = {styles.HandContainer}>
+        <div className = {styles.HandContainer}>
             <p>your hand</p>
             {props.availableResponses.reverse().map(response => {
                 if (response === props.currentResponse){
@@ -22,7 +22,7 @@ const Hand = (props) => {
 
 const Votables = (props) => {
     return (
-        <div class = {styles.VotablesContainer}>
+        <div className = {styles.VotablesContainer}>
             <p>vote for p response</p>
             {props.votableResponses.map((response) => {
                 if (response === props.votedResponse){
@@ -38,7 +38,7 @@ const Votables = (props) => {
 
 const RevealedResponses = (props) => {
     return (
-        <div class = {styles.RevealedResponsesContainer}>
+        <div className = {styles.RevealedResponsesContainer}>
             <p>response scores</p>
             {props.revealedResponses.map((response) => (
                 <div key={response.playerName} className={styles.RevealedResponse}>
