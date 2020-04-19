@@ -1,4 +1,11 @@
 class RudeCardsSM{
+    constructor(settings){
+        if(settings){
+            this.votePoints = settings.votePoints.defaultValue;
+        }else{
+            this.votePoints = 1;
+        }
+    }
     step(userId, action, gameState, playerStates, hiddenState){
         const player = gameState.players.find( p => p.id == userId);
 
@@ -98,7 +105,7 @@ class RudeCardsSM{
 
                 hiddenState.currentResponses.forEach(r => {
                     const p = gameState.players.find(p => p.id == r.userId);
-                    p.score += r.votes;
+                    p.score += (r.votes*this.votePoints);
                 })
 
                 gameState.currentPhase = 'UPDATE_SCORES';
@@ -120,13 +127,14 @@ class RudeCardsSM{
                 for (const userId in playerStates){
                     playerStates[userId].currentResponse = null;
                     playerStates[userId].votableResponses = [];
-                    playerStates[userId].votedRespnse = null;
+                    playerStates[userId].votedResponse = null;
 
                     hiddenState.currentResponses = [];
                 }
 
                 if (gameState.currentRound == gameState.totalRounds){
-                    gameState.currentPhase = 'GAME_END';
+                    gameState.currentPhase = 'END_GAME';
+                    gameState.gameEnded = true;
                 }
                 else {
                     gameState.currentPhase = 'DRAW_CARDS';
@@ -136,8 +144,8 @@ class RudeCardsSM{
             }
             
         }
-        else if (gameState.currentPhase == 'GAME_END'){
-            // this phase does nothing
+        else if (gameState.currentPhase == 'END_GAME'){
+            gameState.gameEnded = true;
 
         }
     

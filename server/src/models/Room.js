@@ -1,9 +1,10 @@
-const {addGameResults} = require('../firebase/utils')
+
+const {addGameResults,addGameResIDtoUserHistory} = require('../firebase/utils')
 const roomActionValidator = require('./roomActionValidator');
 const games = require('./games');
 const Player = require('./Player');
-
 class Room {
+    //TOOD maybe fix        the constracutor problems here?
     constructor(id, createdBy){
         this.id = id;
         this.createdBy = createdBy;
@@ -66,6 +67,10 @@ class Room {
         if (action.actionType == 'ADD_GAME' && this.admin != userId){
             throw new Error("Only admin can add game");
         }
+
+        if (action.actionType == 'CHANGE_SETTINGS' && this.admin != userId){
+            throw new Error("Only admin can change settings");
+        }
     }
 
     makeRoomAction(userId, action){
@@ -78,12 +83,12 @@ class Room {
 
             player.ready = true;
 
-            const allPlayersReady = this.players.reduce((prev, player) => (prev && player.ready), true);
+            // const allPlayersReady = this.players.reduce((prev, player) => (prev && player.ready), true);
 
-            if (allPlayersReady){
-                this.gameStarted = true;
-                this.startGame();
-            }
+            // if (allPlayersReady){
+            //     this.gameStarted = true;
+            //     this.startGame();
+            // }
         }
         else if ( actionType == 'SET_UNREADY'){
             const player = this.players.find( player => player.id == userId);
@@ -101,10 +106,20 @@ class Room {
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            this.game = new games[action.gameId](this.players);
+            this.game = new games[action.gameId](this.players,null);//add settings params here
+            this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
+            
+        }
+
+        else if(actionType == 'CHANGE_SETTINGS'){
+            if (!games[action.gameId]) {
+                throw new Error("Game does not exist");
+            }
+            this.game = new games[action.gameId](this.players,action.settings);
             this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
         }
         else if ( actionType == 'START_GAME'){
+            
             this.startGame();
         }
         console.log("sent room_state_update")
@@ -120,14 +135,16 @@ class Room {
             throw new Error("Game cannot be started as game has not been set");
         }
         
-        this.game.publishScoreCallback = (winner, players) => {
+        this.game.publishScoreCallback = async (winner, players) => {
             console.log('publishScoreCallback called!')
-            addGameResults({
+            const refId = await addGameResults({
             gameId: this.game.id,
             roomId: this.id,
             players,
             winner
-        })};
+            });
+            addGameResIDtoUserHistory(players,refId);
+        }
         
         this.gameStarted = true;
         this.game.start();

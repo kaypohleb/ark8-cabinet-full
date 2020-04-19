@@ -1,5 +1,5 @@
 const firebase = require('./firebase');
-
+const admin = require('firebase-admin');
 const db = firebase.firestore();
 
 const getUserData = async (userId) => {
@@ -8,9 +8,8 @@ const getUserData = async (userId) => {
     if (!user.exists){
         return null;
     }
-
     return user.data();
-}
+};
 
 const updateUserData = async (userId, userData) => {
     const userRef = await db.collection('users').doc(userId);
@@ -30,6 +29,55 @@ const updateUserData = async (userId, userData) => {
     return user.data();
 };
 
+const getDefaultSettings = async(gameID) => {
+    const defaults =  await db.collection('settings').doc('default').get();
+    return defaults.data()[gameID];
+};
+
+const addNewGameSettings = async(playerId,gameID,settings,settingID) =>{
+    console.log("settingID");
+    console.log(settingID);
+    console.log('saving new game settings');
+    await db.collection('settings').doc(playerId+'-'+settingID+'-'+gameID).set({
+        ...settings,
+    });
+    await db.collection('users').doc(playerId).update({
+        [`settings.${gameID}`]: admin.firestore.FieldValue.arrayUnion(playerId+'-'+settingID+'-'+gameID),
+    });
+}
+
+const getGameSettingsList = async(players,gameID) =>{
+    const settinglist = [];
+    await Promise.all(players.map(async player =>{
+        
+        let data = await db.collection('users').doc(player.id).get();
+        if(data.data().settings[gameID]){
+            settinglist.push({
+                settingsName: data.data().settings[gameID],
+                player: player.name,
+            });
+        }
+        
+    }));
+    console.log(settinglist);
+    return(settinglist);
+
+}
+
+const getSettings = async(settingsId) =>{
+    console.log(`getting ${settingsId}`);    
+    const res = await db.collection('settings').doc(settingsId).get();
+    return res.data();
+}
+
+const deleteGameSettings = async(playerId,settingsId) =>{
+    console.log(`deleting ${settingsId}`);
+    await db.collection('settings').doc(settingsId).get().delete();
+    await db.collection('users').doc(playerId).get().update({
+        settings: admin.firestore.FieldValue.arrayRemove(settingsId),
+    })
+}
+
 const addGameResults = async ({gameId, winner, roomId, players}) => {
     console.log('adding game results ..');
     const ref = await db.collection('game_results').add({
@@ -41,21 +89,95 @@ const addGameResults = async ({gameId, winner, roomId, players}) => {
     })
 
     console.log(`results added with ref id ${ref.id}`);
+    return ref.id;
 };
 
+const addGameResIDtoUserHistory = async(players,refId) =>{
+    console.log("adding to firebase");
+    console.log(refId);
+    await Promise.all(players.map(async player =>{
+        await db.collection('users').doc(player.id).update({
+            history: admin.firestore.FieldValue.arrayUnion(refId)
+        })
+        
+    }));
+}
+
 const getGameHistory = async (userId) => {
-    const snapshot = await db.collection('game_results').get();
-    const history = snapshot.docs.map(doc => doc.data());
+    const user = await db.collection('users').doc(userId).get();
 
-    const userHistory = history.filter((gameResult) => (gameResult.players.find( (player) => player.userId == userId )));
-    userHistory.sort((a,b) => ( b.gameEndedAt - a.gameEndedAt)); // sort by newest first
+    if (!user.exists){
+        return null;
+    }
 
-    return userHistory
+    let history = [];
+
+    if (await user.data().history.length == 0) {
+        return [];
+    }
+    
+    const resultsSnapshot = await db.collection('game_results').get();
+    await resultsSnapshot.forEach(async (doc) => {
+        const result = await doc.data();
+        history.push(result);
+    })
+
+    history = history.filter((result) => result.players.find( (player) => player.id == userId ));
+
+    return history;
+}
+
+const saveNicknameToFirestore = async(userId,newName) =>{
+    console.log(newName);
+    await db.collection('users').doc(userId).update({name:newName});
+}
+
+const getScoreboard = async (gameId) => {
+    const resultsRef = db.collection('game_results');
+    const queryRef = resultsRef.where('gameId', '==', gameId);
+    const resultsSnapshot = await queryRef.get();
+
+    if (resultsSnapshot.empty){
+        return [];
+    }
+
+    const players = {};
+
+    await resultsSnapshot.forEach(async (doc) => {
+        const result = await doc.data();
+        result.players.forEach( (player) => {
+            if (player.id in players){
+                players[player.id].score += player.score;
+            }
+            else {
+                players[player.id] = player;
+            }
+        });
+    })
+
+    let scoreboard = [];
+
+    for (const playerId in players){
+        scoreboard.push(players[playerId]);
+    }
+
+    scoreboard.sort( (a,b) => (b.score - a.score) );
+    scoreboard = scoreboard.slice(0,10);
+
+    return scoreboard
 }
 
 module.exports = {
     getUserData,
+    addNewGameSettings,
+    getGameSettingsList,
+    getSettings,
+    getDefaultSettings,
+    deleteGameSettings,
     updateUserData,
     addGameResults,
-    getGameHistory
+    getGameHistory,
+    addGameResIDtoUserHistory,
+    saveNicknameToFirestore,
+    getScoreboard
 };

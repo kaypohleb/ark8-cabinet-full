@@ -77,7 +77,7 @@ class Home extends Component{
             user.getIdToken().then((idToken) => {
             this.props.dispatch(idTokenChanged(idToken));
             this.setState({isSignedIn: true,});
-            this.props.history.push('/profile');
+            this.props.history.push('/home');
           });
           } 
             
@@ -105,18 +105,18 @@ class Home extends Component{
         {
           if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
           
-            return <HomeDesktop isSignedIn={this.state.isSignedIn} width={this.state.width} height={this.state.height} uiConfig={this.uiConfig} show={this.state.signing} entersignIn={this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut={this.signoutHandler}  loginClick={()=> firebase.auth()}/>
+            return <HomeDesktop isSignedIn = {this.state.isSignedIn} width = {this.state.width} height = {this.state.height} uiConfig = {this.uiConfig} show = {this.state.signing} entersignIn = {this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut = {this.signoutHandler}  loginClick = {()=> firebase.auth()}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
            
-            return <HomeTablet isSignedIn={this.state.isSignedIn} width={this.state.width} height={this.state.height} uiConfig={this.uiConfig} show={this.state.signing} entersignIn={this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut={this.signoutHandler}  loginClick={()=> firebase.auth()}/>
+            return <HomeTablet isSignedIn = {this.state.isSignedIn} width = {this.state.width} height = {this.state.height} uiConfig = {this.uiConfig} show = {this.state.signing} entersignIn = {this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut = {this.signoutHandler}  loginClick = {()=> firebase.auth()}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
           
-            return <HomeMobile isSignedIn={this.state.isSignedIn} width={this.state.width} height={this.state.height} uiConfig={this.uiConfig} show={this.state.signing} entersignIn={this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut={this.signoutHandler} loginClick={()=> firebase.auth()}/>
+            return <HomeMobile isSignedIn = {this.state.isSignedIn} width = {this.state.width} height = {this.state.height} uiConfig = {this.uiConfig} show = {this.state.signing} entersignIn = {this.enterSignInHandler} exitSignIn = {this.exitSignInHandler} signOut = {this.signoutHandler} loginClick = {()=> firebase.auth()}/>
           }
           else if (breakpoints[currentBreakpoint] >= 0){
-            return <div className={styles.Home}>Unable to display: use a bigger screen</div>
+            return <div className = {styles.Home}>Unable to display: use a bigger screen</div>
           }
         }
       }

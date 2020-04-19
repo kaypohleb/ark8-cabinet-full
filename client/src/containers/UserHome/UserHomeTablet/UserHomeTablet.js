@@ -24,24 +24,23 @@ const pinStyle = {
 class UserHomeTablet extends Component{
     
     render(){
-        let join = null;
-        let joinButton = null;
+        let join,name,joinButton = null;
         if(this.props.joining){
             join = (<PinInput
-                length={6}
-                inputStyle ={pinStyle}
+                length = {6}
+                inputStyle  = {pinStyle}
                 focus
-                ref={p => (this.pin = p)}
+                ref = {p => (this.pin = p)}
                 type="custom"
-                onChange={(val)=>this.props.roomIDChange(val)}
-                onComplete={(val)=>this.props.roomIDComplete(val)}
+                onChange = {(val)=>this.props.roomIDChange(val)}
+                onComplete = {(val)=>this.props.roomIDComplete(val)}
               />)
         }
         if(this.props.joinIdComplete){
             joinButton =  (<StyledButton 
-            whileHover={{scale:1.1}}
-            whileTap={{scale:0.8}}
-            onClick={()=>{this.props.joinRoom()}}>
+            whileHover = {{scale:1.1}}
+            whileTap = {{scale:0.8}}
+            onClick = {()=>{this.props.joinRoom()}}>
             JOIN ROOM</StyledButton>);
         }
         
@@ -52,49 +51,57 @@ class UserHomeTablet extends Component{
                 <LoadingLottie/>
             </div>)
         }
+        if(!this.props.useNew){
+            name= this.props.name;
+        }
+        else{
+            name = this.props.newName;
+        }
 
         return(
         
         <div className = {styles.UserHomeTablet}>
-            <Modal show={this.props.joining} modalClosed={()=>this.props.exitJoinScreen()}>
-                <div className={styles.joinCard}>
-                <p className={styles.joinTitle}>Please type the room number</p>
+            <Modal show = {this.props.joining} modalClosed = {()=>this.props.exitJoinScreen()}>
+                <div className = {styles.joinCard}>
+                <p className = {styles.joinTitle}>Please type the room number</p>
                 {join}
                 {joinButton}
                 </div>
-               </Modal>   
-            <h1 className={styles.nameTitle}>Hello Buddy{"\n"}{this.props.name}</h1>
-            <div className={styles.options}>
+               </Modal> 
+            <h1 onClick = {()=>this.props.enterNamingScreen()}className = {styles.nameTitle}>{name}</h1>
+            <div className = {styles.options}>
             <StyledButton
-                style ={{padding:"10px",backgroundColor: "#12CCB1", height: "auto", width:"auto", display:"flex",flexDirection:"column", alignItems:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.createRoom()}>
-                    <img style ={{width:"70%"}} alt="createRoomIcon" src={createRoomIcon}/>
+                style  = {{padding:"10px",backgroundColor: "#12CCB1", height: "auto", width:"auto", display:"flex",flexDirection:"column", alignItems:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.createRoom()}>
+                    <img style  = {{width:"70%"}} alt="createRoomIcon" src = {createRoomIcon}/>
                     <p>CREATE ROOM</p></StyledButton>
             <StyledButton 
-                style ={{padding:"10px", backgroundColor: "#E51749", height: "auto", width:"auto",  textAlign:"center",display:"flex", flexDirection:"column" , alignItems:"center"}}
-                whileHover={{scale:1.1}}
-                whileTap={{scale:0.8}}
-                onClick={()=>this.props.enterJoinScreen()}>
-                    <img style ={{width:"70%"}} alt="joinRoomIcon" src={joinRoomIcon}/>
+                style  = {{padding:"10px", backgroundColor: "#E51749", height: "auto", width:"auto",  textAlign:"center",display:"flex", flexDirection:"column" , alignItems:"center"}}
+                whileHover = {{scale:1.1}}
+                whileTap = {{scale:0.8}}
+                onClick = {()=>this.props.enterJoinScreen()}>
+                    <img style  = {{width:"70%"}} alt="joinRoomIcon" src = {joinRoomIcon}/>
                     <p>JOIN ROOM</p></StyledButton>
-            <div className={styles.rightButtons}>
+            <div className = {styles.rightButtons}>
                 <StyledButton 
-                    style ={{backgroundColor: "#FF8DC6", width:"80%", textAlign:"center"}}
-                    whileHover={{scale:1.1}}
-                    whileTap={{scale:0.8}}
-                    >GAME HISTORY</StyledButton>
+                    style  = {{backgroundColor: "#FF8DC6", width:"80%", textAlign:"center"}}
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}}
+                    onClick = {()=>this.props.enterProfile()}>
+                    YOUR PROFILE</StyledButton>
                 <StyledButton 
-                    style ={{backgroundColor: "#EBFF05", width:"80%", textAlign:"center"}}
-                    whileHover={{scale:1.1}}
-                    whileTap={{scale:0.8}}
-                   >SETTINGS</StyledButton>
+                    style  = {{backgroundColor: "#EBFF05", width:"80%", textAlign:"center"}}
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}}
+                    onClick = {()=>this.props.enterScoreboard()}>
+                    SCOREBOARDS</StyledButton>
                 <StyledButton 
-                    style ={{backgroundColor: "#8B940C", "width":"80%", textAlign:"center"}}
-                    whileHover={{scale:1.1}}
-                    whileTap={{scale:0.8}}
-                    onClick={()=>this.props.signOut()}>SIGN OUT</StyledButton>
+                    style  = {{backgroundColor: "#8B940C", "width":"80%", textAlign:"center"}}
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}}
+                    onClick = {()=>this.props.signOut()}>SIGN OUT</StyledButton>
             </div>
             </div>
             </div>

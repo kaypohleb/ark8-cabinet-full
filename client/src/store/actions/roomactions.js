@@ -4,14 +4,13 @@ import{
     UPDATE_GAME_STATE_SUCCESS
   } from '../types';
 import axios from 'axios';
-import socketIOClient from "socket.io-client";
+import io from "socket.io-client";
 import {toast} from "react-toastify";
 const BASE_URL = 'http://localhost:3001';
 
 
 export const createRoom = () =>{
   return async(dispatch,getState) =>{
-    
       let requestURL = `${BASE_URL}/createRoom`;
       await axios.post(
         requestURL,
@@ -34,17 +33,21 @@ export const createRoom = () =>{
 
 export let socket;
 export const enterRoom = (roomID) =>{
- 
+  console.log("entering room", roomID);
+
   return(dispatch,getState)=>{
- 
-    socket = socketIOClient(BASE_URL+"/"+roomID);
+    socket = io(BASE_URL+"/"+roomID);
     socket.open();
     socket.emit('authentication', getState().idtokenReducer.idToken);
     socket.on('room_state_update', (room) =>{
-      console.log({...room});
+      console.log({...room})
       dispatch(updateRoomStateSuccess(room));
     })  
     socket.on('error', (data) => {
+      console.log(data);
+      if(data==="Invalid namespace"){
+        dispatch(updateRoomStateError());
+      }
       toast.error(`Error: ${data}`);
     })
     socket.on('room_action_error', (data) => {
@@ -53,21 +56,9 @@ export const enterRoom = (roomID) =>{
   }
 }
 
-
-export const closeRoom = () =>{
-  return () =>{
-
-   
-      //socket.close();
-    
-  }
-  
-}
-
 export const setGameTitle = (roomID,gameID)=>{
  
   return () => {
-    
     socket.emit('room_action',{roomId:roomID, gameId:gameID, actionType:"ADD_GAME"});
     
   }
@@ -94,6 +85,15 @@ export const startGame = (roomID,gameID) => {
       socket.emit('room_action',{roomId:roomID, gameId:gameID,actionType:"START_GAME"});
   }
 }
+
+export const changeSettings = (roomID,gameID,settings) => {
+    console.log("changing");
+    console.log(settings);
+    return () => {
+        socket.emit('room_action',{roomId:roomID, gameId:gameID, settings:settings, actionType:"CHANGE_SETTINGS"});
+    }
+}
+
 export const setRefreshGameState = () =>{
     return (dispatch) =>{
         socket.on('game_state_update', (data) => {
@@ -104,10 +104,9 @@ export const setRefreshGameState = () =>{
         })
     }
 }
-export const exitGame =  ()=>{
-  return()=>{
-    console.log("exiting game");
-    socket.removeAllListeners('game_state_update');
+export const exitRoom =  () => {
+  return () => {
+    socket.close();
   }
 }
 export const publishGameAction = (data, actionType) => {
@@ -119,10 +118,19 @@ export const publishGameAction = (data, actionType) => {
 const updateRoomStateSuccess = (room) =>({
   type:UPDATE_ROOM_STATE_SUCCESS,
   payload:{
-    ...room
+    ...room,
     }
   
 })
+
+const updateRoomStateError = () =>({
+  type:UPDATE_ROOM_STATE_ERROR,
+  payload:{
+    }
+  
+})
+
+
 
 const updateGameStateSuccess = (data) =>({
     type:UPDATE_GAME_STATE_SUCCESS,

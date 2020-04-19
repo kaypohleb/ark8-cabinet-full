@@ -23,11 +23,13 @@ const checkAuth = async (req, res, next) => {
         return next();
     }
 
+    console.log('checkAuth', idToken);
     const userId = await getUserId(idToken);
 
     if (userId == null){
         return res.json({
-            error: "Authentication Error"
+            error: "Authentication Error",
+            getInfo: false,
         })
     }
 

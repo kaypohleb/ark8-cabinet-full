@@ -1,32 +1,40 @@
 import React,{ Component } from 'react';
 import { connect  } from 'react-redux';
-import {withRouter,Redirect} from  'react-router-dom';
-import {closeRoom,createRoom, enterRoom,setGameTitle,readyPlayer,unreadyPlayer,startGame} from '../../store/actions/index';
+import { withRouter,Redirect } from  'react-router-dom';
+import { createRoom, 
+         enterRoom,
+         setGameTitle,
+         readyPlayer,
+         unreadyPlayer,
+         startGame,
+         exitRoom,
+         getUserSettings,
+         getDefaultSettings,
+         getSpecSettings,
+        } from '../../store/actions/index';
 import styles from './Lobby.module.css';
 import LobbyMobile from './LobbyMobile/LobbyMobile';
 import LobbyDesktop from './LobbyDesktop/LobbyDesktop';
 import LobbyTablet from './LobbyTablet/LobbyTablet';
-import {Media} from 'react-breakpoints';
+import { Media } from 'react-breakpoints';
+import { toast } from 'react-toastify';
 
 class Lobby extends Component{
     constructor(props){
         super(props);
-        if(this.props.location.state.join===false){
-            this.props.createRoom();
-        }else if(this.props.location.state.join===true){
-            this.props.enterRoom(this.props.location.state.roomID)
-        }
         this.readyHandler = this.readyHandler.bind(this);
         this.unreadyHandler = this.unreadyHandler.bind(this);
         this.startGameHandler = this.startGameHandler.bind(this);
         this.selectChangeHandler = this.selectChangeHandler.bind(this);
         this.goBackHandler = this.goBackHandler.bind(this);
         this.gameScreenHandler = this.gameScreenHandler.bind(this);
+        this.getSettingListHandler = this.getSettingListHandler.bind(this);
+        this.settingsScreenHandler = this.settingsScreenHandler.bind(this);
+        this.settingChangeHandler = this.settingChangeHandler.bind(this);
     }
 
-    state={
+    state = {
         gameChosenCnfrm: false,
-        join: this.props.location.state.join,
         createdBy:"",
         userID:'',
         players:[],
@@ -34,9 +42,12 @@ class Lobby extends Component{
         getInfo:false,
         game:"",
         gameStarted:false,
-        isSignedIn:true,
+        isSignedIn:undefined,
         ready:false,
-        gameScreen: false,  
+        gameScreen: false,
+        settingsScreen:false,
+        chosenSetting:"default",
+        defSettings:{},
     }
 
     static getDerivedStateFromProps(nextProps, prevState){
@@ -54,28 +65,49 @@ class Lobby extends Component{
         
     }
 
-    componentDidUpdate(prevProps, prevState){
-       if(prevProps!==this.props){
-            this.setState({
-                id: this.props.id,
-                createdBy: this.props.createdBy,
-                admin: this.props.admin,
-                game: this.props.game,
-                players: this.props.players,
-                userID:this.props.userID,
-                getInfo: this.props.getInfo,
-                gameStarted: this.props.gameStarted,
-                isSignedIn: this.props.isSignedIn,
-            });
+    componentDidMount(){
+    
+        if(this.props.location.state!==undefined && this.props.location.state.join){
+            this.props.enterRoom(this.props.location.state.roomID);
+        }else{
+            this.props.createRoom();
         }
     }
 
+    componentDidUpdate(prevProps, prevState){
+       if(prevProps !== this.props){
+                this.setState({
+                    id: this.props.id,
+                    createdBy: this.props.createdBy,
+                    admin: this.props.admin,
+                    game: this.props.game,
+                    players: this.props.players,
+                    userID:this.props.userID,
+                    getInfo: this.props.getInfo,
+                    gameStarted: this.props.gameStarted,
+                    isSignedIn: this.props.isSignedIn,
+                    settingsList: this.props.settingsList,
+                    defSettings: this.props.defSettings,
+                });
+            
+        }
+    }
+    settingChangeHandler(event){
+        console.log(event);
+         this.setState({
+           chosenSetting: event,
+        });
+        if(event!=="default"){
+            this.props.getSpecSettings(this.state.id,this.state.game,event);
+        }
+    }
     
     selectChangeHandler(event){     
         this.setState({
             game: event.target.value,
             gameChosenCnfrm: true,
         });
+        this.props.getDefaultSettings(event.target.value);
         this.props.setGame(this.state.id,event.target.value);
         
     }
@@ -84,10 +116,26 @@ class Lobby extends Component{
             gameScreen: !this.state.gameScreen,
         })
     }
+
+    settingsScreenHandler(){
+        this.setState({
+            settingsScreen: !this.state.settingsScreen,
+        })
+    }
+    getSettingListHandler(event){
+        this.props.getUserSettings(this.state.players,event.target.value);   
+    }
     startGameHandler(){ 
-        if(this.state.game!=null){
-            this.props.startGame(this.state.id,this.state.game);
+        if(this.state.players.length<2){
+            toast.error("You can't start this game with only 1 person!");
+        }else{
+            if(this.state.game!=null){
+                this.props.startGame(this.state.id,this.state.game);
+            }else{
+                toast.error("Please select a game")
+            }
         }
+        
     }
     readyHandler(){
         this.setState({
@@ -102,29 +150,35 @@ class Lobby extends Component{
         this.props.unready(this.state.id);
     }
     goBackHandler(){
-        this.props.history.push('/profile');
+        console.log("calling exitRoom from lobby gobackhandler");
+        this.props.exitRoom();
+        this.props.history.push('/home');
     }
-
+    
     render(){
         
        let loader = null;
+       if(this.state.isSignedIn===false && !this.state.userID){
+            
+        return <Redirect to="/"/>
+        }
        loader = (<Media>
         {({ breakpoints, currentBreakpoint }) =>
         {
           if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
            
-            return <LobbyDesktop gameID={this.state.game} gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} admin={this.state.admin} id = {this.props.id} gameStarted={this.state.gameStarted} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
+            return <LobbyDesktop defSettings={this.state.defSettings} settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted} startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler} settingsChangeHandler={this.settingChangeHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.tablet){
           
-            return <LobbyTablet gameID={this.state.game} gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} admin={this.state.admin} id = {this.props.id} gameStarted={this.state.gameStarted}  startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
+            return <LobbyTablet defSettings={this.state.defSettings} settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted}  startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler} settingChangeHandler={this.settingChangeHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= breakpoints.mobile){
             
-            return <LobbyMobile gameID={this.state.game} gameChosenCnfrm={this.state.gameChosenCnfrm} show={this.state.gameScreen} userID={this.state.userID} readyState={this.state.ready} getInfo={this.state.getInfo} players={this.state.players} admin={this.state.admin} id = {this.props.id} gameStarted={this.state.gameStarted} startGame={this.startGameHandler} ready={this.readyHandler} unready={this.unreadyHandler} selectChange={this.selectChangeHandler} goBack={this.goBackHandler} gameScreenHandler={this.gameScreenHandler}/>
+            return <LobbyMobile defSettings={this.state.defSettings} settingsList={this.state.settingsList} settingScreen={this.state.settingsScreen} gameID = {this.state.game} gameChosenCnfrm = {this.state.gameChosenCnfrm} show = {this.state.gameScreen} userID = {this.state.userID} readyState = {this.state.ready} getInfo = {this.state.getInfo} players = {this.state.players} admin = {this.state.admin} id = {this.props.id} gameStarted = {this.state.gameStarted} startGame = {this.startGameHandler} ready = {this.readyHandler} unready = {this.unreadyHandler} selectChange = {this.selectChangeHandler} goBack = {this.goBackHandler} gameScreenHandler = {this.gameScreenHandler} settingsScreenHandler={this.settingsScreenHandler} getSettingListHandler={this.getSettingListHandler} settingChangeHandler={this.settingChangeHandler}/>
           }
           else if (breakpoints[currentBreakpoint] >= 0){
-            return <div className={styles.Lobby}>Unable to display: use a bigger screen</div>
+            return <div className = {styles.Lobby}>Unable to display: use a bigger screen</div>
           }
         }
       }
@@ -140,7 +194,7 @@ class Lobby extends Component{
 }
 
 const mapStateToProps = (state) => {
-    
+    console.log(state);
     return{
         id: state.fetchLobbyDataReducer.id,
         createdBy: state.fetchLobbyDataReducer.createdBy,
@@ -151,20 +205,26 @@ const mapStateToProps = (state) => {
         getInfo: true,
         gameStarted: state.fetchLobbyDataReducer.gameStarted,
         isSignedIn:state.fetchLobbyDataReducer.isSignedIn,
+        settingsList: state.fetchSettingsListReducer.settingsList,
+        defSettings: state.fetchDefaultSettingsReducer,
+        settings: state.fetchSettingsListReducer,
     }
 }
 
 const mapDispatchtoProps = (dispatch) =>{
 
    return {
+
        ready: (roomID,gameID) => dispatch(readyPlayer(roomID,gameID)),
        unready: (roomID,gameID)=> dispatch(unreadyPlayer(roomID,gameID)),
        setGame: (roomID,gameID) => dispatch(setGameTitle(roomID,gameID)),
        startGame: (roomID,gameID) => dispatch(startGame(roomID,gameID)),
        createRoom: ()=> dispatch(createRoom()),
        enterRoom: (roomid)=>dispatch(enterRoom(roomid)),
-       closeRoom: ()=>dispatch(closeRoom()),
-
+       exitRoom: ()=>dispatch(exitRoom()),
+       getUserSettings: (players,gameID)=>dispatch(getUserSettings(players,gameID)),
+       getDefaultSettings: (gameID) => dispatch(getDefaultSettings(gameID)),
+       getSpecSettings: (roomID,gameID,settingID) => dispatch(getSpecSettings(roomID,gameID,settingID)),
    }
 }
 

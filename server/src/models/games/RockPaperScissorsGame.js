@@ -1,7 +1,9 @@
 const RockPaperScissorsSM = require('./RockPaperScissorsSM');
 
 class RockPaperScissorsGame {
-    constructor(players){
+    constructor(players,settings){
+        console.log("adding settings in game");
+        //TODO setup based on settings, default also taken from firestore
         this.id = 'ROCK_PAPER_SCISSORS';
         this.timer = null;
         this.gameState = {
@@ -12,7 +14,9 @@ class RockPaperScissorsGame {
             timerStart: null,
             timerLength: 5000,
             history: [],
-            prevWinner: null
+            prevWinner: null,
+            gameEnded: false,
+            labels: ["rock","paper","scissors"],
         };
         this.playerStates = players.reduce( (playerStates, player) => {
             playerStates[player.id] = {selection : null};
@@ -21,7 +25,11 @@ class RockPaperScissorsGame {
         this.history = [];
         this.gameStateUpdateCallback = null;
         this.publishScoreCallback = null;
-        this.gameStateMachine = new RockPaperScissorsSM();
+        this.gameStateMachine = new RockPaperScissorsSM(settings);
+        if(this.settings){
+            this.gameState.totalRounds = settings.totalRounds.defaultValue;
+            this.gameState.labels = settings.labels;
+        }
     }
 
     printState(){
@@ -54,7 +62,12 @@ class RockPaperScissorsGame {
     }
 
     end(){
-        console.log('ending game...')
+        const action = {
+            actionType: 'END_GAME',
+            timerStart: new Date().getTime()
+        };
+        this.makeAction(null,action);
+        console.log('ending game...');
         const players = this.gameState.players;
         players.sort((a,b) => b.score - a.score); // sort by highest score first
         const winner = players[0];

@@ -1,9 +1,28 @@
-class RockPaperScissorsSM {
-    step(userId, action, gameState, playerStates){
-        let updatedGameState = {...gameState};
-        let updatedPlayerStates = {...playerStates};
+class RockPaperScissorsSM{
+    constructor(settings){
+        if(settings){
+            this.correctPoints = settings.correctPoints.defaultValue;
+        }else{
+            this.correctPoints = 1;
+        }
+    }
 
-        if (action.actionType == 'MAKE_SELECTION'){
+    step(userId, action, gameState, playerStates){
+        let updatedGameState = {
+            ...gameState,
+            gameEnded:false,
+        }
+        
+        let updatedPlayerStates = {...playerStates};
+        if(action.actionType == 'END_GAME'){
+            //console.log(action);
+            //console.log(updatedGameState);
+            updatedGameState = {
+                ...updatedGameState,
+                gameEnded: true,
+            }
+        }
+        else if (action.actionType == 'MAKE_SELECTION'){
             updatedPlayerStates[userId] = { selection: action.selection };
         }
         else if (action.actionType = 'NEXT_TURN'){
@@ -43,8 +62,8 @@ class RockPaperScissorsSM {
 
             for (const playerId in playerStates){
                 if (winningSelection && playerStates[playerId].selection == winningSelection){
-                    const player = updatedGameState.players.find(player => player.id == playerId);
-                    player.score++;
+                    let player = updatedGameState.players.find(player => player.id == playerId);
+                    player.score+=this.correctPoints;
                 }
             }
 

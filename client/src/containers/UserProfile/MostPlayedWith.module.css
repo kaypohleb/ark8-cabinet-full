@@ -1,0 +1,44 @@
+.MostPlayedWith {
+    background-color: #32BEA6;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px 10px;
+    margin-bottom: 15px;
+}
+
+.title {
+    align-self: start;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.playerDisp {
+    background-color: white;
+    border-radius: 10px;
+    flex-grow: 1;
+    color: black;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 2px 0;
+}
+
+.playerDisp:hover {
+    background-color: #DDDDEE;
+}
+
+.playerName {
+
+}
+
+.playerCount {
+
+}

@@ -18,6 +18,12 @@ const roomActionConstants = {
         'START_GAME' : {
             roomId: "string",
             gameId: "string"
+        },
+
+        'CHANGE_SETTINGS':{
+            roomId: "string",
+            gameId: "string",
+            settings: "object",
         }
 
     }

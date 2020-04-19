@@ -1,15 +1,23 @@
 const RudeCardsSM = require('./RudeCardsSM');
+const firebase = require('../../firebase/firebase');
 const shuffle = require('knuth-shuffle-seeded');
-const {prompts, responses} = require('./RudeCardsData.json');
+const db = firebase.firestore();
+const getPrompts = async()=>{
+    await db.collection('prompts').doc('rude_cards').get().then(result=>{allPrompts = result.data()});
+}
 
+let allPrompts = null;
 class RudeCardsGame {
-    constructor(players){
+    constructor(players,settings){
+        //TODO setup based on settings, default also taken from firestore
+        getPrompts();
+        this.settings = settings;
         this.id = 'RUDE_CARDS';
         this.history = [];
         this.timer = null;
         this.gameStateUpdateCallback = null;
-        this.gameStateMachine = new RudeCardsSM();
-
+        this.gameStateMachine = new RudeCardsSM(this.settings);
+        
         this.gameState = {
             gameId: 'RUDE_CARDS',
             players: players.map((player) => ({id: player.id, name: player.name, score: 0})),
@@ -22,7 +30,8 @@ class RudeCardsGame {
             timerStart: null,
             timerLength: 10000,
             currentRound: 0,
-            totalRounds: 5
+            totalRounds: 2,
+            gameEnded: false,
         };
 
         this.playerStates = players.reduce( (playerStates, player) => {
@@ -33,14 +42,21 @@ class RudeCardsGame {
         this.hiddenState = {
             availablePrompts: [],
             availableResponses: [],
-            currentResponses: []
+            currentResponses: [],
         };
-
-        this.setPrompts(prompts);
-        this.setResponses(responses);
+        if(this.settings){
+            this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
+        }
+        
     }
-
-
+    end(){
+        console.log('ending game...')
+        const players = this.gameState.players;
+        players.sort((a,b) => b.score - a.score); // sort by highest score first
+        const winner = players[0];
+        this.publishScoreCallback(winner, players);
+    }
+    
     printState(){
         return {
             game: {...this.gameState},
@@ -54,6 +70,16 @@ class RudeCardsGame {
         const turn = (function(){
             const phase = this.gameState.currentPhase;
             if (phase == 'INITIAL'){
+                let updatedPrompts = allPrompts.prompts
+                if(this.settings.customPrompts){
+                    updatedPrompts = updatedPrompts.concat(this.settings.customPrompts);
+                }
+                let updatedResponse = allPrompts.responses
+                if(this.settings.customResponse){
+                    updatedResponse = updatedResponse.concat(this.settings.customResponse);
+                }
+                this.setPrompts(updatedPrompts);
+                this.setResponses(updatedResponse);
                 nextPhase(Date.now(), 3000);
                 turn();
             }
@@ -81,6 +107,9 @@ class RudeCardsGame {
                     turn();
                 }, 5000)
             }
+            else if (phase == 'END_GAME'){
+                this.end();
+            }
         }).bind(this);
 
         turn();
@@ -100,16 +129,16 @@ class RudeCardsGame {
         this.hiddenState = hidden;
 
 
-        console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
+        //console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
         this.gameStateUpdateCallback(game, players);
     }
 
-    setPrompts(prompts){
+    setPrompts = (prompts)=>{
         this.hiddenState.availablePrompts = [...prompts];
         shuffle(this.hiddenState.availablePrompts);
     }
 
-    setResponses(responses){
+    setResponses = (responses)=>{
         this.hiddenState.availableResponses = [...responses];
         shuffle(this.hiddenState.availableResponses);
     }

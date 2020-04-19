@@ -32,15 +32,15 @@ class ControlledLottie extends Component {
       <div className="controlled">
         <h1>Controlled Lottie</h1>
         <p>Uses state manipulation to start, stop and pause animations</p>
-        <Lottie options={defaultOptions}
-              height={400}
-              width={400}
-              isStopped={this.state.isStopped}
-              isPaused={this.state.isPaused}
+        <Lottie options = {defaultOptions}
+              height = {400}
+              width = {400}
+              isStopped = {this.state.isStopped}
+              isPaused = {this.state.isPaused}
         />
-        <button style={buttonStyle} onClick={() => this.setState({isStopped: true})}>Stop</button>
-        <button style={buttonStyle} onClick={() => this.setState({isStopped: false, isPaused: false })}>Play</button>
-        <button style={buttonStyle} onClick={() => this.setState({isPaused: !this.state.isPaused})}>Pause</button>
+        <button style = {buttonStyle} onClick = {() => this.setState({isStopped: true})}>Stop</button>
+        <button style = {buttonStyle} onClick = {() => this.setState({isStopped: false, isPaused: false })}>Play</button>
+        <button style = {buttonStyle} onClick = {() => this.setState({isPaused: !this.state.isPaused})}>Pause</button>
       </div>
     )
   }
