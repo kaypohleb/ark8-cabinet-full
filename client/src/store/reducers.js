@@ -74,6 +74,17 @@ function fetchUserProfileDataReducer(state={}, action){
     }
 }
 
+function fetchScoreboardDataReducer(state={}, action){
+    switch(action.type){
+        case(type.FETCH_SCOREBOARD_SUCCESS):
+            return action.payload;
+        case(type.FETCH_USER_PROFILE_ERROR):
+            return {};
+        default:
+            return state;
+    }
+}
+
 const initLobbyState = {
     admin:'',
     game:null,
@@ -165,4 +176,5 @@ export const rootReducer = combineReducers({
     fetchSettingsListReducer,
     fetchDefaultSettingsReducer,
     fetchSpecSettingsReducer,
+    fetchScoreboardDataReducer
 });

@@ -90,6 +90,12 @@ class UserHomeDesktop extends Component{
                     onClick = {()=>this.props.enterProfile()}>
                     YOUR PROFILE</StyledButton>
                 <StyledButton 
+                    style  = {{backgroundColor: "#EBFF05", width:"100%", textAlign:"center"}}
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}}
+                    onClick = {()=>this.props.enterScoreboard()}>
+                    SCOREBOARDS</StyledButton>
+                <StyledButton 
                     style  = {{backgroundColor: "#8B940C", width:"100%", textAlign:"center"}}
                     whileHover = {{scale:1.1}}
                     whileTap = {{scale:0.8}}
