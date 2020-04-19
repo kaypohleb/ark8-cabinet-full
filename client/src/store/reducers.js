@@ -122,6 +122,17 @@ function fetchDefaultSettingsReducer(state = {},action){
     }
 }
 
+function fetchSpecSettingsReducer(state={},action){
+    switch(action.type){
+        case(type.FETCH_SPEC_SETTINGS_SUCCESS):
+            return({
+                ...action.payload
+            })
+        default:
+            return state;
+    }
+}
+
 
 
 
@@ -134,4 +145,5 @@ export const rootReducer = combineReducers({
     fetchGameDataReducer,
     fetchSettingsListReducer,
     fetchDefaultSettingsReducer,
+    fetchSpecSettingsReducer,
 });

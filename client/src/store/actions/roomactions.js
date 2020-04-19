@@ -87,6 +87,8 @@ export const startGame = (roomID,gameID) => {
 }
 
 export const changeSettings = (roomID,gameID,settings) => {
+    console.log("changing");
+    console.log(settings);
     return () => {
         socket.emit('room_action',{roomId:roomID, gameId:gameID, settings:settings, actionType:"CHANGE_SETTINGS"});
     }

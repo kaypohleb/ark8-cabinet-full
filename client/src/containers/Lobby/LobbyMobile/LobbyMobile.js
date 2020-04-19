@@ -38,7 +38,7 @@ class LobbyMobile extends Component{
                     <option value="DRAWFUL">drawful</option>
                     <option value="RUDE_CARDS">rude-cards</option>
                 </StyledSelect>
-                <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{}}/>
+                <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{this.props.settingChangeHandler(e)}}/>
                 {gameSettingsButton}
                 {startGameButton}
                 </Mux>); 

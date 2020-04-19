@@ -68,10 +68,10 @@ const getGameSettingsList = async(players,gameID) =>{
 
 }
 
-const setGameSettings = async(settingsId) =>{
+const getSettings = async(settingsId) =>{
     console.log(`getting ${settingsId}`);    
-    const settings = await db.collection('settings').doc(settingsId).get().data();
-
+    const res = await db.collection('settings').doc(settingsId).get();
+    return res.data();
 }
 
 const deleteGameSettings = async(playerId,settingsId) =>{
@@ -139,7 +139,7 @@ module.exports = {
     getUserData,
     addNewGameSettings,
     getGameSettingsList,
-    setGameSettings,
+    getSettings,
     getDefaultSettings,
     deleteGameSettings,
     updateUserData,
