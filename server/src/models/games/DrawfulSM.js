@@ -312,9 +312,10 @@ class DrawfulSM {
                     }
                 }
                 else {
-                    for(answer in updatedGameState.currentDrawing.answers){
-                        if(answer.owner==this.selectedUserId){
-                            answer.selected.forEach(select=>{
+                   
+                    Object.keys(updatedGameState.currentDrawing.answers).map(answer=>{
+                        if(answer==this.selectedPrompt){
+                            updatedGameState.currentDrawing.answers[answer].selected.forEach(select=>{
                                 updatedGameState.players.forEach(player=>{
                                     if(player.name == select){
                                         player.score+=this.correctPoints;
@@ -323,16 +324,15 @@ class DrawfulSM {
                             });
                         }else{
                             updatedGameState.players.forEach(player=>{
-                                if(player.name == answer.owner){
-                                    answer.selected.forEach(select=>{
+                                if(player.name == updatedGameState.currentDrawing.answers[answer].owner){
+                                    updatedGameState.currentDrawing.answers[answer].selected.forEach(select=>{
                                         player.score+=this.foolPoints;
                                     });   
                                 }
                             });
                             
                         }
-                    }
-                    
+                    });
                     const nextDrawingUserId = Object.keys(updatedHiddenState.submittedDrawings)[0];
                     this.selectedDrawing = updatedHiddenState.submittedDrawings[nextDrawingUserId];
                     this.selectedUserId = nextDrawingUserId;

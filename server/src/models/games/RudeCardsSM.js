@@ -133,7 +133,7 @@ class RudeCardsSM{
                 }
 
                 if (gameState.currentRound == gameState.totalRounds){
-                    gameState.currentPhase = 'GAME_END';
+                    gameState.currentPhase = 'END_GAME';
                     gameState.gameEnded = true;
                 }
                 else {
@@ -144,7 +144,7 @@ class RudeCardsSM{
             }
             
         }
-        else if (gameState.currentPhase == 'GAME_END'){
+        else if (gameState.currentPhase == 'END_GAME'){
             gameState.gameEnded = true;
 
         }

@@ -99,9 +99,7 @@ class RudeCardsGame {
                 }, 5000)
             }
             else if (phase == 'END_GAME'){
-                if(this.gameState.toEnd){
-                    this.end();
-                }
+                this.end();
             }
         }).bind(this);
 

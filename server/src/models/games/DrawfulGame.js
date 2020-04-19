@@ -122,9 +122,7 @@ class DrawfulGame{
                     turn();
                 }, 10000)
             }else if(phase == 'END_GAME'){
-                if(this.gameState.toEnd){
                     this.end();
-                }
             }
            
         
