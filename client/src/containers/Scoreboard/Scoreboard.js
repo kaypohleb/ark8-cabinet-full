@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import { connect  } from 'react-redux';
-import {StyledSelect} from '../../components/StyledComponents/StyledSelect'
 import styles from './Scoreboard.module.css'
-import { symbol } from 'prop-types';
-import { StyleSheetManager } from 'styled-components';
 import { getScoreboardData } from '../../store/actions';
 
 class Scoreboard extends Component {
@@ -39,7 +36,7 @@ class Scoreboard extends Component {
     }
 
     render(){
-        const isCorrectGame = this.state.gameId == this.props.gameId;
+        const isCorrectGame = (this.state.gameId === this.props.gameId);
         const scoreboard = isCorrectGame ? this.props.scoreboard : [];
         const content = scoreboard.map((player) => (
             <div className={styles.playerDisp} onClick={this.redirectHandler(player.id)}>

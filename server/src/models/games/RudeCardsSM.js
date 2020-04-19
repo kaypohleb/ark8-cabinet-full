@@ -127,7 +127,7 @@ class RudeCardsSM{
                 for (const userId in playerStates){
                     playerStates[userId].currentResponse = null;
                     playerStates[userId].votableResponses = [];
-                    playerStates[userId].votedRespnse = null;
+                    playerStates[userId].votedResponse = null;
 
                     hiddenState.currentResponses = [];
                 }
