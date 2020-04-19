@@ -153,6 +153,8 @@ class SettingsInput extends Component{
                 <label key={`${name}-label`}>{name}</label>
                 <input type="number" max={obj.max} key={`${name}-input`} min={obj.min} className={name} value={obj.defaultValue} onChange={this.handleChange}/>
             </div>
+            }else{
+                return null;
             }
         }
         
