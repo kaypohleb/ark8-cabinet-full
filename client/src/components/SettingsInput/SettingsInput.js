@@ -75,7 +75,6 @@ class SettingsInput extends Component{
         let updatedSettings = {...this.state.settings}
         if(this.state.array.includes(e.target.className)){ 
             updatedSettings[e.target.className][e.target.dataset.id] = e.target.value;
-            //console.log(updatedSettings[e.target.className][e.target.dataset.id]);
         }else{
             updatedSettings[e.target.className].defaultValue = parseInt(e.target.value); 
         }
@@ -100,8 +99,6 @@ class SettingsInput extends Component{
         if(this.state.customResponse){
             updatedSettings["customResponse"]  = this.state.customResponse;
         }
-        
-        console.log(this.props.gameID);
         let set = 'previous';
         if(this.state.settingsID){
             set = this.state.settingsID;

@@ -17,13 +17,10 @@ router.post('/getUser', async (req, res) => {
 });
 
 router.post('/getProfile', async (req, res) => {
-    console.log('getProfile request')
     const ownId = req.userId;
     const otherId = req.body.userId;
 
     const user = await getUserData(otherId);
-    console.log('got user')
-
     if (!user){
         return res.json({
             error : 'User profile not found'
@@ -96,8 +93,7 @@ router.post('/updateUserData', async (req, res) => {
 router.post('/getUserHistory',async (req, res) => {
     const userId = req.userId;
     const history= await getGameHistory(userId);;
-    console.log(history);
-    
+
     if (!history){
         return res.json({
             history:[],
@@ -112,7 +108,6 @@ router.post('/getUserHistory',async (req, res) => {
 });
 
 router.post('/saveNickname',async (req, res) => {
-    console.log("trying to save nickname");
     await saveNicknameToFirestore(req.userId,req.body.name);
 
 });

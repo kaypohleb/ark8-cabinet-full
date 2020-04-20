@@ -57,7 +57,6 @@ export const getDefaultSettings = (gameID) =>{
 
 
   export const getSpecSettings = (roomID,gameID,settingID)=>{
-    console.log("getting settings");
     return async(dispatch,getState) =>{
         let requestURL = `${BASE_URL}/getSettings`;
         await axios.post(
@@ -72,7 +71,6 @@ export const getDefaultSettings = (gameID) =>{
               Authorization: 'Bearer ' + getState().idtokenReducer.idToken,
             }
           }).then(response=>{
-            console.log("got the settings");
                 dispatch(fetchSpecSettingsSuccess(response.data.settingsList));
                 dispatch(changeSettings(roomID,gameID,response.data));
               
