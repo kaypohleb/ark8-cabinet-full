@@ -5,7 +5,9 @@ import{
     FETCH_USER_ERROR,
   } from '../types';
 import axios from 'axios';
-const BASE_URL = 'http://localhost:3001';
+
+const BASE_URL = process.env.NODE_ENV === 'production' ?
+ 'https://ark8-server.herokuapp.com' : 'http://localhost:3001';
   
 
 export const userStateChanged = user => {

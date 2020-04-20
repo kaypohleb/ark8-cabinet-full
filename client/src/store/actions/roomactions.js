@@ -6,8 +6,9 @@ import{
 import axios from 'axios';
 import io from "socket.io-client";
 import {toast} from "react-toastify";
-const BASE_URL = 'http://localhost:3001';
 
+const BASE_URL = process.env.NODE_ENV === 'production' ?
+ 'https://ark8-server.herokuapp.com' : 'http://localhost:3001';
 
 export const createRoom = () =>{
   return async(dispatch,getState) =>{

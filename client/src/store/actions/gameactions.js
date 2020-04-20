@@ -6,9 +6,11 @@ import {
     FETCH_DEFAULT_SETTINGS_SUCCESS,
     FETCH_SPEC_SETTINGS_SUCCESS
 } from '../types';
+
 import {changeSettings} from './index';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = process.env.NODE_ENV === 'production' ?
+ 'https://ark8-server.herokuapp.com' : 'http://localhost:3001';
 
 export const getUserSettings = (players,gameID) =>{
     return async(dispatch,getState) =>{
