@@ -5,6 +5,7 @@ const db = firebase.firestore();
 
 class RudeCardsGame {
     constructor(players,settings){
+        console.log("settings:" , settings);
         //TODO setup based on settings, default also taken from firestore
         this.id = 'RUDE_CARDS';
         this.settings = settings;
@@ -48,10 +49,9 @@ class RudeCardsGame {
 
         if(this.settings){
             this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
-            this.timers = {
-                ...this.timers,
-                ...this.settings.timers
-            }
+            this.timers.placeCards = this.settings.placeCardsTimer.defaultValue;
+            this.timers.voting = this.settings.votingTimer.defaultValue;
+            this.timers.update = this.settings.updateTimer.defaultValue;
         }
         
     }
@@ -93,6 +93,7 @@ class RudeCardsGame {
 
         const turn = (function(){
             const phase = this.gameState.currentPhase;
+            console.log("CURRENT PHASE", phase, "CALLED TURN")
             if (phase == 'INITIAL'){
                 nextPhase(Date.now(), this.timers.placeCards * 1000);
                 setTimeout(turn, this.timers.placeCards * 1000);

@@ -121,14 +121,14 @@ class SocketRouter {
 
         socket.on('room_action', (data) => {
             console.log(`received room_action from ${socket.id}`, data);
-            // try {
+            try {
                validateRoomAction(socket.userId, data);
                makeRoomAction(socket.userId, data);
-            // }
-            // catch (e) {
-            //     console.log('room_action_error:', e.message);
-            //     return socket.emit('room_action_error', { message: e.message});
-            // }
+            }
+            catch (e) {
+                console.log('room_action_error:', e.message);
+                return socket.emit('room_action_error', { message: e.message});
+            }
         })
     }
 
