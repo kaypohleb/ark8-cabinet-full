@@ -6,8 +6,7 @@ class WinnerScore extends Component{
         return(
             <div className = {styles.Score}>
                 <img height="25px" width="25px" src={Crown} alt="Winner"/>
-                {this.props.playerName}
-                <div> Score: {this.props.score}</div>
+                <div> {this.props.playerName + "   "} Score: {this.props.score}</div>
                 </div>
         )
     }

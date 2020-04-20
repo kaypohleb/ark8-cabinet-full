@@ -2,26 +2,19 @@ const RudeCardsSM = require('./RudeCardsSM');
 const firebase = require('../../firebase/firebase');
 const shuffle = require('knuth-shuffle-seeded');
 const db = firebase.firestore();
-const getPrompts = async()=>{
-    await db.collection('prompts').doc('rude_cards').get().then(result=>{allPrompts = result.data()});
-}
 
-let allPrompts = null;
 class RudeCardsGame {
     constructor(players,settings){
         //TODO setup based on settings, default also taken from firestore
-        getPrompts();
         this.id = 'RUDE_CARDS';
         this.settings = settings;
-        this.settings.timers = {
-            placeCards: 30,
-            voting: 20,
-            update: 5,
-            ...settings.timers
-        }
-
         this.history = [];
         this.timer = null;
+        this.timers = {
+            placeCards: 10,
+            voting: 10,
+            update: 5
+        };
         this.gameStateUpdateCallback = null;
         this.gameStateMachine = new RudeCardsSM(this.settings);
         
@@ -52,8 +45,13 @@ class RudeCardsGame {
             availableResponses: [],
             currentResponses: [],
         };
+
         if(this.settings){
             this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
+            this.timers = {
+                ...this.timers,
+                ...this.settings.timers
+            }
         }
         
     }
@@ -73,39 +71,47 @@ class RudeCardsGame {
     }
 
 
-    start(){
+    async start(){
+        const promptsRef = await db.collection('prompts').doc('rude_cards').get();
+        const allPrompts = await promptsRef.data();
+
+        const prompts = allPrompts.prompts;
+        const responses = allPrompts.responses;
+
+        if (this.settings && this.settings.customPrompts){
+            prompts.concat(this.settings.customPrompts);
+        }
+
+        if (this.settings && this.settings.customResponse){
+            responses.concat(this.customResponse);
+        }
+
+        this.setPrompts(prompts);
+        this.setResponses(responses);
+
         const nextPhase = ((timerStart, timerLength) => {this.makeAction(null, {actionType: 'NEXT_PHASE', timerStart: timerStart, timerLength: timerLength})}).bind(this)
 
         const turn = (function(){
             const phase = this.gameState.currentPhase;
             if (phase == 'INITIAL'){
-                let updatedPrompts = allPrompts.prompts
-                if(this.settings.customPrompts){
-                    updatedPrompts = updatedPrompts.concat(this.settings.customPrompts);
-                }
-                let updatedResponse = allPrompts.responses
-                if(this.settings.customResponse){
-                    updatedResponse = updatedResponse.concat(this.settings.customResponse);
-                }
-                this.setPrompts(updatedPrompts);
-                this.setResponses(updatedResponse);
-                nextPhase(Date.now(), 0);
-                turn();
+                nextPhase(Date.now(), this.timers.placeCards * 1000);
+                setTimeout(turn, this.timers.placeCards * 1000);
             }
             else if (phase == 'DRAW_CARDS'){
-                nextPhase(Date.now(), this.settings.timers.placeCards * 1000);
-                setTimeout(turn, this.settings.timers.placeCards * 1000);
+                nextPhase(Date.now(), this.timers.placeCards * 1000);
+                setTimeout(turn, this.timers.placeCards * 1000);
             }
             else if (phase == 'PLACE_CARDS'){
-                nextPhase(Date.now(), this.settings.timers.voting * 1000);
-                setTimeout(turn, this.settings.timers.voting * 1000);
+                nextPhase(Date.now(), this.timers.voting * 1000);
+                setTimeout(turn, this.timers.voting * 1000);
             }
             else if (phase == 'VOTING'){
-                nextPhase(Date.now(), this.settings.timers.update * 1000);
-                setTimeout(turn, this.settings.timers.update * 1000);
+                nextPhase(Date.now(), this.timers.update * 1000);
+                setTimeout(turn, this.timers.update * 1000);
             }
             else if (phase == 'UPDATE_SCORES'){
                 nextPhase(Date.now(),0);
+                turn();
             }
             else if (phase == 'END_GAME'){
                 this.end();

@@ -5,8 +5,7 @@ class Score extends Component{
     render(){
         return(
             <div className = {styles.Score}>
-                {this.props.playerName}
-                <div> Score: {this.props.score}</div>
+                <div>{this.props.playerName + "   "} Score: {this.props.score}</div>
             </div>
         )
     }
