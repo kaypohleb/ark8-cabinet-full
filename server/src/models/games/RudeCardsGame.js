@@ -11,12 +11,20 @@ class RudeCardsGame {
     constructor(players,settings){
         //TODO setup based on settings, default also taken from firestore
         getPrompts();
-        this.settings = settings;
         this.id = 'RUDE_CARDS';
+        this.settings = settings;
+        this.settings.timers = {
+            placeCards: 30,
+            voting: 20,
+            update: 5,
+            ...settings.timers
+        }
+
         this.history = [];
         this.timer = null;
         this.gameStateUpdateCallback = null;
         this.gameStateMachine = new RudeCardsSM(this.settings);
+        
         
         this.gameState = {
             gameId: 'RUDE_CARDS',
@@ -67,6 +75,7 @@ class RudeCardsGame {
 
     start(){
         const nextPhase = ((timerStart, timerLength) => {this.makeAction(null, {actionType: 'NEXT_PHASE', timerStart: timerStart, timerLength: timerLength})}).bind(this)
+
         const turn = (function(){
             const phase = this.gameState.currentPhase;
             if (phase == 'INITIAL'){
@@ -80,32 +89,23 @@ class RudeCardsGame {
                 }
                 this.setPrompts(updatedPrompts);
                 this.setResponses(updatedResponse);
-                nextPhase(Date.now(), 3000);
+                nextPhase(Date.now(), 0);
                 turn();
             }
             else if (phase == 'DRAW_CARDS'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                }, 3000)
+                nextPhase(Date.now(), this.settings.timers.placeCards * 1000);
+                setTimeout(turn, this.settings.timers.placeCards * 1000);
             }
             else if (phase == 'PLACE_CARDS'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 5000)
-                    turn();
-                },10000)
+                nextPhase(Date.now(), this.settings.timers.voting * 1000);
+                setTimeout(turn, this.settings.timers.voting * 1000);
             }
             else if (phase == 'VOTING'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 5000)
-                    turn();
-                },5000)
+                nextPhase(Date.now(), this.settings.timers.update * 1000);
+                setTimeout(turn, this.settings.timers.update * 1000);
             }
             else if (phase == 'UPDATE_SCORES'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 3000)
-                    turn();
-                }, 5000)
+                nextPhase(Date.now(),0);
             }
             else if (phase == 'END_GAME'){
                 this.end();
@@ -128,8 +128,6 @@ class RudeCardsGame {
         this.playerStates = players;
         this.hiddenState = hidden;
 
-
-        //console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
         this.gameStateUpdateCallback(game, players);
     }
 

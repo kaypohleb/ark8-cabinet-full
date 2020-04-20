@@ -115,7 +115,7 @@ class Room {
             if (!games[action.gameId]) {
                 throw new Error("Game does not exist");
             }
-            this.game = new games[action.gameId](this.players,action.settings);
+            this.game = new games[action.gameId](this.players, action.settings);
             this.game.gameStateUpdateCallback = this.gameStateUpdateCallback;
         }
         else if ( actionType == 'START_GAME'){
