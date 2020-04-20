@@ -24,7 +24,15 @@ class Home extends Component{
         this.enterSignInHandler = this.enterSignInHandler.bind(this);
         this.exitSignInHandler = this.exitSignInHandler.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-        
+            
+        firebase.auth().onAuthStateChanged(async (user) => {
+          if (user != null){
+            this.props.dispatch(userStateChanged(user));
+            const idToken = await user.getIdToken();
+            this.props.dispatch(idTokenChanged(idToken));
+            this.props.history.push('/home');
+          }
+        })
     }
 
     state = {
@@ -66,22 +74,9 @@ class Home extends Component{
     }
 
     enterSignInHandler(){
-      
         this.setState({
           signing:true,
         })
-      
-        firebase.auth().onAuthStateChanged(user=>{
-          if(user!==null){
-          this.props.dispatch(userStateChanged(user));
-            user.getIdToken().then((idToken) => {
-            this.props.dispatch(idTokenChanged(idToken));
-            this.setState({isSignedIn: true,});
-            this.props.history.push('/home');
-          });
-          } 
-            
-          })
      }
 
     exitSignInHandler(){
@@ -93,7 +88,6 @@ class Home extends Component{
       this.setState({
         isSignedIn:false
       })
-      //("trying to sign out");
       firebase.auth().signOut();
     }
   
