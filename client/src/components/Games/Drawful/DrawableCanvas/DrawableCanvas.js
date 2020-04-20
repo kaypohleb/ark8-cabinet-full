@@ -105,7 +105,10 @@ class DrawableCanvas extends Component {
         let prompt,submitButton,drawable = null;
         if(!this.props.disableDraw){
           
-          submitButton = <StyledMobileButton className = {styles.Buttons} onClick = {()=>this.props.gameAction({userId: this.props.userId, drawing:this.state.lines},"SEND_DRAWING")}>SUBMIT</StyledMobileButton>
+          submitButton = <StyledMobileButton 
+                        whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}}
+                        className = {styles.Buttons} onClick = {()=>this.props.gameAction({userId: this.props.userId, drawing:this.state.lines},"SEND_DRAWING")}>SUBMIT</StyledMobileButton>
           prompt = <div className = {styles.Prompt}>{this.props.prompt}</div>
           drawable = <div
           className = {styles.drawArea}

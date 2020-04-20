@@ -121,7 +121,10 @@ class SettingsInput extends Component{
                             return <input className={styles.inputBox} key={`customPrompts-${index}`} type="text" data-id={index} data-user="customPrompts" value={prompt||""} onChange={this.handleCustom}/>
                         })
                     }
-                    <StyledMobileButton onClick={this.addNewPrompt}>add custom prompts</StyledMobileButton>
+                    <StyledMobileButton 
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}}
+                    onClick={this.addNewPrompt}>add custom prompts</StyledMobileButton>
                 </div>
     }
     if(this.state.customResponse!==undefined && this.state.customResponse!==null){
@@ -133,7 +136,10 @@ class SettingsInput extends Component{
                             return <input className={styles.inputBox} key={`customResponse-${index}`} type="text" data-id={index} data-user="customResponse" value={prompt||""} onChange={this.handleCustom}/>
                         })
                     }
-                    <StyledMobileButton onClick={this.addNewResponse}>add custom responses</StyledMobileButton>
+                    <StyledMobileButton 
+                    whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}}
+                    onClick={this.addNewResponse}>add custom responses</StyledMobileButton>
                 </div>
     }
     if(this.state.settings){
@@ -168,7 +174,10 @@ class SettingsInput extends Component{
         <label>Setting Name</label>
         <input className={styles.inputBox} type="text" data-user="name" placeholder="optional" value = {this.state.settingsID} onChange={this.handleID}/>
         {full}
-        <StyledMobileButton onClick={this.handleSubmit}>SAVE</StyledMobileButton>
+        <StyledMobileButton
+        whileHover = {{scale:1.1}}
+        whileTap = {{scale:0.8}}
+         onClick={this.handleSubmit}>SAVE</StyledMobileButton>
         </form>
         
         </div>;

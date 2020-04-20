@@ -26,7 +26,9 @@ class LobbyDesktop extends Component{
                         whileTap = {{scale:0.8}}
                         onClick = {()=>{this.props.startGame()}}>
                         Start Game</StyledMobileButton>);
-                gameSettingsButton = (<StyledMobileButton onClick={()=>this.props.settingsScreenHandler()}>SETTINGS</StyledMobileButton> );
+                gameSettingsButton = (<StyledMobileButton  whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}} 
+                    onClick={()=>this.props.settingsScreenHandler()}>SETTINGS</StyledMobileButton> );
             }
             chooseGame = (<Mux>
                 <p>Pick a Game</p>
@@ -38,7 +40,10 @@ class LobbyDesktop extends Component{
                     <option value="RUDE_CARDS">rude-cards</option>
                 </StyledSelect>
                 <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{this.props.settingChangeHandler(e)}}/>
-                {gameSettingsButton} 
+                {gameSettingsButton}
+                <StyledMobileButton  whileHover = {{scale:1.1}}
+                    whileTap = {{scale:0.8}} 
+                    onClick={()=>this.props.gameScreenHandler()}>CLOSE</StyledMobileButton> 
                 </Mux>); 
             if(this.props.players.every(isAllReady)){
                 intro = null;
@@ -120,7 +125,11 @@ class LobbyDesktop extends Component{
                     recommended = <div>Recommended (>2 Players)</div>;
                 }
                 gameChosen = <div>
-                    <div>GAME CHOSEN: {this.props.gameID}<StyledMobileButton onClick={()=>this.props.tutorialScreenHandler()}>TUTORIAL</StyledMobileButton>{startGameButton}</div>
+                    <div>GAME CHOSEN: {this.props.gameID}
+                    <StyledMobileButton 
+                        whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}}
+                        onClick={()=>this.props.tutorialScreenHandler()}>TUTORIAL</StyledMobileButton>{startGameButton}</div>
                     {recommended}
                     </div>
             }

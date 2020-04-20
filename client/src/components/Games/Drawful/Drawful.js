@@ -88,7 +88,10 @@ class Drawful extends Component{
                     <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     <input value={this.state.fakeValue} onChange={this.inputHandleChange} className={styles.inputBox} type="text" placeholder="please write your fake answer"></input>
-                    <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>SUBMIT</StyledMobileButton>
+                    <StyledMobileButton 
+                        whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}}
+                         onClick={()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>SUBMIT</StyledMobileButton>
                 </div>
             }
             else{
@@ -106,7 +109,10 @@ class Drawful extends Component{
                     </div>
                     
                     {this.shuffleArray(this.state.player.shownAnswers).map((answer)=>{
-                        return <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
+                        return <StyledMobileButton 
+                        whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}}
+                        onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
                     })}
                 </div>);
             }
