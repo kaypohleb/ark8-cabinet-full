@@ -9,6 +9,21 @@
   justify-content: space-between;
   color: white;
 }
+.gameTitle{
+    font-family: 'Abduction';
+  font-weight: 400;
+  color:black;
+  font-size: 2rem;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    color:black;
+    font-size: 1rem;
+    height: 50vh;
+  }
 .LobbyContent{
   display: flex;
   flex-direction: column;

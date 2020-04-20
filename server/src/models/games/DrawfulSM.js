@@ -114,16 +114,24 @@ class DrawfulSM {
                     timerLength: action.timerLength
                 }
     
-                // this means the correct answer is always the last item. solve this on front end?
                 const answers = Object.keys(updatedHiddenState.fakeAnswers).map((userId) => updatedHiddenState.fakeAnswers[userId]).filter((answer) => !!answer);
                 answers.push(hiddenState.drawingPrompts[updatedGameState.currentDrawing.userId]);
                 updatedGameState.currentDrawing.answers = answers;
                 
                 for (const userId in updatedPlayerStates){
-                    let shownAnswers = answers;
-                    if (userId === updatedGameState.currentDrawing.userId){
-                        shownAnswers = [];
+                    let shownAnswers = [];
+                    console.log(answers);
+                    
+                    if (userId !== updatedGameState.currentDrawing.userId){
+                        answers.forEach(answer=>{
+                            console.log(answer);
+                            if(answer !== updatedHiddenState.fakeAnswers[userId])
+                            {
+                                shownAnswers.push(answer);
+                            }
+                        })
                     }
+                    console.log(shownAnswers);
     
                     updatedPlayerStates[userId] = {
                         ...updatedPlayerStates[userId],

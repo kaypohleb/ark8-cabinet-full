@@ -11,9 +11,9 @@ class MostPlayedWith extends Component{
         let content = '';
         if (this.props.mostPlayedWith){
             content = this.props.mostPlayedWith.map(player => (
-                <div className={styles.playerDisp} onClick={this.redirectHandler(player.id)}>
-                    <div className={styles.playerName} >{player.name}</div>
-                    <div className={styles.playCount} >play count: {player.playCount}</div>
+                <div key={`${player.id}-overall`} className={styles.playerDisp} onClick={this.redirectHandler(player.id)}>
+                    <div key={`${player.id}-name`} className={styles.playerName} >{player.name}</div>
+                    <div key={`${player.id}-count`} className={styles.playCount} >play count: {player.playCount}</div>
                 </div>
             ))
         }

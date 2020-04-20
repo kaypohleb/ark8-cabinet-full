@@ -60,6 +60,15 @@ class Drawful extends Component{
             showScore: !this.state.showScore,
         });
     }
+    shuffleArray(array) {
+        if(array.length>1){
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        return array;
+    }
     
 
     render(){
@@ -97,7 +106,7 @@ class Drawful extends Component{
                     <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     
-                    {this.state.player.shownAnswers.map((answer)=>{
+                    {this.shuffleArray(this.state.player.shownAnswers).map((answer)=>{
                         return <StyledMobileButton onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
                     })}
                 </div>);
