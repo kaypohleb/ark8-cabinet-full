@@ -28,7 +28,6 @@ class RockPaperScissorsGame {
         this.gameStateMachine = new RockPaperScissorsSM(settings);
         if(this.settings){
             this.gameState.totalRounds = settings.totalRounds.defaultValue;
-            this.gameState.labels = settings.labels;
         }
     }
 

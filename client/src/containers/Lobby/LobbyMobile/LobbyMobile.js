@@ -107,15 +107,25 @@ class LobbyMobile extends Component{
     
         if(this.props.gameID){
             tutorial = <LowerModal show={this.props.tutorialScreen} modalClosed = {()=>this.props.tutorialScreenHandler()}>
-                {this.props.gameID}
+                <div className={styles.gameTitle}>{this.props.gameID}</div>
+                <div className={styles.content}>
                 {this.props.content}
+                </div>
             </LowerModal>
             gameSettingsModal = (<LowerModal show={this.props.settingScreen} modalClosed = {()=>this.props.settingsScreenHandler()}>
                 <h1>GAME PARAMETERS</h1>
                 <SettingsInput gameID={this.props.gameID} roomID={this.props.id} settings={this.props.defSettings} toClose={()=>this.props.settingsScreenHandler()}/>
             </LowerModal>);
-            gameChosen = <div>GAME CHOSEN: {this.props.gameID}<StyledMobileButton onClick={()=>this.props.tutorialScreenHandler()}>TUTORIAL</StyledMobileButton>{startGameButton}</div>
-        
+            if(!this.props.gameStarted){
+                let recommended = null;
+                if((this.props.gameID === "DRAWFUL" || this.props.gameID === "RUDE_CARDS")&& this.props.players.length <= 2){
+                    recommended = <div>recommended (>2 Players)</div>;
+                }
+                gameChosen = <div>
+                    <div>GAME CHOSEN: {this.props.gameID}<StyledMobileButton onClick={()=>this.props.tutorialScreenHandler()}>TUTORIAL</StyledMobileButton>{startGameButton}</div>
+                    {recommended}
+                    </div>
+            }
         }
         if(!this.props.id){
             return(

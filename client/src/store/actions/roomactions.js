@@ -96,12 +96,14 @@ export const changeSettings = (roomID,gameID,settings) => {
 
 export const setRefreshGameState = () =>{
     return (dispatch) =>{
+        if(socket){
         socket.on('game_state_update', (data) => {
             dispatch(updateGameStateSuccess(data));
         })
         socket.on('game_action_error', (data) => {
           toast.error(`Game Action Error: ${data.message}`);
         })
+        }
     }
 }
 export const exitRoom =  () => {

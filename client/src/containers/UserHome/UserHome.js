@@ -4,7 +4,7 @@ import {withRouter, Redirect} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './UserHome.module.css';
 import { Media } from 'react-breakpoints';
-import {fetchUserData, getScoreboardData} from '../../store/actions/index';
+import {fetchUserData} from '../../store/actions/index';
 import UserHomeDesktop from './UserHomeDesktop/UserHomeDesktop';
 import UserHomeTablet from './UserHomeTablet/UserHomeTablet';
 import UserHomeMobile from './UserHomeMobile/UserHomeMobile';
