@@ -29,7 +29,6 @@ class GameHistory extends Component{
                 this.setState({
                     getInfo: this.props.getInfo,
                 })
-                console.log(this.state);
             }
         }
     }
@@ -38,7 +37,6 @@ class GameHistory extends Component{
     render(){
         
         var loader = null;
-        console.log(typeof getInfo);
         if(this.state.getInfo===false){
             
             return <Redirect to="/"/>
@@ -56,7 +54,6 @@ class GameHistory extends Component{
 }
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return{
         gamehistory: state.fetchUserHistoryDataReducer.history,
         getInfo: state.fetchUserHistoryDataReducer.getInfo,

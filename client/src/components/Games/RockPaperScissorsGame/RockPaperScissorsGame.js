@@ -26,7 +26,7 @@ class RockPaperScissorsGame extends Component {
     }
     
     static getDerivedStateFromProps(nextProps, prevState){
-        // console.log(nextProps);
+        
         if(nextProps.game){
             return { 
             currentRound:nextProps.game.currentRound,
@@ -107,7 +107,6 @@ class RockPaperScissorsGame extends Component {
 
 
 const mapStateToProps = (state) =>{
-    console.log(state)
     return{
         game:state.fetchGameDataReducer.game,
         roomId:state.fetchLobbyDataReducer.id,

@@ -60,7 +60,6 @@ const RudeCards = (props) => {
 
 
 const mapStateToProps = (state) =>{
-    console.log(state);
     return {
         player: state.fetchGameDataReducer.player,
         game: state.fetchGameDataReducer.game,

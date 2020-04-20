@@ -83,7 +83,6 @@ export const getScoreboardData = (gameId) => {
     try {
       const scoreboard = await axios.post( requestURL, {gameId},
         {headers : {Authorization: 'Bearer ' + getState().idtokenReducer.idToken}} );
-      console.log(scoreboard.data)
       dispatch(fetchScoreboardSuccess(gameId, scoreboard.data));   
     }
     catch (e) {

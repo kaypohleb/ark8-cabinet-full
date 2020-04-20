@@ -153,7 +153,6 @@ class UserHome extends Component{
           {({ breakpoints, currentBreakpoint }) =>
           {
             if(!this.state.isSignedIn){
-                console.log("redirecting back to first screen.")
                 return <Redirect to="/"/>
             }else if (breakpoints[currentBreakpoint] >= breakpoints.desktop){
             

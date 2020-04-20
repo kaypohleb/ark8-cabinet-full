@@ -22,3 +22,12 @@
     justify-content: space-evenly;
     align-content: flex-start;
 }
+.inputBox {
+    border-radius: 25px;
+    border: 2px solid black;
+    margin: 5px; 
+    padding: 10px;
+    height: 15px;
+    background-color: transparent;  
+    color: white;
+}

@@ -115,7 +115,7 @@ class RudeCardsSM{
             
         }
         else if (gameState.currentPhase == 'UPDATE_SCORES'){
-            // this phase is also to prause the ui for a bit
+            // this phase is also to pause the ui for a bit
             if (action.actionType == 'NEXT_PHASE'){
                 // check if its the final round, if so, go to GAME_END
                 gameState.currentPrompt = {

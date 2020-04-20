@@ -50,7 +50,6 @@ class Drawful extends Component{
                 timerLength: this.props.game.timerLength,
             })
         }
-        console.log(this.state);
     }
     inputHandleChange(event) {
         this.setState({fakeValue: event.target.value});
@@ -186,7 +185,6 @@ class Drawful extends Component{
 }
 
 const mapStateToProps = (state) =>{
-    console.log(state);
     return{
         game:state.fetchGameDataReducer.game,
         player:state.fetchGameDataReducer.player,

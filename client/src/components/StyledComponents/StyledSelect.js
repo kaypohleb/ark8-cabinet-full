@@ -6,7 +6,8 @@ export const StyledSelect = styled.select`
   padding-left: 5px;
   font-size: 14px;
   border: none;
-  margin-left: 10px;
+  margin: 10px 10px;
+  max-width: 90%;
   &:focus{
     border-color: gray;
     outline:none;

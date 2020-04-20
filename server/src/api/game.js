@@ -44,10 +44,6 @@ router.post('/getSettings',async(req,res) =>{
 });
 
 router.post('/setNewSettings',async (req, res) => {
-    console.log("trying to set and save new settings");
-    
-    console.log(req.body);
-    
     let settingID = req.body.settingID;
     if(!req.body.settingID){
         settingID = "previous";
