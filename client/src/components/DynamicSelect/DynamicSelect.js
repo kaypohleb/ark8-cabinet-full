@@ -13,12 +13,14 @@ class DynamicSelect extends Component{
         let options = null;
         if(this.props.settingsList){
             options = this.props.settingsList.map((data) =>
-                <option 
-                    key={data.settingsName}
-                    value={data.settingsName}
-                >
-                    {data.settingsName} ({data.player})
-                </option>
+                data.settingsName.map(setting=>{
+                    return(<option 
+                    key={setting}
+                    value={setting}
+                    >
+                    {setting} ({data.player})
+                </option>)
+                })
             );
         }
 

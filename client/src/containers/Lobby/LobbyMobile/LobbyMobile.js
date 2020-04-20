@@ -17,7 +17,7 @@ class LobbyMobile extends Component{
 
     render(){
         
-        let players,options,startGameButton,intro,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
+        let tutorial,players,options,startGameButton,intro,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
         if(this.props.userID === this.props.admin){
             
             if(this.props.gameChosenCnfrm){
@@ -40,7 +40,6 @@ class LobbyMobile extends Component{
                 </StyledSelect>
                 <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{this.props.settingChangeHandler(e)}}/>
                 {gameSettingsButton}
-                {startGameButton}
                 </Mux>); 
             if(this.props.players.every(isAllReady)){
                 intro = null;
@@ -97,6 +96,7 @@ class LobbyMobile extends Component{
             </div>;
             options= <div className = {styles.LobbyOptions}>
                 {pickGame}
+                
                 {ready}
                 </div>;
             modalPickGame = <Modal show = {this.props.show} modalClosed = {()=>this.props.gameScreenHandler()}>
@@ -106,11 +106,15 @@ class LobbyMobile extends Component{
         }
     
         if(this.props.gameID){
+            tutorial = <LowerModal show={this.props.tutorialScreen} modalClosed = {()=>this.props.tutorialScreenHandler()}>
+                {this.props.gameID}
+                {this.props.content}
+            </LowerModal>
             gameSettingsModal = (<LowerModal show={this.props.settingScreen} modalClosed = {()=>this.props.settingsScreenHandler()}>
                 <h1>GAME PARAMETERS</h1>
                 <SettingsInput gameID={this.props.gameID} roomID={this.props.id} settings={this.props.defSettings} toClose={()=>this.props.settingsScreenHandler()}/>
             </LowerModal>);
-            gameChosen = <div>GAME CHOSEN: {this.props.gameID}</div>
+            gameChosen = <div>GAME CHOSEN: {this.props.gameID}<StyledMobileButton onClick={()=>this.props.tutorialScreenHandler()}>TUTORIAL</StyledMobileButton>{startGameButton}</div>
         
         }
         if(!this.props.id){
@@ -127,6 +131,7 @@ class LobbyMobile extends Component{
             
             <div className = {styles.LobbyMobile}>
                 {modalPickGame}
+                {tutorial}
                 {gameSettingsModal}
                 <div className = {styles.LobbyContent}>
                 {title}
