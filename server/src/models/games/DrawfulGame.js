@@ -18,6 +18,12 @@ class DrawfulGame{
         this.publishScoreCallback = null;
         this.gameStateMachine = new DrawfulSM(this.settings);
         this.useState = true;
+        this.timers={
+            drawing:30,
+            fakeAnswer:30,
+            pickAnswer:10,
+            update:10,
+        }
         this.gameState = {
             gameId: 'DRAWFUL',
             players: players.map((player) => ({id: player.id, name: player.name, score: 0, ready: false})),
@@ -29,7 +35,7 @@ class DrawfulGame{
                 answers: null
             },
             timerStart: null,
-            timerLength: 5000,
+            timerLength: 10000,
             currentRound: 0,
             totalRounds: 1,
             history: null,
@@ -58,6 +64,10 @@ class DrawfulGame{
         };
         if(settings){
             this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
+            this.timers.drawing = this.settings.drawingTimer.defaultValue;
+            this.timers.fakeAnswer = this.settings.fakeAnswerTimer.defaultValue;
+            this.timers.pickAnswer = this.settings.pickAnswerTimer.defaultValue;
+            this.timers.update = this.settings.updateTimer.defaultValue;
         }
     }
 
@@ -88,44 +98,33 @@ class DrawfulGame{
                     ...this.hiddenState,
                     allDrawingPrompts: updatedPrompts,
                 }
-                nextPhase(Date.now(), 10000);
-                turn();
+                
+                nextPhase(Date.now(), this.timers.drawing * 1000);
+                setTimeout(turn, this.timers.drawing * 1000);
             }
             else if (phase == 'DRAWING'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                }, 10000)
+                nextPhase(Date.now(), this.timers.fakeAnswer * 1000);
+                setTimeout(turn, this.timers.fakeAnswer * 1000);
             }
             else if (phase == 'FAKE_ANSWER'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                }, 10000)
+                nextPhase(Date.now(), this.timers.pickAnswer * 1000);
+                setTimeout(turn, this.timers.pickAnswer * 1000);
             }
             else if (phase == 'PICK_ANSWER'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                },10000)
+                nextPhase(Date.now(), this.timers.update * 1000);
+                setTimeout(turn, this.timers.update * 1000);
             }
             else if (phase == 'ANSWER'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                },10000)
+                nextPhase(Date.now(), this.timers.update * 1000);
+                setTimeout(turn, this.timers.update * 1000);
             }
             else if (phase == 'REVEAL'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                }, 10000)
+                nextPhase(Date.now(), this.timers.update * 1000);
+                setTimeout(turn, this.timers.update * 1000);
             
             }else if(phase == 'NO_DRAWING'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                }, 10000)
+                nextPhase(Date.now(), this.timers.update * 1000);
+                setTimeout(turn, this.timers.update * 1000);
             }else if(phase == 'END_GAME'){
                     this.end();
             }
