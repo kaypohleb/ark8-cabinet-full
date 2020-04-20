@@ -21,16 +21,16 @@ const MatchHistory = (props) => {
             const winnerName = (result.winner.id === props.userId) ? 'You' : result.winner.name;
 
             return (
-                <div className={styles.resultDisp}>
-                    <div className={styles.gameInfo}>
-                        <div className={styles.gameName}>{result.gameId.split('_').join(' ')}</div>
-                        <div className={styles.endTime}>Game played on {endDate}</div>
+                <div key={`${result.gameEndedAt}-overall`} className={styles.resultDisp}>
+                    <div key={`${result.gameEndedAt}-gameinfo`} className={styles.gameInfo}>
+                        <div key={`${result.gameEndedAt}-gameName`}className={styles.gameName}>{result.gameId.split('_').join(' ')}</div>
+                        <div key={`${result.gameEndedAt}-endTime`}className={styles.endTime}>Game played on {endDate}</div>
                     </div>
 
-                    <div className={styles.scores}>
-                        <div> You scored {userResult.score} points</div>
-                        {(isOwnProfile) ? '' :<div> {profileResult.name} scored {profileResult.score} points </div>}
-                        <div>{winnerName} won!</div>
+                    <div key={`${result.gameEndedAt}-score`}className={styles.scores}>
+                        <div key={`${result.gameEndedAt}-resScore`}> You scored {userResult.score} points</div>
+                        {(isOwnProfile) ? '' :<div key={`${result.gameEndedAt}-scored`}> {profileResult.name} scored {profileResult.score} points </div>}
+                        <div key={`${result.gameEndedAt}-winner`}>{winnerName} won!</div>
                     </div>
                 </div>
             )

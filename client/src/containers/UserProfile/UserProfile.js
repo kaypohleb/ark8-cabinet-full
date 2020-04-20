@@ -6,7 +6,8 @@ import styles from './UserProfile.module.css';
 import MostPlayedWith from './MostPlayedWith';
 import MatchHistory from './MatchHistory';
 import Modal from '../../components/UI/Modal/Modal'
-
+import {motion} from 'framer-motion';
+import BackIcon from '../../assets/svg/icon/backIcon.svg';
 
 class UserProfile extends Component{
     constructor(props){
@@ -80,11 +81,11 @@ class UserProfile extends Component{
                 </Modal>
                 <div className={styles.UserProfileContainer}>
                     <div className={styles.userName}>
+                        <motion.img height="35px" width="35px" className = {styles.BackIcon} onClick = {()=>this.props.history.push('/home')} whileTap = {{scale:0.8}}  src = {BackIcon}/>
                         {this.state.shownName}
                         {isOwnPage ? 
                             <div className={styles.editName} onClick={this.openModal}>edit name</div> 
-                            : ''}
-                        
+                            : ''} 
                     </div>
                     
                     <MostPlayedWith mostPlayedWith={this.props.mostPlayedWith} history={this.props.history}/>
