@@ -23,7 +23,7 @@ const Hand = (props) => {
 const Votables = (props) => {
     return (
         <div className = {styles.VotablesContainer}>
-            <p>vote for p response</p>
+            <p>vote for a response</p>
             {props.votableResponses.map((response) => {
                 if (response === props.votedResponse){
                     return (<div key={response} className={styles.SelectedVote}> {response}</div>)

@@ -2,21 +2,23 @@ const RudeCardsSM = require('./RudeCardsSM');
 const firebase = require('../../firebase/firebase');
 const shuffle = require('knuth-shuffle-seeded');
 const db = firebase.firestore();
-const getPrompts = async()=>{
-    await db.collection('prompts').doc('rude_cards').get().then(result=>{allPrompts = result.data()});
-}
 
-let allPrompts = null;
 class RudeCardsGame {
     constructor(players,settings){
+        console.log("settings:" , settings);
         //TODO setup based on settings, default also taken from firestore
-        getPrompts();
-        this.settings = settings;
         this.id = 'RUDE_CARDS';
+        this.settings = settings;
         this.history = [];
         this.timer = null;
+        this.timers = {
+            placeCards: 10,
+            voting: 10,
+            update: 5
+        };
         this.gameStateUpdateCallback = null;
         this.gameStateMachine = new RudeCardsSM(this.settings);
+        
         
         this.gameState = {
             gameId: 'RUDE_CARDS',
@@ -44,8 +46,12 @@ class RudeCardsGame {
             availableResponses: [],
             currentResponses: [],
         };
+
         if(this.settings){
             this.gameState.totalRounds = this.settings.totalRounds.defaultValue;
+            this.timers.placeCards = this.settings.placeCardsTimer.defaultValue;
+            this.timers.voting = this.settings.votingTimer.defaultValue;
+            this.timers.update = this.settings.updateTimer.defaultValue;
         }
         
     }
@@ -65,47 +71,48 @@ class RudeCardsGame {
     }
 
 
-    start(){
+    async start(){
+        const promptsRef = await db.collection('prompts').doc('rude_cards').get();
+        const allPrompts = await promptsRef.data();
+
+        const prompts = allPrompts.prompts;
+        const responses = allPrompts.responses;
+
+        if (this.settings && this.settings.customPrompts){
+            prompts.concat(this.settings.customPrompts);
+        }
+
+        if (this.settings && this.settings.customResponse){
+            responses.concat(this.customResponse);
+        }
+
+        this.setPrompts(prompts);
+        this.setResponses(responses);
+
         const nextPhase = ((timerStart, timerLength) => {this.makeAction(null, {actionType: 'NEXT_PHASE', timerStart: timerStart, timerLength: timerLength})}).bind(this)
+
         const turn = (function(){
             const phase = this.gameState.currentPhase;
+            console.log("CURRENT PHASE", phase, "CALLED TURN")
             if (phase == 'INITIAL'){
-                let updatedPrompts = allPrompts.prompts
-                if(this.settings.customPrompts){
-                    updatedPrompts = updatedPrompts.concat(this.settings.customPrompts);
-                }
-                let updatedResponse = allPrompts.responses
-                if(this.settings.customResponse){
-                    updatedResponse = updatedResponse.concat(this.settings.customResponse);
-                }
-                this.setPrompts(updatedPrompts);
-                this.setResponses(updatedResponse);
-                nextPhase(Date.now(), 3000);
-                turn();
+                nextPhase(Date.now(), this.timers.placeCards * 1000);
+                setTimeout(turn, this.timers.placeCards * 1000);
             }
             else if (phase == 'DRAW_CARDS'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 10000)
-                    turn();
-                }, 3000)
+                nextPhase(Date.now(), this.timers.placeCards * 1000);
+                setTimeout(turn, this.timers.placeCards * 1000);
             }
             else if (phase == 'PLACE_CARDS'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 5000)
-                    turn();
-                },10000)
+                nextPhase(Date.now(), this.timers.voting * 1000);
+                setTimeout(turn, this.timers.voting * 1000);
             }
             else if (phase == 'VOTING'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 5000)
-                    turn();
-                },5000)
+                nextPhase(Date.now(), this.timers.update * 1000);
+                setTimeout(turn, this.timers.update * 1000);
             }
             else if (phase == 'UPDATE_SCORES'){
-                setTimeout(() => {
-                    nextPhase(Date.now(), 3000)
-                    turn();
-                }, 5000)
+                nextPhase(Date.now(),0);
+                turn();
             }
             else if (phase == 'END_GAME'){
                 this.end();
@@ -128,8 +135,6 @@ class RudeCardsGame {
         this.playerStates = players;
         this.hiddenState = hidden;
 
-
-        //console.log('available prompts length: ', this.hiddenState.availablePrompts.length, 'available responses length: ', this.hiddenState.availableResponses.length);
         this.gameStateUpdateCallback(game, players);
     }
 
