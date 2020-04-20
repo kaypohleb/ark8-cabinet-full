@@ -53,7 +53,7 @@ class SettingsInput extends Component{
         })
     }
     handleCustom(e){
-        if(e.target.className==="customPrompts"){
+        if(e.target.dataset.user==="customPrompts"){
             let updatedCustom = this.state.customPrompts;
             updatedCustom[e.target.dataset.id] = e.target.value;
             this.setState({
@@ -61,7 +61,7 @@ class SettingsInput extends Component{
                
             })
         }
-        else if(e.target.className==="customResponse"){
+        else if(e.target.dataset.user==="customResponse"){
             let updatedCustom = this.state.customResponse;
             updatedCustom[e.target.dataset.id] = e.target.value;
             this.setState({
@@ -71,12 +71,13 @@ class SettingsInput extends Component{
     }
     handleChange(e){
         
-        if(e.target.className!=="name"){
+        if(e.target.dataset.user!=="name"){
         let updatedSettings = {...this.state.settings}
-        if(this.state.array.includes(e.target.className)){ 
-            updatedSettings[e.target.className][e.target.dataset.id] = e.target.value;
+        if(this.state.array.includes(e.target.dataset.user)){ 
+            updatedSettings[e.target.dataset.user][e.target.dataset.id] = e.target.value;
+            //console.log(updatedSettings[e.target.className][e.target.dataset.id]);
         }else{
-            updatedSettings[e.target.className].defaultValue = parseInt(e.target.value); 
+            updatedSettings[e.target.dataset.user].defaultValue = parseInt(e.target.value); 
         }
         this.setState({
             settings:updatedSettings,
@@ -99,6 +100,8 @@ class SettingsInput extends Component{
         if(this.state.customResponse){
             updatedSettings["customResponse"]  = this.state.customResponse;
         }
+        
+        console.log(this.props.gameID);
         let set = 'previous';
         if(this.state.settingsID){
             set = this.state.settingsID;
@@ -115,10 +118,10 @@ class SettingsInput extends Component{
                     <label>Custom Prompts</label>
                     {
                         this.state.customPrompts.map((prompt,index)=>{
-                            return <input key={`customPrompts-${index}`} type="text" data-id={index} className="customPrompts" value={prompt||""} onChange={this.handleCustom}/>
+                            return <input className={styles.inputBox} key={`customPrompts-${index}`} type="text" data-id={index} data-user="customPrompts" value={prompt||""} onChange={this.handleCustom}/>
                         })
                     }
-                    <button onClick={this.addNewPrompt}>add custom prompts</button>
+                    <StyledMobileButton onClick={this.addNewPrompt}>add custom prompts</StyledMobileButton>
                 </div>
     }
     if(this.state.customResponse!==undefined && this.state.customResponse!==null){
@@ -127,10 +130,10 @@ class SettingsInput extends Component{
                     {
                         this.state.customResponse.map((prompt,index)=>{
 
-                            return <input key={`customResponse-${index}`} type="text" data-id={index} className="customResponse" value={prompt||""} onChange={this.handleCustom}/>
+                            return <input className={styles.inputBox} key={`customResponse-${index}`} type="text" data-id={index} data-user="customResponse" value={prompt||""} onChange={this.handleCustom}/>
                         })
                     }
-                    <button onClick={this.addNewResponse}>add custom responses</button>
+                    <StyledMobileButton onClick={this.addNewResponse}>add custom responses</StyledMobileButton>
                 </div>
     }
     if(this.state.settings){
@@ -140,7 +143,7 @@ class SettingsInput extends Component{
         if(this.state.array.includes(name)&&obj.length!==0){
             return <div key={`${name}-overall`} className={styles.arrayInput}>
             <label key={`${name}-label`}>{name}</label>
-            {obj.map((ob,index)=><input type="text" key={`${name}-${index}-input`} value={ob||""} data-id={index} className={name} onChange={this.handleChange}/> )}
+            {obj.map((ob,index)=><input className={styles.inputBox} type="text" key={`${name}-${index}-input`} value={ob||""} data-id={index} data-user={name} onChange={this.handleChange}/> )}
             </div>
             
         }
@@ -148,7 +151,7 @@ class SettingsInput extends Component{
             if(!this.state.array.includes(name)){
             return <div key={`${name}-overall`} className={styles.numberInput}>
                 <label key={`${name}-label`}>{name}</label>
-                <input type="number" max={obj.max} key={`${name}-input`} min={obj.min} className={name} value={obj.defaultValue} onChange={this.handleChange}/>
+                <input className={styles.inputBox} type="number" max={obj.max} key={`${name}-input`} min={obj.min} data-user={name} value={obj.defaultValue} onChange={this.handleChange}/>
             </div>
             }else{
                 return null;
@@ -163,7 +166,7 @@ class SettingsInput extends Component{
         {customResponse}
         <form className={styles.AllSettings} onInput={this.handleChange} >
         <label>Setting Name</label>
-        <input type="text" className="name" placeholder="optional" value = {this.state.settingsID} onChange={this.handleID}/>
+        <input className={styles.inputBox} type="text" data-user="name" placeholder="optional" value = {this.state.settingsID} onChange={this.handleID}/>
         {full}
         <StyledMobileButton onClick={this.handleSubmit}>SAVE</StyledMobileButton>
         </form>
