@@ -18,54 +18,56 @@ class LobbyDesktop extends Component{
     render(){
         
         let tutorial,players,options,startGameButton,intro,gameSettingsButton,gameSettingsModal,chooseGame,gameChosen,ready,pickGame,current,modalPickGame,title = null;
-        if(this.props.userID === this.props.admin){
-            if(this.props.gameChosenCnfrm){
-                startGameButton = (
-                    <StyledMobileButton 
+        
+            
+        if(this.props.players.every(isAllReady)){
+            if(this.props.userID === this.props.admin){
+                if(this.props.gameChosenCnfrm){
+                    startGameButton = (
+                        <StyledMobileButton 
+                            whileHover = {{scale:1.1}}
+                            whileTap = {{scale:0.8}}
+                            onClick = {()=>{this.props.startGame()}}>
+                            Start Game</StyledMobileButton>);
+                    gameSettingsButton = (<StyledMobileButton  whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}} 
+                        onClick={()=>this.props.settingsScreenHandler()}>SETTINGS</StyledMobileButton> );
+                }
+                chooseGame = (<Mux>
+                    <p>Pick a Game</p>
+                    <StyledSelect defaultValue="" onChange = {(e)=>{this.props.selectChange(e);
+                                                                    this.props.getSettingListHandler(e)}}>
+                        <option disabled value="">--pick-a-game--</option>
+                        <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
+                        <option value="DRAWFUL">drawful</option>
+                        <option value="RUDE_CARDS">rude-cards</option>
+                    </StyledSelect>
+                    <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{this.props.settingChangeHandler(e)}}/>
+                    {gameSettingsButton}
+                    <StyledMobileButton  whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}} 
+                        onClick={()=>this.props.gameScreenHandler()}>CLOSE</StyledMobileButton> 
+                    </Mux>); 
+                    pickGame = (<StyledMobileButton 
                         whileHover = {{scale:1.1}}
-                        whileTap = {{scale:0.8}}
-                        onClick = {()=>{this.props.startGame()}}>
-                        Start Game</StyledMobileButton>);
-                gameSettingsButton = (<StyledMobileButton  whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}} 
-                    onClick={()=>this.props.settingsScreenHandler()}>SETTINGS</StyledMobileButton> );
-            }
-            chooseGame = (<Mux>
-                <p>Pick a Game</p>
-                <StyledSelect defaultValue="" onChange = {(e)=>{this.props.selectChange(e);
-                                                                this.props.getSettingListHandler(e)}}>
-                    <option disabled value="">--pick-a-game--</option>
-                    <option value="ROCK_PAPER_SCISSORS">rock-paper-scissors</option>
-                    <option value="DRAWFUL">drawful</option>
-                    <option value="RUDE_CARDS">rude-cards</option>
-                </StyledSelect>
-                <DynamicSelect settingsList={this.props.settingsList} onSelectChange={(e)=>{this.props.settingChangeHandler(e)}}/>
-                {gameSettingsButton}
-                <StyledMobileButton  whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}} 
-                    onClick={()=>this.props.gameScreenHandler()}>CLOSE</StyledMobileButton> 
-                </Mux>); 
-            if(this.props.players.every(isAllReady)){
-                intro = null;
-                pickGame = (<StyledMobileButton 
-                    whileHover = {{scale:1.1}}
-                    whileTap = {{scale:0.8}} 
-                    onClick = {()=>this.props.gameScreenHandler()}>
-                        PICK A GAME
-                </StyledMobileButton>)
-            }else{
-                const admin_name =()=>{
-                    var temp_name = null;
-                    this.props.players.forEach(player => {
-                    if(player.id===this.props.admin){
-                        temp_name = player.name;
-                    }
+                        whileTap = {{scale:0.8}} 
+                        onClick = {()=>this.props.gameScreenHandler()}>
+                            PICK A GAME
+                    </StyledMobileButton>)
+            }             
+        }else{
+            const admin_name =()=>{
+                var temp_name = null;
+                this.props.players.forEach(player => {
+                if(player.id===this.props.admin){
+                    temp_name = player.name;
+                }
                 });
-                return temp_name}
-                intro = <div>Ready up so {admin_name()} can pick a game</div>
+                return temp_name
             }
-
+            intro = <div>Ready up so {admin_name()} can pick a game</div>
         }
+
         
 
         if(this.props.gameStarted){

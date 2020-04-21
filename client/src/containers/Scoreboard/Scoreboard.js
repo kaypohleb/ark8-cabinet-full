@@ -3,7 +3,8 @@ import {withRouter} from 'react-router-dom';
 import { connect  } from 'react-redux';
 import styles from './Scoreboard.module.css'
 import { getScoreboardData } from '../../store/actions';
-
+import {motion} from 'framer-motion';
+import BackIcon from '../../assets/svg/icon/backIcon.svg'
 class Scoreboard extends Component {
     constructor(props){
         super(props);
@@ -52,7 +53,7 @@ class Scoreboard extends Component {
 
         return (
             <div className={styles.Scoreboard}>
-                <div className={styles.titleText}>SCOREBOARDS</div>
+                <div className={styles.titleText}><motion.img height="35px" width="35px" className = {styles.BackIcon} onClick = {()=>this.props.history.push('/home')} whileTap = {{scale:0.8}}  src = {BackIcon}/> SCOREBOARDS</div>
                 <div className={styles.scoreboardContainer}>
                     <div className={styles.scoreboardBox}>
                         <div className={styles.selectorBox}>

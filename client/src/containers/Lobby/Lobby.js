@@ -81,21 +81,21 @@ class Lobby extends Component{
 
     componentDidUpdate(prevProps, prevState){
        if(prevProps !== this.props){
-                this.setState({
-                    id: this.props.id,
-                    createdBy: this.props.createdBy,
-                    admin: this.props.admin,
-                    game: this.props.game,
-                    players: this.props.players,
-                    userID:this.props.userID,
-                    getInfo: this.props.getInfo,
-                    gameStarted: this.props.gameStarted,
-                    isSignedIn: this.props.isSignedIn,
-                    settingsList: this.props.settingsList,
-                    defSettings: this.props.defSettings,
-                });
-            
+            this.setState({
+                id: this.props.id,
+                createdBy: this.props.createdBy,
+                admin: this.props.admin,
+                game: this.props.game,
+                players: this.props.players,
+                userID:this.props.userID,
+                getInfo: this.props.getInfo,
+                gameStarted: this.props.gameStarted,
+                isSignedIn: this.props.isSignedIn,
+                settingsList: this.props.settingsList,
+                defSettings: this.props.defSettings,
+            });
         }
+        
     }
     settingChangeHandler(event){
         console.log(event);

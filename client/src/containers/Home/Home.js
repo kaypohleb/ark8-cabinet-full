@@ -25,14 +25,7 @@ class Home extends Component{
         this.exitSignInHandler = this.exitSignInHandler.bind(this);
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
             
-        firebase.auth().onAuthStateChanged(async (user) => {
-          if (user != null){
-            this.props.dispatch(userStateChanged(user));
-            const idToken = await user.getIdToken();
-            this.props.dispatch(idTokenChanged(idToken));
-            this.props.history.push('/home');
-          }
-        })
+        
     }
 
     state = {
@@ -47,9 +40,6 @@ class Home extends Component{
       signInFlow:"popup",
       signInOptions: [
         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       callbacks:{
         signInSuccessWithAuthResult: () => false
@@ -74,9 +64,18 @@ class Home extends Component{
     }
 
     enterSignInHandler(){
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user != null){
+              this.props.dispatch(userStateChanged(user));
+              const idToken = await user.getIdToken();
+              this.props.dispatch(idTokenChanged(idToken));
+              this.props.history.push('/home');
+            }
+          })
         this.setState({
           signing:true,
         })
+        
      }
 
     exitSignInHandler(){

@@ -104,7 +104,7 @@ class DrawableCanvas extends Component {
       render() {
         let prompt,submitButton,drawable = null;
         if(!this.props.disableDraw){
-          if(this.props.submit){
+          if(!this.props.submit){
           submitButton = <StyledMobileButton 
                         whileHover = {{scale:1.1}}
                         whileTap = {{scale:0.8}}
