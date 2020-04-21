@@ -43,7 +43,11 @@ class DrawfulGame{
         };
 
         this.playerStates = players.reduce( (playerStates, player) => {
-            playerStates[player.id] = {};
+            playerStates[player.id] = {
+                submittedPick:false,
+                submittedFake:false,
+                submittedDraw:false,
+            };
             return playerStates;
         }, {});
 
@@ -124,7 +128,7 @@ class DrawfulGame{
             
             }else if(phase == 'NO_DRAWING'){
                 nextPhase(Date.now(), this.timers.update * 1000);
-                setTimeout(turn, this.timers.update * 1000);
+                setTimeout(turn, this.timers.fakeAnswer * 1000);
             }else if(phase == 'END_GAME'){
                     this.end();
             }

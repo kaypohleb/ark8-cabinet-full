@@ -34,6 +34,9 @@ class DrawfulSM {
                 for (const userId in updatedPlayerStates){
                     let selectPrompt = updatedHiddenState.allDrawingPrompts.splice(Math.floor(Math.random()*updatedHiddenState.allDrawingPrompts.length), 1)[0]; 
                     updatedPlayerStates[userId].prompt = selectPrompt;
+                    updatedPlayerStates[userId].submittedFake = false;
+                    updatedPlayerStates[userId].submittedPick = false;
+                    updatedPlayerStates[userId].submittedDraw = false;
                     updatedHiddenState.drawingPrompts[userId] = selectPrompt;
                 }  
             }
@@ -41,6 +44,7 @@ class DrawfulSM {
         else if (gameState.currentPhase === 'DRAWING'){
             if (action.actionType === 'SEND_DRAWING'){
                 updatedHiddenState.submittedDrawings[action.userId] = action.drawing;
+                updatedPlayerStates[action.userId].submittedDraw = true;
             }
             if (action.actionType === 'NEXT_PHASE'){
                 const nextDrawingUserId = Object.keys(updatedHiddenState.submittedDrawings)[0];
@@ -70,6 +74,13 @@ class DrawfulSM {
                         timerStart: action.timerStart,
                         timerLength: action.timerLength
                     }
+                    for (const userId in updatedPlayerStates){
+                        updatedPlayerStates[userId] = {
+                            ...updatedPlayerStates[userId],
+                            submittedDraw : false,
+                            prompt: null
+                        }
+                    }
                 }
                 else{
                 
@@ -89,6 +100,7 @@ class DrawfulSM {
                 for (const userId in updatedPlayerStates){
                     updatedPlayerStates[userId] = {
                         ...updatedPlayerStates[userId],
+                        submittedDraw : false,
                         prompt: null
                     }
                 }
@@ -98,6 +110,7 @@ class DrawfulSM {
         else if (gameState.currentPhase === 'FAKE_ANSWER'){
             if (action.actionType === 'SEND_FAKE_ANSWER'){
                 updatedHiddenState.fakeAnswers[action.userId] = action.fakeAnswer;
+                updatedPlayerStates[action.userId].submittedFake = true;
             }
             if (action.actionType === 'NEXT_PHASE'){
             
@@ -135,7 +148,8 @@ class DrawfulSM {
     
                     updatedPlayerStates[userId] = {
                         ...updatedPlayerStates[userId],
-                        shownAnswers: shownAnswers
+                        shownAnswers: shownAnswers,
+                        submittedFake: false,
                     }
                 }
             
@@ -144,8 +158,8 @@ class DrawfulSM {
         else if (gameState.currentPhase === 'PICK_ANSWER'){
             
             if (action.actionType === 'PICK_ANSWER'){
-                
                 updatedPlayerStates[action.userId].pickedAnswer = action.pickedAnswer;
+                updatedPlayerStates[action.userId].submittedPick = true;
             }
             if (action.actionType === 'NEXT_PHASE'){
                 const newAnswers = {};
@@ -168,7 +182,7 @@ class DrawfulSM {
                             selected:[],
                         }
                     }
-                
+                    
                     for(const player in updatedPlayerStates){
                         if(updatedPlayerStates[player].pickedAnswer==answer){
                             let playername = null;
@@ -203,6 +217,7 @@ class DrawfulSM {
                     updatedPlayerStates[userId] = {
                         ...updatedPlayerStates[userId],
                         fooled: fooled,
+                        submittedPick:false,
                     }
                 }
                 //console.log("MOVING TO REVEAL");
@@ -221,6 +236,20 @@ class DrawfulSM {
                             currentRound: gameState.currentRound + 1,
                             timerStart: action.timerStart,
                             timerLength: action.timerLength
+                        }
+                        for (const userId in updatedPlayerStates){
+                            let fooled = false;
+                            if (updatedPlayerStates[userId].pickedAnswer !== this.selectedPrompt){
+                                fooled = true;
+                            }
+        
+                            updatedPlayerStates[userId] = {
+                                ...updatedPlayerStates[userId],
+                                fooled: fooled,
+                                submittedPick:false,
+                                submittedDraw: false,
+                                submittedFake: false,
+                            }
                         }
                         
                     }
@@ -285,6 +314,9 @@ class DrawfulSM {
                             pickedAnswer:null,
                             prompt: null,
                             fooled: null,
+                            submittedPick:false,
+                            submittedDraw: false,
+                            submittedFake: false,
                         }
                     }
                         
@@ -390,6 +422,9 @@ class DrawfulSM {
                             pickedAnswer:null,
                             prompt: null,
                             fooled: null,
+                            submittedPick:false,
+                            submittedDraw: false,
+                            submittedFake: false,
                         }
                     }
                         

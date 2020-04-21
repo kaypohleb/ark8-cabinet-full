@@ -72,7 +72,7 @@ class Drawful extends Component{
 
     render(){
         const timer = this.state.timerLength + this.state.timerStart;
-        let phase,answerList,fakeAnswer,statusbar,reveal = null;
+        let phase,answerList,fakeAnswer,fakeButton,answerButton,statusbar,reveal = null;
         if(this.state.players){
             const playerData = this.state.players.find(p => p.id === this.props.quickID);
             if(playerData && this.state.currentPhase){
@@ -82,16 +82,24 @@ class Drawful extends Component{
         
        
         if(this.state.player){
+            
             if(this.state.userId !== this.state.currentDrawing.userId){
+                if(!this.state.player.submittedFake){
+                    fakeButton = <StyledMobileButton 
+                        whileHover = {{scale:1.1}}
+                        whileTap = {{scale:0.8}}
+                         onClick={()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>
+                             SUBMIT
+                    </StyledMobileButton>
+                }else{
+                    fakeButton = <div>You've submitted!</div>
+                }
             fakeAnswer = <div className={styles.FakeAnswer}>
                     <div className={styles.displayDrawing}>
                     <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
                     </div>
                     <input value={this.state.fakeValue} onChange={this.inputHandleChange} className={styles.inputBox} type="text" placeholder="please write your fake answer"></input>
-                    <StyledMobileButton 
-                        whileHover = {{scale:1.1}}
-                        whileTap = {{scale:0.8}}
-                         onClick={()=>this.props.gameAction({userId: this.props.userId, fakeAnswer:this.state.fakeValue},"SEND_FAKE_ANSWER")}>SUBMIT</StyledMobileButton>
+                    {fakeButton}
                 </div>
             }
             else{
@@ -103,17 +111,21 @@ class Drawful extends Component{
                 </div>
             }
             if(this.state.player.shownAnswers ){
-                answerList = (<div className={styles.AnswerList}>
-                    <div className={styles.displayDrawing}>
-                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
-                    </div>
-                    
-                    {this.shuffleArray(this.state.player.shownAnswers).map((answer)=>{
+                if(!this.state.player.submittedPick){
+                    answerButton = this.shuffleArray(this.state.player.shownAnswers).map((answer)=>{
                         return <StyledMobileButton 
                         whileHover = {{scale:1.1}}
                         whileTap = {{scale:0.8}}
                         onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>
-                    })}
+                    })
+                }else{
+                    answerButton = <div>You've submitted!</div>
+                }
+                answerList = (<div className={styles.AnswerList}>
+                    <div className={styles.displayDrawing}>
+                    <Drawing lines={this.state.currentDrawing.drawing} disableDraw={true} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>
+                    </div>
+                    {answerButton}
                 </div>);
             }
             else{
@@ -158,7 +170,7 @@ class Drawful extends Component{
                 phase = <div className={styles.Initial}>DRAW WELL AND GUESS WELL</div>;
                 break;
             case "DRAWING":
-                phase = <DrawableCanvas disableDraw={false} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction}/>;
+                phase = <DrawableCanvas disableDraw={false} userId={this.state.userId} prompt={this.state.player.prompt} gameAction={this.props.gameAction} submit={this.state.player.submittedDraw}/>;
                 break;
             case "FAKE_ANSWER":
                 phase = <Mux>{fakeAnswer}</Mux>
