@@ -12,11 +12,7 @@ import BackIcon from '../../assets/svg/icon/backIcon.svg';
 class UserProfile extends Component{
     constructor(props){
         super(props);
-        this.state = {
-            modalActive : false,
-            editedName: "",
-            shownName: props.name,
-        }
+        
         const userId = props.match.params.id;
         if (userId){
             this.props.dispatch(getUserProfileData(userId))
@@ -25,6 +21,12 @@ class UserProfile extends Component{
         this.closeModal = this.closeModal.bind(this);
         this.openModal = this.openModal.bind(this);
         this.changeName = this.changeName.bind(this);
+    }
+
+    state = {
+        modalActive : false,
+        editedName: "",
+        shownName: this.props.name,
     }
 
     openModal(){
@@ -39,6 +41,7 @@ class UserProfile extends Component{
         const text = e.target.value
         this.setState({editedName: text});
     }
+
 
     changeName(){
         const savedName = this.state.editedName;
@@ -58,11 +61,12 @@ class UserProfile extends Component{
             if (userId){
                 this.props.dispatch(getUserProfileData(userId))
             }
-            if(this.state.shownName!==this.props.name){
-                this.setState({
-                    showName: this.props.name,
-                })
-            }
+            
+        }
+        if(this.props.name!==prevProps.name){
+            this.setState({
+                shownName: this.props.name,
+            })
         }
         
         

@@ -113,7 +113,8 @@ class Drawful extends Component{
             if(this.state.player.shownAnswers ){
                 if(!this.state.player.submittedPick){
                     answerButton = this.shuffleArray(this.state.player.shownAnswers).map((answer)=>{
-                        return <StyledMobileButton 
+                        return <StyledMobileButton
+                        key={answer}
                         whileHover = {{scale:1.1}}
                         whileTap = {{scale:0.8}}
                         onClick={()=>this.props.gameAction({userId: this.props.userId, pickedAnswer: answer},"PICK_ANSWER")}>{answer}</StyledMobileButton>

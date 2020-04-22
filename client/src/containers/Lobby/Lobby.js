@@ -55,20 +55,6 @@ class Lobby extends Component{
         defSettings:{},
     }
 
-    static getDerivedStateFromProps(nextProps, prevState){
-        return { 
-              id: nextProps.id,
-              createdBy: nextProps.createdBy,
-              admin: nextProps.admin,
-              game: nextProps.game,
-              players: nextProps.players,
-              userID:nextProps.userID,
-              getInfo: nextProps.getInfo,
-              gameStarted: nextProps.gameStarted,
-              isSignedIn: nextProps.isSignedIn,
-        };
-        
-    }
 
     componentDidMount(){
     
