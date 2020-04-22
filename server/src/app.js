@@ -10,7 +10,7 @@ const io = require('./socketio/socketio');
 io.attach(http);
 
 app.use(cors({
-    origin:['http://localhost:3000','http://ark8-client.herokuapp.com', 'https://ark8-client.herokuapp.com'],
+    origin:['http://localhost:3000','http://ark8.herokuapp.com', 'https://ark8.herokuapp.com', 'http://www.ark8.tech', 'https://www.ark8.tech'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));

@@ -69,6 +69,9 @@ router.post('/getProfile', async (req, res) => {
         ));
     }
 
+    matchHistory.sort( (a,b) => b.gameEndedAt - a.gameEndedAt );
+
+
     return res.json({
         name: user.name,
         id: user.id,
